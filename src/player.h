@@ -22,6 +22,7 @@ public:
     Race race = RACE_UNDEAD;
 
     int combustion;
+    int fire_power;
     int fingers_of_frost;
     bool heating_up;
     int hotstreak_crits;

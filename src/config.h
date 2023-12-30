@@ -46,6 +46,11 @@ struct Config
     bool sulfuron_slammer = false;
     bool black_magic = false;
     bool lightweave_embroidery = false;
+
+    // sirus procs
+    bool queldanas_aldor = false;
+    bool queldanas_scryer = false;
+
     bool darkglow_embroidery = false;
     bool hyperspeed_accelerators = false;
     bool t3_2set = false;

@@ -1,730 +1,680 @@
 #pragma once
 
+#include <sstream>
+#include <string>
+
 #include "stats.h"
 
-#include <string>
-#include <sstream>
+namespace buff {
+enum ID : int {
+  // TODO: Проверить айди или забить хер и добавить новые баффы с Созвездиями
 
-namespace buff
-{
-enum ID : int
-{
-    ARCANE_BLAST = 30451,
-    ARCANE_POWER = 12042,
-    PRESENCE_OF_MIND = 12043,
-    ARCANE_POTENCY = 57531,
-    ICY_VEINS = 12472,
-    COMBUSTION = 29977,
-    EVOCATION = 12051,
-    BLOODLUST = 2825,
-    POWER_INFUSION = 10060,
-    INNERVATE = 29166,
-    CLEARCAST = 12536,
-    MANA_TIDE = 39609,
-    BERSERKING = 20554,
-    MISSILE_BARRAGE = 44401,
-    HOT_STREAK = 48108,
-    FIRESTARTER = 54741,
-    MOLTEN_FURY = 31680,
-    BRAIN_FREEZE = 57761,
-    FINGERS_OF_FROST = 44544,
-    GHOST_FINGERS = 4454411,
-    FOCUS_MAGIC = 54648,
-    FIRE_WARD = 43010,
-    MANA_SHIELD = 43020,
-    INCANTERS_ABSORPTION = 44413,
-    HYPERSPEED_ACCELERATION = 54758,
-    BLACK_MAGIC = 59626,
-    LIGHTWEAVE = 55637,
-    SPEED = 53908,
-    WILD_MAGIC = 53909,
-    MANA_SURGE = 37447,
-    MANA_SURGES = 61062,
-    PRAXIS = 64867,
-    QUAD_CORE = 70747,
-    PUSHING_THE_LIMIT = 70753,
-    ASHEN_BAND = 72416,
-    // Trinkets
-    TWILIGHT_SERPENT = 56184,
-    INFINITE_POWER = 61428,
-    TOME_ARCANE_PHENOMENA = 60471,
-    ARGENT_VALOR = 59657,
-    MARK_WAR_PRISONER = 60480,
-    FORGE_EMBER = 60479,
-    NOW_IS_THE_TIME = 60064,
-    ELUSIVE_POWER = 67669,
-    EMBRACE_SPIDER = 60492,
-    DYING_CURSE = 60494,
-    ILLUSTRATION_DRAGON_SOUL = 60486,
-    ALACRITY_ELEMENTS = 65004,
-    EYE_BROODMOTHER = 65006,
-    MEMORIES_LOVE = 65003,
-    SCALE_FATES = 64707,
-    FLARE_HEAVENS = 64713,
-    SHOW_FAITH = 64739,
-    LIVING_FLAME = 64712,
-    PANDORAS_PLEA = 64741,
-    VOLATILE_POWER_HC = 67744,
-    VOLATILE_POWER_NM = 67736,
-    VOLATILITY_HC = 67743,
-    VOLATILITY_NM = 67735,
-    SHARD_CRYSTAL_HEART = 67683,
-    TALISMAN_RESURGENCE = 67684,
-    ENERGIZED_HC = 67750,
-    ENERGIZED_NM = 67696,
-    REIGN_UNLIVING_HC = 67759,
-    REIGN_UNLIVING_NM = 67713,
-    MURADINS_SPYGLASS_HC = 71572,
-    MURADINS_SPYGLASS_NM = 71570,
-    DISLODGED_OBJECT_HC = 71644,
-    DISLODGED_OBJECT_NM = 71601,
-    NAMELESS_LICH_HC = 71636,
-    NAMELESS_LICH_NM = 71605,
-    CHARRED_TWILIGHT_SCALE_HC = 75473,
-    CHARRED_TWILIGHT_SCALE_NM = 75466,
-    NEVERMELTING_ICE_CRYSTAL = 71563,
-    DEADLY_PRECISION = 71564,
-    MISGUIDED_QUILL = 71579,
-    PURIFIED_LUNAR_DUST = 71584,
-    // Encounters
-    HODIR_STORM_POWER = 63711,
-    HODIR_STARLIGHT = 62807,
-    IRON_COUNCIL_SHIELD_OF_RUNES = 63967,
-    // TBC Stuff
-    FLAME_CAP = 28714,
-    SKULL_GULDAN = 40396,
-    SHRUNKEN_HEAD = 43712,
-    NAARU_SLIVER = 45042,
-    ASHTONGUE_TALISMAN = 40482,
-    MQG = 23723,
-    ARCANE_MADNESS = 37444,
+  ARCANE_BLAST = 30451,
+  ARCANE_POWER = 12042,
+  PRESENCE_OF_MIND = 12043,
+  ARCANE_POTENCY = 57531,
+  ICY_VEINS = 12472,
+  COMBUSTION = 29977,
+  FIRE_POWER = 310168,
+  EVOCATION = 12051,
+  BLOODLUST = 2825,
+  POWER_INFUSION = 10060,
+  INNERVATE = 29166,
+  CLEARCAST = 12536,
+  MANA_TIDE = 39609,
+  BERSERKING = 20554,
+  MISSILE_BARRAGE = 44401,
+  HOT_STREAK = 48108,
+  FIRESTARTER = 54741,
+  MOLTEN_FURY = 31680,
+  BRAIN_FREEZE = 57761,
+  FINGERS_OF_FROST = 44544,
+  GHOST_FINGERS = 4454411,
+  FOCUS_MAGIC = 54648,
+  FIRE_WARD = 43010,
+  MANA_SHIELD = 43020,
+  INCANTERS_ABSORPTION = 44413,
+  HYPERSPEED_ACCELERATION = 54758,
+  BLACK_MAGIC = 59626,
+  LIGHTWEAVE = 55637,
+  SPEED = 53908,
+  WILD_MAGIC = 53909,
+  MANA_SURGE = 37447,
+  MANA_SURGES = 61062,
+  PRAXIS = 64867,
+  QUAD_CORE = 70747,
+  PUSHING_THE_LIMIT = 70753,
+  ASHEN_BAND = 72416,
+  // Trinkets
+  TWILIGHT_SERPENT = 56184,
+  INFINITE_POWER = 61428,
+  TOME_ARCANE_PHENOMENA = 60471,
+  ARGENT_VALOR = 59657,
+  MARK_WAR_PRISONER = 60480,
+  FORGE_EMBER = 60479,
+  NOW_IS_THE_TIME = 60064,
+  ELUSIVE_POWER = 67669,
+  EMBRACE_SPIDER = 60492,
+  DYING_CURSE = 60494,
+  ILLUSTRATION_DRAGON_SOUL = 60486,
+  ALACRITY_ELEMENTS = 65004,
+  EYE_BROODMOTHER = 65006,
+  MEMORIES_LOVE = 65003,
+  SCALE_FATES = 64707,
+  FLARE_HEAVENS = 64713,
+  SHOW_FAITH = 64739,
+  LIVING_FLAME = 64712,
+  PANDORAS_PLEA = 64741,
+  VOLATILE_POWER_HC = 67744,
+  VOLATILE_POWER_NM = 67736,
+  VOLATILITY_HC = 67743,
+  VOLATILITY_NM = 67735,
+  SHARD_CRYSTAL_HEART = 67683,
+  TALISMAN_RESURGENCE = 67684,
+  ENERGIZED_HC = 67750,
+  ENERGIZED_NM = 67696,
+  REIGN_UNLIVING_HC = 67759,
+  REIGN_UNLIVING_NM = 67713,
+  MURADINS_SPYGLASS_HC = 71572,
+  MURADINS_SPYGLASS_NM = 71570,
+  DISLODGED_OBJECT_HC = 71644,
+  DISLODGED_OBJECT_NM = 71601,
+  NAMELESS_LICH_HC = 71636,
+  NAMELESS_LICH_NM = 71605,
+  CHARRED_TWILIGHT_SCALE_HC = 75473,
+  CHARRED_TWILIGHT_SCALE_NM = 75466,
+  NEVERMELTING_ICE_CRYSTAL = 71563,
+  DEADLY_PRECISION = 71564,
+  MISGUIDED_QUILL = 71579,
+  PURIFIED_LUNAR_DUST = 71584,
+  // Encounters
+  HODIR_STORM_POWER = 63711,
+  HODIR_STARLIGHT = 62807,
+  IRON_COUNCIL_SHIELD_OF_RUNES = 63967,
+  // TBC Stuff
+  FLAME_CAP = 28714,
+  SKULL_GULDAN = 40396,
+  SHRUNKEN_HEAD = 43712,
+  NAARU_SLIVER = 45042,
+  ASHTONGUE_TALISMAN = 40482,
+  MQG = 23723,
+  ARCANE_MADNESS = 37444,
+
+
+  // Sirus Racials TODO: fix id
+  LIGHT_FORGED = 319321,
+  BLOOD_ELF_RACE = 2132132456,
+  ZANDALARI_HASTE = 1223411,
+
+  // Sirus items
+  QUELDANAS_NECK_ALDOR = 222222222,
+  QUELDANAS_NECK_SCRYERS = 333333333,
+
 };
 
 
 // Prolonged ownership by Event and Unit
 // TODO: Do Event and Unit really need the same copy (i.e. pointer)?
-struct Buff
-{
-    ID id;
-    std::string name;
-    double duration;
-    int stacks = 1;
-    int stack_increment = 1;
-    int max_stacks = 1;
-    bool stack_refresh = true;
-    bool show_refresh = false;
-    bool hidden = false;
-    bool snapshot = false;
-    double cost = 0;
-    double t_gained = 0;
-    double t_refreshed = 0;
-    Stats stats;
+struct Buff {
+  ID id;
+  std::string name;
+  double duration;
+  int stacks = 1;
+  int stack_increment = 1;
+  int max_stacks = 1;
+  bool stack_refresh = true;
+  bool show_refresh = false;
+  bool hidden = false;
+  bool snapshot = false;
+  double cost = 0;
+  double t_gained = 0;
+  double t_refreshed = 0;
+  Stats stats;
 
-    int addStack();
-    int addStacks(int add);
-    int removeStack();
+  int addStack();
+
+  int addStacks(int add);
+
+  int removeStack();
 };
 
-class ArcaneBlast : public Buff
-{
+class ArcaneBlast : public Buff {
 
 public:
-    ArcaneBlast();
-
+  ArcaneBlast();
 };
 
-class ArcanePower : public Buff
-{
+class ArcanePower : public Buff {
 
 public:
-    ArcanePower(bool glyph = false);
-
+  ArcanePower(bool glyph = false);
 };
 
-class PresenceOfMind : public Buff
-{
+class PresenceOfMind : public Buff {
 
 public:
-    PresenceOfMind();
-
+  PresenceOfMind();
 };
 
-class ArcanePotency : public Buff
-{
+class ArcanePotency : public Buff {
 
 public:
-    ArcanePotency();
-
+  ArcanePotency();
 };
 
-class IcyVeins : public Buff
-{
+class IcyVeins : public Buff {
 
 public:
-    IcyVeins();
-
+  IcyVeins();
 };
 
-class Combustion : public Buff
-{
+class Combustion : public Buff {
 
 public:
-    Combustion();
+  Combustion();
 };
 
-class Evocation : public Buff
-{
+class Evocation : public Buff {
 
 public:
-    Evocation(double haste = 1, int ticks = 4);
+  Evocation(double haste = 1, int ticks = 4);
 };
 
-class Clearcast : public Buff
-{
+class Clearcast : public Buff {
 
 public:
-    Clearcast();
+  Clearcast();
 };
 
-class Bloodlust : public Buff
-{
+class Bloodlust : public Buff {
 
 public:
-    Bloodlust();
+  Bloodlust();
 };
 
-class PowerInfusion : public Buff
-{
+class PowerInfusion : public Buff {
 
 public:
-    PowerInfusion();
+  PowerInfusion();
 };
 
-class Innervate : public Buff
-{
+class Innervate : public Buff {
 
 public:
-    Innervate();
+  Innervate();
+};
 
+class ManaTide : public Buff {
+
+public:
+  ManaTide();
 };
 
-class ManaTide : public Buff
-{
+class Berserking : public Buff {
 
 public:
-    ManaTide();
+  Berserking();
 };
 
-class Berserking : public Buff
-{
+class MissileBarrage : public Buff {
 
 public:
-    Berserking();
+  MissileBarrage();
 };
 
-class MissileBarrage : public Buff
-{
+class HotStreak : public Buff {
 
 public:
-    MissileBarrage();
+  HotStreak();
 };
 
-class HotStreak : public Buff
-{
+class Firestarter : public Buff {
 
 public:
-    HotStreak();
+  Firestarter();
 };
 
-class Firestarter : public Buff
-{
+class BrainFreeze : public Buff {
 
 public:
-    Firestarter();
+  BrainFreeze();
 };
 
-class BrainFreeze : public Buff
-{
+class FingersOfFrost : public Buff {
 
 public:
-    BrainFreeze();
+  FingersOfFrost();
 };
 
-class FingersOfFrost : public Buff
-{
+class GhostFingers : public Buff {
 
 public:
-    FingersOfFrost();
+  GhostFingers();
 };
 
-class GhostFingers : public Buff
-{
+class FocusMagic : public Buff {
 
 public:
-    GhostFingers();
+  FocusMagic();
 };
 
-class FocusMagic : public Buff
-{
+class FireWard : public Buff {
 
 public:
-    FocusMagic();
+  FireWard();
 };
 
-class FireWard : public Buff
-{
+class ManaShield : public Buff {
 
 public:
-    FireWard();
+  ManaShield();
 };
 
-class ManaShield : public Buff
-{
+class IncantersAbsorption : public Buff {
 
 public:
-    ManaShield();
+  IncantersAbsorption(double sp);
 };
 
-class IncantersAbsorption : public Buff
-{
+class HyperspeedAcceleration : public Buff {
 
 public:
-    IncantersAbsorption(double sp);
+  HyperspeedAcceleration();
+};
 
+class BlackMagic : public Buff {
+
+public:
+  BlackMagic();
 };
 
-class HyperspeedAcceleration : public Buff
-{
+class Lightweave : public Buff {
 
 public:
-    HyperspeedAcceleration();
+  Lightweave();
 };
 
-class BlackMagic : public Buff
-{
+class Speed : public Buff {
 
 public:
-    BlackMagic();
+  Speed();
 };
 
-class Lightweave : public Buff
-{
+class WildMagic : public Buff {
 
 public:
-    Lightweave();
+  WildMagic();
 };
 
-class Speed : public Buff
-{
+class ManaSurge : public Buff {
 
 public:
-    Speed();
+  ManaSurge();
 };
 
-class WildMagic : public Buff
-{
+class ManaSurges : public Buff {
 
 public:
-    WildMagic();
+  ManaSurges();
 };
 
-class ManaSurge : public Buff
-{
+class Praxis : public Buff {
 
 public:
-    ManaSurge();
+  Praxis();
 };
 
-class ManaSurges : public Buff
-{
+class QuadCore : public Buff {
 
 public:
-    ManaSurges();
+  QuadCore();
 };
 
-class Praxis : public Buff
-{
+class PushingTheLimit : public Buff {
 
 public:
-    Praxis();
+  PushingTheLimit();
 };
 
-class QuadCore : public Buff
-{
+class AshenBand : public Buff {
 
 public:
-    QuadCore();
+  AshenBand();
 };
 
-class PushingTheLimit : public Buff
-{
+class TwilightSerpent : public Buff {
 
 public:
-    PushingTheLimit();
+  TwilightSerpent();
 };
 
-class AshenBand : public Buff
-{
+class InfinitePower : public Buff {
 
 public:
-    AshenBand();
+  InfinitePower();
 };
 
-class TwilightSerpent : public Buff
-{
+class TomeArcanePhenomena : public Buff {
 
 public:
-    TwilightSerpent();
+  TomeArcanePhenomena();
 };
 
-class InfinitePower : public Buff
-{
+class ArgentValor : public Buff {
 
 public:
-    InfinitePower();
+  ArgentValor();
 };
 
-class TomeArcanePhenomena : public Buff
-{
+class MarkWarPrisoner : public Buff {
 
 public:
-    TomeArcanePhenomena();
+  MarkWarPrisoner();
 };
 
-class ArgentValor : public Buff
-{
+class ForgeEmber : public Buff {
 
 public:
-    ArgentValor();
+  ForgeEmber();
 };
 
-class MarkWarPrisoner : public Buff
-{
+class NowIsTheTime : public Buff {
 
 public:
-    MarkWarPrisoner();
+  NowIsTheTime();
 };
 
-class ForgeEmber : public Buff
-{
+class ElusivePower : public Buff {
 
 public:
-    ForgeEmber();
+  ElusivePower();
 };
 
-class NowIsTheTime : public Buff
-{
+class EmbraceSpider : public Buff {
 
 public:
-    NowIsTheTime();
+  EmbraceSpider();
 };
 
-class ElusivePower : public Buff
-{
+class DyingCurse : public Buff {
 
 public:
-    ElusivePower();
+  DyingCurse();
 };
 
-class EmbraceSpider : public Buff
-{
+class IllustrationDragonSoul : public Buff {
 
 public:
-    EmbraceSpider();
+  IllustrationDragonSoul();
 };
 
-class DyingCurse : public Buff
-{
+class AlacrityElements : public Buff {
 
 public:
-    DyingCurse();
+  AlacrityElements();
 };
 
-class IllustrationDragonSoul : public Buff
-{
+class EyeBroodmother : public Buff {
 
 public:
-    IllustrationDragonSoul();
+  EyeBroodmother();
 };
 
-class AlacrityElements : public Buff
-{
+class MemoriesLove : public Buff {
 
 public:
-    AlacrityElements();
+  MemoriesLove();
 };
 
-class EyeBroodmother : public Buff
-{
+class ScaleFates : public Buff {
 
 public:
-    EyeBroodmother();
+  ScaleFates();
 };
 
-class MemoriesLove : public Buff
-{
+class FlareHeavens : public Buff {
 
 public:
-    MemoriesLove();
+  FlareHeavens();
 };
 
-class ScaleFates : public Buff
-{
+class ShowFaith : public Buff {
 
 public:
-    ScaleFates();
+  ShowFaith();
 };
 
-class FlareHeavens : public Buff
-{
+class LivingFlame : public Buff {
 
 public:
-    FlareHeavens();
+  LivingFlame();
 };
 
-class ShowFaith : public Buff
-{
+class PandorasPlea : public Buff {
 
 public:
-    ShowFaith();
+  PandorasPlea();
 };
 
-class LivingFlame : public Buff
-{
+class VolatilePowerHc : public Buff {
 
 public:
-    LivingFlame();
+  VolatilePowerHc();
 };
 
-class PandorasPlea : public Buff
-{
+class VolatilePowerNm : public Buff {
 
 public:
-    PandorasPlea();
+  VolatilePowerNm();
 };
 
-class VolatilePowerHc : public Buff
-{
+class VolatilityHc : public Buff {
 
 public:
-    VolatilePowerHc();
+  VolatilityHc();
 };
 
-class VolatilePowerNm : public Buff
-{
+class VolatilityNm : public Buff {
 
 public:
-    VolatilePowerNm();
+  VolatilityNm();
 };
 
-class VolatilityHc : public Buff
-{
+class ShardCrystalHeart : public Buff {
 
 public:
-    VolatilityHc();
+  ShardCrystalHeart();
 };
 
-class VolatilityNm : public Buff
-{
+class TalismanResurgence : public Buff {
 
 public:
-    VolatilityNm();
+  TalismanResurgence();
 };
 
-class ShardCrystalHeart : public Buff
-{
+class EnergizedHc : public Buff {
 
 public:
-    ShardCrystalHeart();
+  EnergizedHc();
 };
 
-class TalismanResurgence : public Buff
-{
+class EnergizedNm : public Buff {
 
 public:
-    TalismanResurgence();
+  EnergizedNm();
 };
 
-class EnergizedHc : public Buff
-{
+class ReignUnlivingHc : public Buff {
 
 public:
-    EnergizedHc();
+  ReignUnlivingHc();
 };
 
-class EnergizedNm : public Buff
-{
+class ReignUnlivingNm : public Buff {
 
 public:
-    EnergizedNm();
+  ReignUnlivingNm();
 };
 
-class ReignUnlivingHc : public Buff
-{
+class MuradinsSpyglassHc : public Buff {
 
 public:
-    ReignUnlivingHc();
+  MuradinsSpyglassHc();
 };
 
-class ReignUnlivingNm : public Buff
-{
+class MuradinsSpyglassNm : public Buff {
 
 public:
-    ReignUnlivingNm();
+  MuradinsSpyglassNm();
 };
 
-class MuradinsSpyglassHc : public Buff
-{
+class DislodgedObjectHc : public Buff {
 
 public:
-    MuradinsSpyglassHc();
+  DislodgedObjectHc();
 };
 
-class MuradinsSpyglassNm : public Buff
-{
+class DislodgedObjectNm : public Buff {
 
 public:
-    MuradinsSpyglassNm();
+  DislodgedObjectNm();
 };
 
-class DislodgedObjectHc : public Buff
-{
+class NamelessLichHc : public Buff {
 
 public:
-    DislodgedObjectHc();
+  NamelessLichHc();
 };
 
-class DislodgedObjectNm : public Buff
-{
+class NamelessLichNm : public Buff {
 
 public:
-    DislodgedObjectNm();
+  NamelessLichNm();
 };
 
-class NamelessLichHc : public Buff
-{
+class CharredTwilightScaleHc : public Buff {
 
 public:
-    NamelessLichHc();
+  CharredTwilightScaleHc();
 };
 
-class NamelessLichNm : public Buff
-{
+class CharredTwilightScaleNm : public Buff {
 
 public:
-    NamelessLichNm();
+  CharredTwilightScaleNm();
 };
 
-class CharredTwilightScaleHc : public Buff
-{
+class NevermeltingIceCrystal : public Buff {
 
 public:
-    CharredTwilightScaleHc();
+  NevermeltingIceCrystal();
 };
 
-class CharredTwilightScaleNm : public Buff
-{
+class DeadlyPrecision : public Buff {
 
 public:
-    CharredTwilightScaleNm();
+  DeadlyPrecision();
 };
 
-class NevermeltingIceCrystal : public Buff
-{
+class MisguidedQuill : public Buff {
 
 public:
-    NevermeltingIceCrystal();
+  MisguidedQuill();
 };
 
-class DeadlyPrecision : public Buff
-{
+class PurifiedLunarDust : public Buff {
 
 public:
-    DeadlyPrecision();
+  PurifiedLunarDust();
 };
 
-class MisguidedQuill : public Buff
-{
+class HodirStormPower : public Buff {
 
 public:
-    MisguidedQuill();
+  HodirStormPower();
 };
 
-class PurifiedLunarDust : public Buff
-{
+class HodirStarlight : public Buff {
 
 public:
-    PurifiedLunarDust();
+  HodirStarlight();
 };
 
-class HodirStormPower : public Buff
-{
+class IronCouncilShieldOfRunes : public Buff {
 
 public:
-    HodirStormPower();
+  IronCouncilShieldOfRunes();
 };
 
-class HodirStarlight : public Buff
-{
+class FlameCap : public Buff {
 
 public:
-    HodirStarlight();
+  FlameCap();
 };
 
-class IronCouncilShieldOfRunes : public Buff
-{
+class SkullGuldan : public Buff {
 
 public:
-    IronCouncilShieldOfRunes();
+  SkullGuldan();
 };
 
-class FlameCap : public Buff
-{
+class ShrunkenHead : public Buff {
 
 public:
-    FlameCap();
+  ShrunkenHead();
 };
 
-class SkullGuldan : public Buff
-{
+class NaaruSliver : public Buff {
 
 public:
-    SkullGuldan();
+  NaaruSliver();
 };
 
-class ShrunkenHead : public Buff
-{
+class AshtongueTalisman : public Buff {
 
 public:
-    ShrunkenHead();
+  AshtongueTalisman();
 };
 
-class NaaruSliver : public Buff
-{
+class MindQuickening : public Buff {
 
 public:
-    NaaruSliver();
+  MindQuickening();
 };
 
-class AshtongueTalisman : public Buff
-{
+class ArcaneMadness : public Buff {
+
+public:
+  ArcaneMadness();
+};
 
+class FirePower : public Buff {
 public:
-    AshtongueTalisman();
+  FirePower();
 };
 
-class MindQuickening : public Buff
-{
+class LightForged : public Buff {
+public:
+  LightForged();
+};
 
+class BloodElfRace : public Buff {
 public:
-    MindQuickening();
+  BloodElfRace();
 };
 
-class ArcaneMadness : public Buff
-{
+class ZandalariHaste : public Buff {
+public:
+  ZandalariHaste();
+};
 
+class QuelDanasNeckAldors : public Buff {
 public:
-    ArcaneMadness();
+  QuelDanasNeckAldors();
 };
 
-}
+class QuelDanasNeckScryers : public Buff {
+public:
+  QuelDanasNeckScryers();
+};
+}// namespace buff

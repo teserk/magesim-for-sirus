@@ -22,6 +22,8 @@ enum Rotation : int
     ROTATION_AOE_FS = 130,
 };
 
+
+// TODO: добавить все юзфул расы
 enum Race : int
 {
     RACE_BLOOD_ELF,
@@ -29,9 +31,11 @@ enum Race : int
     RACE_GNOME,
     RACE_HUMAN,
     RACE_TROLL,
-    RACE_UNDEAD
+    RACE_UNDEAD,
+    RACE_LIGHTFORGED,
+    RACE_ZANDALARI
 };
-
+// TODO: снести нахуй (?) фракции
 enum Faction : int
 {
     FACTION_HORDE,

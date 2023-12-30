@@ -5,6 +5,8 @@ import pprint
 import re
 import json
 
+
+# TODO: Поменять вовхед на базу данных сируса
 def getItem(item_id, phase = 1, faction = None):
     if item_id[:4] == "http":
         url = item_id + "&xml"
