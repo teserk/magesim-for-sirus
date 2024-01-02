@@ -32398,6 +32398,22 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
         title: "Sapper Charge",
         icon: "https://www.wowhead.com/images/wow/icons/large/inv_gizmo_supersappercharge.jpg"
       });
+      // sirus timings
+      timings.push({
+        name: "fire_power",
+        title: "Власть Огня",
+        icon: "https://cdn.scourge.tech/icons/inv_misc_volatilefire.png"
+      });
+      timings.push({
+        name: "zandalari_haste",
+        title: "Боевая регенерация",
+        icon: "https://cdn.scourge.tech/icons/inv_raptortravelform.png"
+      });
+      timings.push({
+        name: "lightforged",
+        title: "Воплощение",
+        icon: "https://cdn.scourge.tech/icons/spell_holy_healingfocus.png"
+      });
       var potion = {
         name: "potion",
         title: "Runic Mana Potion",
@@ -32651,6 +32667,38 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
         id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.PURIFIED_LUNAR_DUST,
         name: "Purified Lunar Dust"
       });
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_213)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_ALDORS_213,
+        name: "Neck Aldors 213"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_213)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_SCRYERS_213,
+        name: "Neck Scryers 213"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_232)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_ALDORS_232,
+        name: "Neck Aldors 232"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_232)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_SCRYERS_232,
+        name: "Neck Scryers 232"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_251)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_ALDORS_251,
+        name: "Neck Aldors 251"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_251)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_SCRYERS_251,
+        name: "Neck Scryers 251"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_264)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_ALDORS_264,
+        name: "Neck Aldors 264"
+      });
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_264)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.NECK_SCRYERS_264,
+        name: "Neck Scryers 264"
+      });
       if (this.isEquipped("finger", this.items.ids.ASHEN_BAND_ENDLESS_DESTRUCTION) || this.isEquipped("finger", this.items.ids.ASHEN_BAND_UNMATCHED_DESTRUCTION)) buffs.push({
         id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.ASHEN_BAND,
         name: "Frostforged Sage (Ashen Band)"
@@ -32727,6 +32775,8 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
     timingEnabled: function timingEnabled(name) {
       var always = ["bloodlust", "mana_tide", "power_infusion", "innervate", "mana_gem", "evocation", "mirror_image", "dark_rune"];
       if (always.indexOf(name) != -1) return true;
+      if (name == "zandalari_haste") return this.config.race == _constants__WEBPACK_IMPORTED_MODULE_4__["default"].races.RACE_ZANDALARI;
+      if (name == "lightforged") return this.config.race == _constants__WEBPACK_IMPORTED_MODULE_4__["default"].races.RACE_LIGHTFORGED;
       if (name == "berserking") return this.config.race == _constants__WEBPACK_IMPORTED_MODULE_4__["default"].races.RACE_TROLL;
       if (name == "arcane_torrent") return this.config.race == _constants__WEBPACK_IMPORTED_MODULE_4__["default"].races.RACE_BLOOD_ELF;
       if (name == "potion") return this.config.potion != _constants__WEBPACK_IMPORTED_MODULE_4__["default"].potions.POTION_NONE;
@@ -32735,7 +32785,7 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
       if (name == "sapper_charge") return this.config.talents.incanters_absorption && this.config.pre_incanters_absorption;
       if (name == "presence_of_mind") return this.config.talents.presence_of_mind > 0;
       if (name == "arcane_power") return this.config.talents.arcane_power > 0;
-      if (name == "combustion") return this.config.talents.combustion > 0;
+      if (name == "combustion" || name == "fire_power") return this.config.talents.combustion > 0;
       if (name == "icy_veins") return this.config.talents.icy_veins > 0;
       if (name == "cold_snap") return this.config.talents.cold_snap > 0;
       if (name == "water_elemental") return this.config.talents.water_elemental > 0;

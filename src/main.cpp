@@ -19,6 +19,7 @@
 #include "bindings.h"
 #else
 
+// the code below doesn't work and never will
 namespace
 {
     std::vector<SimulationsResult> results;

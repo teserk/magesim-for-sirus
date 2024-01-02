@@ -5,7 +5,6 @@
 namespace cooldown {
 
 enum ID : int {
-  // TODO: Добавить бурсты созвездий и власти огня
   NONE = 0,
   POTION = 1,
   CONJURED = 2,
@@ -45,7 +44,6 @@ enum ID : int {
   NIBELUNG_NM = 71843,
 
   // Sirus races, TODO: исправить айди
-  // TODO: Исправить баг с бесконечным аптаймом активки эльфа
   LIGHTFORGED = 319321,
   ZANDALARI_HASTE = 55555252,
   BLOOD_ELF_RACE = 443123123,
@@ -613,6 +611,8 @@ public:
   }
 };
 
+
+// Sirus cooldowns
 class Lightforged : public Cooldown {
 
 public:

@@ -363,8 +363,8 @@ double Player::buffDmgMultiplier(std::shared_ptr<spell::Spell> spell, const Stat
     multi *= 1.05 + talents.imp_cone_of_cold * 0.1;
   if (hasBuff(buff::QUAD_CORE))
     multi *= 1.18;
-  if (hasBuff(buff::FIRE_POWER))
-    multi *= 1.15;// Actually multiplier is only for pyroblast but we will only use pyros with fire_power
+  if (hasBuff(buff::FIRE_POWER) && spell->id == spell::PYROBLAST)
+    multi *= 1.15;
   // TODO: add other sirus races
   if (hasBuff(buff::LIGHT_FORGED))
     multi *= 1.2;
@@ -1863,17 +1863,17 @@ action::Action Player::useCooldown(const State &state) {
   } else if (talents.combustion && !hasCooldown(cooldown::FIRE_POWER) && !hasBuff(buff::FIRE_POWER) &&
              useTimingIfPossible("fire_power", state)) {
     fire_power = 0;
-    return buffAction<buff::FirePower>(true);
+    return buffCooldownAction<buff::FirePower, cooldown::FirePower>(true);
     // Sirus races
   } else if (race == RACE_LIGHTFORGED && !hasCooldown(cooldown::LIGHTFORGED) && !hasBuff(buff::LIGHT_FORGED) &&
              useTimingIfPossible("light_forged", state)) {
-    return buffAction<buff::LightForged>(true);
+    return buffCooldownAction<buff::LightForged, cooldown::Lightforged>(true);
   } else if (race == RACE_BLOOD_ELF && !hasCooldown(cooldown::BLOOD_ELF_RACE) && !hasBuff(buff::BLOOD_ELF_RACE) &&
              useTimingIfPossible("blood_elf_race", state)) {
-    return buffAction<buff::BloodElfRace>(true);
+    return buffCooldownAction<buff::BloodElfRace, cooldown::BloodElfRace>(true);
   } else if (race == RACE_ZANDALARI && !hasCooldown(cooldown::ZANDALARI_HASTE) && !hasBuff(buff::ZANDALARI_HASTE) &&
            useTimingIfPossible("zandalari_haste", state)) {
-    return buffAction<buff::ZandalariHaste>(true);
+    return buffCooldownAction<buff::ZandalariHaste, cooldown::ZandalariHaste>(true);
   } else if (talents.presence_of_mind && !hasCooldown(cooldown::PRESENCE_OF_MIND) && !hasBuff(buff::ARCANE_POWER) &&
              useTimingIfPossible("presence_of_mind", state)) {
     return buffCooldownAction<buff::PresenceOfMind, cooldown::PresenceOfMind>(true);

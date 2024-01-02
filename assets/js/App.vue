@@ -2777,6 +2777,22 @@ export default {
         title: "Sapper Charge",
         icon: "https://www.wowhead.com/images/wow/icons/large/inv_gizmo_supersappercharge.jpg",
       });
+      // sirus timings
+      timings.push({
+        name: "fire_power",
+        title: "Власть Огня",
+        icon: "https://cdn.scourge.tech/icons/inv_misc_volatilefire.png",
+      })
+      timings.push({
+        name: "zandalari_haste",
+        title: "Боевая регенерация",
+        icon: "https://cdn.scourge.tech/icons/inv_raptortravelform.png",
+      })
+      timings.push({
+        name: "lightforged",
+        title: "Воплощение",
+        icon: "https://cdn.scourge.tech/icons/spell_holy_healingfocus.png",
+      })
 
       var potion = {
         name: "potion",
@@ -3013,6 +3029,24 @@ export default {
       if (this.isEquipped("trinket", this.items.ids.TRINKET_PURIFIED_LUNAR_DUST))
         buffs.push({id: constants.buffs.PURIFIED_LUNAR_DUST, name: "Purified Lunar Dust"});
 
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_213))
+        buffs.push({id: constants.buffs.NECK_ALDORS_213, name: "Neck Aldors 213"});
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_213))
+        buffs.push({id: constants.buffs.NECK_SCRYERS_213, name: "Neck Scryers 213"});
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_232))
+        buffs.push({id: constants.buffs.NECK_ALDORS_232, name: "Neck Aldors 232"});
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_232))
+        buffs.push({id: constants.buffs.NECK_SCRYERS_232, name: "Neck Scryers 232"});
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_251))
+        buffs.push({id: constants.buffs.NECK_ALDORS_251, name: "Neck Aldors 251"});
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_251))
+        buffs.push({id: constants.buffs.NECK_SCRYERS_251, name: "Neck Scryers 251"});
+      if (this.isEquipped("neck", this.items.ids.NECK_ALDORS_264))
+        buffs.push({id: constants.buffs.NECK_ALDORS_264, name: "Neck Aldors 264"});
+      if (this.isEquipped("neck", this.items.ids.NECK_SCRYERS_264))
+        buffs.push({id: constants.buffs.NECK_SCRYERS_264, name: "Neck Scryers 264"});
+
+
       if (this.isEquipped("finger", this.items.ids.ASHEN_BAND_ENDLESS_DESTRUCTION) || this.isEquipped("finger", this.items.ids.ASHEN_BAND_UNMATCHED_DESTRUCTION))
         buffs.push({id: constants.buffs.ASHEN_BAND, name: "Frostforged Sage (Ashen Band)"});
       else if (this.isEquipped("finger", this.items.ids.ASHEN_BAND_ENDLESS_WISDOM) || this.isEquipped("finger", this.items.ids.ASHEN_BAND_UNMATCHED_WISDOM))
@@ -3117,6 +3151,10 @@ export default {
       if (always.indexOf(name) != -1)
         return true;
 
+      if (name == "zandalari_haste")
+        return this.config.race == constants.races.RACE_ZANDALARI;
+      if (name == "lightforged")
+        return this.config.race == constants.races.RACE_LIGHTFORGED;
       if (name == "berserking")
         return this.config.race == constants.races.RACE_TROLL;
       if (name == "arcane_torrent")
@@ -3133,7 +3171,7 @@ export default {
         return this.config.talents.presence_of_mind > 0;
       if (name == "arcane_power")
         return this.config.talents.arcane_power > 0;
-      if (name == "combustion")
+      if (name == "combustion" || name == "fire_power")
         return this.config.talents.combustion > 0;
       if (name == "icy_veins")
         return this.config.talents.icy_veins > 0;
