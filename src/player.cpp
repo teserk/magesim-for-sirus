@@ -1139,16 +1139,6 @@ std::vector<action::Action> Player::onSpellImpactProc(const State &state, const 
         actions.push_back(buffCooldownAction<buff::Lightweave, cooldown::Lightweave>());
       }
 
-      // TODO: узнать прок
-      if (config.queldanas_aldor && !instance.spell->channeling && !hasCooldown(cooldown::QUELDANAS_NECK_ALDORS) &&
-          random<int>(0, 99) < 35) {
-        actions.push_back(buffCooldownAction<buff::QuelDanasNeckAldors, cooldown::QueldanasNeckAldors>());
-      }
-      if (config.queldanas_scryer && !instance.spell->channeling && !hasCooldown(cooldown::QUELDANAS_NECK_SCRYERS) &&
-          random<int>(0, 99) < 35) {
-        actions.push_back(buffCooldownAction<buff::QuelDanasNeckScryers, cooldown::QueldanasNeckScryers>());
-      }
-
       // Confirmed - on spell impact and channeled cast success
       if ((config.black_magic || black_magic) && !hasCooldown(cooldown::BLACK_MAGIC) && random<int>(0, 99) < 35) {
         actions.push_back(buffCooldownAction<buff::BlackMagic, cooldown::BlackMagic>());
@@ -1350,6 +1340,41 @@ Player::onCastOrTick(const State &state, std::shared_ptr<spell::Spell> spell, st
   if (hasTrinket(TRINKET_ILLUSTRATION_DRAGON_SOUL) && (spell->id != spell::BLIZZARD || !tick)) {
     actions.push_back(buffAction<buff::IllustrationDragonSoul>());
   }
+
+  // Sirus necks
+  // Unconfirmed proc rate and on cast
+  if (config.neck == NECK_ALDORS_213 && !hasCooldown(cooldown::NECK_ALDORS_213) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckAldors213, cooldown::NeckAldors213>());
+  }
+
+  if (config.neck == NECK_SCRYERS_213 && !hasCooldown(cooldown::NECK_SCRYERS_213) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckScryers213, cooldown::NeckScryers213>());
+  }
+
+  if (config.neck == NECK_ALDORS_232 && !hasCooldown(cooldown::NECK_ALDORS_232) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckAldors232, cooldown::NeckAldors232>());
+  }
+
+  if (config.neck == NECK_SCRYERS_232 && !hasCooldown(cooldown::NECK_SCRYERS_232) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckScryers232, cooldown::NeckScryers232>());
+  }
+
+  if (config.neck == NECK_ALDORS_251 && !hasCooldown(cooldown::NECK_ALDORS_251) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckAldors251, cooldown::NeckAldors251>());
+  }
+
+  if (config.neck == NECK_SCRYERS_251 && !hasCooldown(cooldown::NECK_SCRYERS_251) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckScryers251, cooldown::NeckScryers251>());
+  }
+
+  if (config.neck == NECK_ALDORS_264 && !hasCooldown(cooldown::NECK_ALDORS_264) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckAldors264, cooldown::NeckAldors264>());
+  }
+
+  if (config.neck == NECK_SCRYERS_264 && !hasCooldown(cooldown::NECK_SCRYERS_264) && random(0, 99) < 35) {
+    actions.push_back(buffCooldownAction<buff::NeckScryers264, cooldown::NeckScryers264>());
+  }
+
 
   // Confirmed - on cast/tick
   if (hasTrinket(TRINKET_DYING_CURSE) && !hasCooldown(cooldown::DYING_CURSE) && random<int>(0, 19) < 3) {

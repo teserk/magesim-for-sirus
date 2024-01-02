@@ -1,22 +1,19 @@
 #pragma once
 
-#include "unit.h"
 #include "stats.h"
+#include "unit.h"
 
-namespace unit
-{
+namespace unit {
 
 constexpr int WATER_ELEMENTAL = 37994;
 
-class WaterElemental : public Unit
-{
+class WaterElemental : public Unit {
 
 public:
+  WaterElemental(const Config& config, const Stats& stats);
 
-    WaterElemental(const Config& config, const Stats& stats);
+  double maxMana() const;
 
-    double maxMana() const;
-
-    action::Action nextAction(const State& state);
+  action::Action nextAction(const State& state);
 };
-}
+}// namespace unit

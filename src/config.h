@@ -88,6 +88,9 @@ struct Config
     Trinket trinket2 = TRINKET_NONE;
     MetaGem meta_gem = META_NONE;
 
+    // Sirus queldanas neck
+    Neck neck = NECK_NONE;
+
     // Rotation
     Rotation rotation = ROTATION_ST_AB_AM;
     double rot_ab3_mana = 0;

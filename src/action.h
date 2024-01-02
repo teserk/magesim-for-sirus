@@ -3,8 +3,26 @@
 namespace unit {
 class Unit;
 }
+namespace buff {
+class Buff;
+}
+
+namespace debuff {
+class Debuff;
+}
+
+namespace spell {
+class Spell;
+}
+namespace cooldown {
+class Cooldown;
+}
+namespace target {
+class Target;
+}
 
 #include <memory>
+#include "common.h"
 
 namespace action
 {

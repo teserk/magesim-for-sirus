@@ -1,4 +1,4 @@
-var ids = {
+const ids = {
     // Trinkets
     TRINKET_MERCURIAL_ALCHEMIST_STONE: 44322,
     TRINKET_TWILIGHT_SERPENT: 42395,
@@ -88,6 +88,15 @@ var ids = {
     TRINKET_SHRUNKEN_HEAD: 33829,
     TRINKET_NAARU_SLIVER: 34429,
     TRINKET_ASHTONGUE_TALISMAN: 32488,
+    // Sirus necks
+    NECK_ALDORS_213: 111111111,
+    NECK_SCRYERS_213: 222222222,
+    NECK_ALDORS_232: 333333333,
+    NECK_SCRYERS_232: 444444444,
+    NECK_ALDORS_251: 555555555,
+    NECK_SCRYERS_251: 666666666,
+    NECK_ALDORS_264: 777777777,
+    NECK_SCRYERS_264: 888888888,
 };
 
 var equip = {
@@ -300,7 +309,7 @@ var equip = {
         { id: 37134, title: "Telestra's Journal", ilvl: 200, int: 43, sp: 50, hit: 39, q: "rare" },
         { id: 37718, title: "Temple Crystal Fragment", ilvl: 200, int: 31, sp: 51, haste: 42, q: "rare" },
         { id: 37051, title: "Seal of Valgarde", ilvl: 187, int: 35, sp: 44, haste: 38, q: "rare" },
-        { id: 37086, title: "Tome of Salramm", ilvl: 187, ilvl: 187, int: 21, spi: 19, sp: 46, crit: 38, q: "rare" },
+        { id: 37086, title: "Tome of Salramm", ilvl: 187, int: 21, spi: 19, sp: 46, crit: 38, q: "rare" },
         { id: 37889, title: "Prison Manifest", ilvl: 200, int: 42, spi: 34, sp: 51, q: "rare" },
         // tbc
         { id: 34179, title: "Heart of the Pit", ilvl: 154, int: 21, sp: 39, haste: 32 },
@@ -534,6 +543,16 @@ var equip = {
         // tbc
         { id: 34359, title: "Pendant of Sunfire", ilvl: 159, int: 19, sp: 34, crit: 25, haste: 25, sockets: ["y"], bonus: { sp: 2 } },
         { id: 34204, title: "Amulet of Unfettered Magics", ilvl: 154, int: 17, sp: 39, hit: 15, haste: 32 },
+
+        //queldanas sirus neck TODO: доделать остальные илвл
+        {id:ids.NECK_ALDORS_213, title: "Подвеска проницательности воина Расколотого Солнца (Алдоры)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_SCRYERS_213, title: "Подвеска проницательности воина Расколотого Солнца (Провидцы)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_ALDORS_251, title: "Подвеска проницательности воина Расколотого Солнца (Алдоры)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_SCRYERS_251, title: "Подвеска проницательности воина Расколотого Солнца (Провидцы)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_ALDORS_232, title: "Подвеска проницательности воина Расколотого Солнца (Алдоры)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_SCRYERS_232, title: "Подвеска проницательности воина Расколотого Солнца (Провидцы)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_ALDORS_264, title: "Подвеска проницательности воина Расколотого Солнца (Алдоры)", ilvl:213, int:38, haste:34, hit:28, sp:59},
+        {id:ids.NECK_SCRYERS_264, title: "Подвеска проницательности воина Расколотого Солнца (Провидцы)", ilvl:213, int:38, haste:34, hit:28, sp:59},
     ],
     shoulder: [
         // icc
@@ -717,8 +736,8 @@ var equip = {
         { id: 51790, title: "Robes of Azure Downfall", ilvl: 251, int: 101, sp: 140, crit: 76, haste: 95, sockets: ["y", "r", "r"], bonus: {sp: 9}, phase: 4 },
         { id: 51851, title: "Bloodsoul Raiment", ilvl: 264, int: 123, spi: 90, sp: 162, haste: 102, sockets: ["r", "r", "y"], bonus: {sp: 9}, phase: 4 },
         { id: 51379, title: "Bloodsoul Raiment", ilvl: 251, int: 109, spi: 78, sp: 140, haste: 90, sockets: ["r", "r", "y"], bonus: {sp: 9}, phase: 4 },
-        { id: 50975, title: "Ermine Coronation Robes", ilvl: 264, ilvl: 264, int: 123, spi: 84, sp: 162, crit: 108, sockets: ["y", "r", "b"], bonus: {sp: 9}, phase: 4 },
-        { id: 50974, title: "Meteor Chaser's Raiment", ilvl: 264, ilvl: 264, int: 123, sp: 162, crit: 84, haste: 108, sockets: ["r", "y", "b"], bonus: {sp: 9}, phase: 4 },
+        { id: 50975, title: "Ermine Coronation Robes", ilvl: 264, int: 123, spi: 84, sp: 162, crit: 108, sockets: ["y", "r", "b"], bonus: {sp: 9}, phase: 4 },
+        { id: 50974, title: "Meteor Chaser's Raiment", ilvl: 264, int: 123, sp: 162, crit: 84, haste: 108, sockets: ["r", "y", "b"], bonus: {sp: 9}, phase: 4 },
         // totc
         { id: 47766, itemset: ids.T9_SET, title: "Sunstrider's Robe of Triumph", ilvl: 258, int: 116, spi: 102, sp: 160, hit: 86, sockets: ["b", "r"], bonus: {sp: 7}, faction: "h", phase: 3 },
         { id: 47769, itemset: ids.T9_SET, title: "Sunstrider's Robe of Triumph", ilvl: 245, int: 103, spi: 90, sp: 140, hit: 74, sockets: ["b", "r"], bonus: {sp: 7}, faction: "h", phase: 3 },
@@ -734,7 +753,7 @@ var equip = {
         { id: 47301, title: "Skyweaver Vestments", ilvl: 245, int: 103, sp: 140, hit: 82, haste: 82, sockets: ["b", "y"], bonus: {sp: 7}, faction: "h", phase: 3 },
         { id: 47129, title: "Skyweaver Robes", ilvl: 258, int: 116, sp: 151, hit: 86, haste: 94, sockets: ["b", "y", "r"], bonus: {sp: 9}, faction: "a", phase: 3 },
         { id: 47126, title: "Skyweaver Robes", ilvl: 245, int: 103, sp: 140, hit: 82, haste: 82, sockets: ["b", "y"], bonus: {sp: 7}, faction: "a", phase: 3 },
-        { id: 48051, title: "Robes of the Sleepless", ilvl: 245, ilvl: 245, int: 95, sp: 140, crit: 71, hit: 96, sockets: ["b", "r"], bonus: {sp: 7}, faction: "h", phase: 3 },
+        { id: 48051, title: "Robes of the Sleepless", ilvl: 245, int: 95, sp: 140, crit: 71, hit: 96, sockets: ["b", "r"], bonus: {sp: 7}, faction: "h", phase: 3 },
         { id: 47906, title: "Robes of the Sleepless", ilvl: 232, int: 88, sp: 132, crit: 65, hit: 86, sockets: ["b"], bonus: {sp: 5}, faction: "h", phase: 3 },
         { id: 47974, title: "Vestments of the Sleepless", ilvl: 245, int: 95, sp: 140, crit: 71, hit: 96, sockets: ["b", "r"], bonus: {sp: 7}, faction: "a", phase: 3 },
         { id: 47838, title: "Vestments of the Sleepless", ilvl: 232, int: 88, sp: 132, crit: 65, hit: 86, sockets: ["b"], bonus: {sp: 5}, faction: "a", phase: 3 },
@@ -1405,12 +1424,19 @@ var equip = {
 var gems = [
     { id: 49110, title: "Nightmare Tear", color: "a", int: 10, spi: 10, unique: true },
     { id: 42702, title: "Enchanted Tear", color: "a", int: 6, spi: 6, unique: true },
+
+    // Черные бриллианты, TODO: добавить остальные
+    { id: 260042, title: "Гладкий черный бриллиант",color: "a", crit: 40},
+    { id: 260044, title: "Мягкий черный бриллиант",color: "a", haste: 40},
+    { id: 103512, title: "Прочный черный бриллиант",color: "a", hit: 40},
+    { id: 103507, title: "Рунический черный бриллиант",color: "a", sp: 46},
+
     { id: ids.META_CHAOTIC_SKYFLARE, title: "Chaotic Skyflare Diamond", color: "m", crit: 21, desc: "+3% crit dmg", req: {b: 2} },
     { id: ids.META_EMBER_SKYFLARE, title: "Ember Skyflare Diamond", color: "m", sp: 25, desc: "+2% int", req: {r: 3} },
     { id: ids.META_BEAMING_EARTHSIEGE, title: "Beaming Earthsiege Diamond", color: "m", crit: 21, desc: "+2% mana", req: {y: 1, r: 2} },
     { id: ids.META_INSIGHTFUL_EARTHSIEGE, title: "Insightful Earthsiege Diamond", color: "m", int: 21, desc: "Chance to restore mana", req: {b: 1, y: 1, r: 1} },
     { id: 41375, title: "Tireless Skyflare Diamond", color: "m", sp: 25, desc: "Minor Run Speed Increase", req: {b: 1, y: 1, r: 1} },
-    { id: 42144, title: "Runed Dragon's Eye", color: "r", sp: 39 },
+    { id: 42144, title: "Runed Dragon's Eye", color: "r", sp: 46 }, // changed for sirus
     { id: 40113, title: "Runed Cardinal Ruby", color: "r", sp: 23 },
     { id: 45883, title: "Runed Stormjewel", color: "r", sp: 23 },
     { id: 39998, title: "Runed Scarlet Ruby", color: "r", sp: 19 },
@@ -1422,10 +1448,10 @@ var gems = [
     { id: 40048, title: "Potent Monarch Topaz", color: "o", sp: 9, crit: 8 },
     { id: 40049, title: "Veiled Monarch Topaz", color: "o", sp: 9, hit: 8 },
     { id: 40051, title: "Reckless Monarch Topaz", color: "o", sp: 9, haste: 8 },
-    { id: 42148, title: "Brilliant Dragon's Eye", color: "y", int: 34 },
-    { id: 42149, title: "Smooth Dragon's Eye", color: "y", crit: 34 },
-    { id: 42156, title: "Rigid Dragon's Eye", color: "y", hit: 34 },
-    { id: 42150, title: "Quick Dragon's Eye", color: "y", haste: 34 },
+    { id: 42148, title: "Brilliant Dragon's Eye", color: "y", int: 40 }, // changed for sirus
+    { id: 42149, title: "Smooth Dragon's Eye", color: "y", crit: 40 }, // changed for sirus
+    { id: 42156, title: "Rigid Dragon's Eye", color: "y", hit: 40 }, // changed for sirus
+    { id: 42150, title: "Quick Dragon's Eye", color: "y", haste: 40 }, // changed for sirus
     { id: 40123, title: "Brilliant King's Amber", color: "y", int: 20 },
     { id: 40124, title: "Smooth King's Amber", color: "y", crit: 20 },
     { id: 40125, title: "Rigid King's Amber", color: "y", hit: 20 },
@@ -1466,8 +1492,8 @@ var gems = [
     { id: 40096, title: "Sundered Forest Emerald", color: "g", crit: 8, mp5: 4 },
     { id: 40100, title: "Lambent Forest Emerald", color: "g", hit: 8, mp5: 4 },
     { id: 40105, title: "Energized Forest Emerald", color: "g", haste: 8, mp5: 4 },
-    { id: 42145, title: "Sparkling Dragon's Eye", color: "b", spi: 34 },
-    { id: 42146, title: "Lustrous Dragon's Eye", color: "b", mp5: 17 },
+    { id: 42145, title: "Sparkling Dragon's Eye", color: "b", spi: 40 },  // changed for sirus
+    { id: 42146, title: "Lustrous Dragon's Eye", color: "b", mp5: 20 }, // changed for sirus
     { id: 40120, title: "Sparkling Majestic Zircon", color: "b", spi: 20 },
     { id: 40121, title: "Lustrous Majestic Zircon", color: "b", mp5: 10 },
     { id: 45881, title: "Sparkling Stormjewel", color: "b", spi: 20 },
@@ -1495,7 +1521,7 @@ var enchants = {
     back: [
         { id: ids.LIGHTWEAVE_EMBROIDERY, enchantmentId: 3722, title: "Lightweave Embroidery", spi: 1 },
         { id: ids.DARKGLOW_EMBROIDERY, enchantmentId: 3728, title: "Darkglow Embroidery" },
-        { id: 63765, enchantmentId: 3859, title: "Springy Arachnoweave", sp: 27 },
+        { id: 63765, enchantmentId: 3859, title: "Springy Arachnoweave", sp: 40 }, // changed for sirus
         { id: 47898, enchantmentId: 3831, title: "Greater Speed", haste: 23 },
         { id: 47899, enchantmentId: 3296, title: "Wisdom", spi: 10 },
     ],
@@ -1532,7 +1558,7 @@ var enchants = {
         { id: 60623, enchantmentId: 3826, title: "Icewalker", hit: 12, crit: 12 },
     ],
     finger: [
-        { id: 44636, enchantmentId: 3840, title: "Greater Spellpower", sp: 23 },
+        { id: 44636, enchantmentId: 3840, title: "Greater Spellpower", sp: 35 }, // changed for sirus
     ],
 };
 

@@ -107,8 +107,14 @@ enum ID : int {
   ZANDALARI_HASTE = 1223411,
 
   // Sirus items
-  QUELDANAS_NECK_ALDOR = 222222222,
-  QUELDANAS_NECK_SCRYERS = 333333333,
+  NECK_ALDORS_213 = 111111111,
+  NECK_SCRYERS_213 = 222222222,
+  NECK_ALDORS_232 = 333333333,
+  NECK_SCRYERS_232 = 444444444,
+  NECK_ALDORS_251 = 555555555,
+  NECK_SCRYERS_251 = 666666666,
+  NECK_ALDORS_264 = 777777777,
+  NECK_SCRYERS_264 = 888888888,
 
 };
 
@@ -668,13 +674,43 @@ public:
   ZandalariHaste();
 };
 
-class QuelDanasNeckAldors : public Buff {
+class NeckAldors213 : public Buff {
 public:
-  QuelDanasNeckAldors();
+  NeckAldors213();
 };
 
-class QuelDanasNeckScryers : public Buff {
+class NeckScryers213 : public Buff {
 public:
-  QuelDanasNeckScryers();
+  NeckScryers213();
+};
+
+class NeckAldors232 : public Buff {
+public:
+  NeckAldors232();
+};
+
+class NeckScryers232 : public Buff {
+public:
+  NeckScryers232();
+};
+
+class NeckAldors251 : public Buff {
+public:
+  NeckAldors251();
+};
+
+class NeckScryers251 : public Buff {
+public:
+  NeckScryers251();
+};
+
+class NeckAldors264 : public Buff {
+public:
+  NeckAldors264();
+};
+
+class NeckScryers264 : public Buff {
+public:
+  NeckScryers264();
 };
 }// namespace buff

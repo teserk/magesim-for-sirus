@@ -5,7 +5,9 @@ export default {
         RACE_GNOME: 2,
         RACE_HUMAN: 3,
         RACE_TROLL: 4,
-        RACE_UNDEAD: 5
+        RACE_UNDEAD: 5,
+        RACE_LIGHTFORGED: 6,
+        RACE_ZANDALARI: 7,
     },
     rotations: {
         ROTATION_ST_FROSTFIRE: 0,
@@ -88,5 +90,14 @@ export default {
         CHARRED_TWILIGHT_SCALE_HC: 75473,
         CHARRED_TWILIGHT_SCALE_NM: 75466,
         PURIFIED_LUNAR_DUST: 71584,
+        // Sirus necks
+        NECK_ALDORS_213: 111111111,
+        NECK_SCRYERS_213: 222222222,
+        NECK_ALDORS_232: 3333333333,
+        NECK_SCRYERS_232: 444444444,
+        NECK_ALDORS_251: 5555555555,
+        NECK_SCRYERS_251: 666666666,
+        NECK_ALDORS_264: 777777777,
+        NECK_SCRYERS_264: 888888888,
     }
 };

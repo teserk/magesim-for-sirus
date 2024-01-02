@@ -1,1 +1,69 @@
-importScripts("./magesim.js"),onmessage=function(n){var t=n.data;"start"==t.type&&fetch("./magesim.wasm",{cache:"no-store"}).then((function(n){return n.arrayBuffer()})).then((function(n){return MageSim({wasmBinary:n})})).then((function(n){return n.ready})).then((function(n){var i=n.allocConfig();for(var o in t.config)"timings"!=o&&void 0!==i[o]&&(i[o]=t.config[o]);n.Rotation.values.hasOwnProperty(t.config.rotation)&&(i.rotation=n.Rotation.values[t.config.rotation]),n.Trinket.values.hasOwnProperty(t.config.trinket1)&&(i.trinket1=n.Trinket.values[t.config.trinket1]),n.Trinket.values.hasOwnProperty(t.config.trinket2)&&(i.trinket2=n.Trinket.values[t.config.trinket2]),n.MetaGem.values.hasOwnProperty(t.config.meta_gem)&&(i.meta_gem=n.MetaGem.values[t.config.meta_gem]),n.Potion.values.hasOwnProperty(t.config.potion)&&(i.potion=n.Potion.values[t.config.potion]),n.Potion.values.hasOwnProperty(t.config.pre_potion)&&(i.pre_potion=n.Potion.values[t.config.pre_potion]),n.Conjured.values.hasOwnProperty(t.config.conjured)&&(i.conjured=n.Conjured.values[t.config.conjured]),t.config.rot_black_magic&&t.config.rot_black_magic_ench&&n.Enchant.values.hasOwnProperty(t.config.rot_black_magic_ench)&&(i.rot_black_magic_ench=n.Enchant.values[t.config.rot_black_magic_ench]);for(var e=0;e<t.config.timings.length;e++)n.addTiming(i,t.config.timings[e].name,t.config.timings[e].t?t.config.timings[e].t:0,t.config.timings[e].wait_for_buff,t.config.timings[e].wait_t?t.config.timings[e].wait_t:0);for(e=0;e<t.config.interruptions.length;e++)n.addInterruption(i,t.config.interruptions[e].silence,t.config.interruptions[e].affects_all,t.config.interruptions[e].t,t.config.interruptions[e].duration);var r=JSON.parse(JSON.stringify(n.emptyStats()));for(var o in t.config.stats)r.hasOwnProperty(o)&&(r[o]=t.config.stats[o]);var a=JSON.parse(JSON.stringify(n.emptyTalents()));for(var o in t.config.talents)a.hasOwnProperty(o)&&(a[o]=t.config.talents[o]);var s=JSON.parse(JSON.stringify(n.emptyGlyphs()));for(var o in t.config.glyphs)s.hasOwnProperty(o)&&(s[o]=t.config.glyphs[o]);var c=n.allocPlayer(i,r,a,s);if(n.Race.values.hasOwnProperty(t.config.race)&&(c.race=n.Race.values[t.config.race]),t.iterations&&t.iterations>1)var g=n.runSimulations(i,c,t.iterations);else g=n.runSimulation(i,c);g.log&&(g.log=JSON.parse(g.log)),g.spells&&(g.spells=JSON.parse(g.spells)),g.histogram&&(g.histogram=JSON.parse(g.histogram)),postMessage({type:"success",result:g})})).catch((function(n){return console.error(n)}))};
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!*********************************!*\
+  !*** ./assets/js/sim_worker.js ***!
+  \*********************************/
+importScripts("./magesim.js");
+onmessage = function onmessage(event) {
+  var data = event.data;
+  if (data.type == "start") {
+    var wasm = fetch("./magesim.wasm", {
+      cache: "no-store"
+    }).then(function (r) {
+      return r.arrayBuffer();
+    }).then(function (binary) {
+      return MageSim({
+        wasmBinary: binary
+      });
+    }).then(function (w) {
+      return w.ready;
+    }).then(function (m) {
+      var config = m.allocConfig();
+      for (var key in data.config) {
+        if (key == "timings") continue;
+        if (typeof config[key] != "undefined") config[key] = data.config[key];
+      }
+      if (m.Rotation.values.hasOwnProperty(data.config.rotation)) config.rotation = m.Rotation.values[data.config.rotation];
+      if (m.Trinket.values.hasOwnProperty(data.config.trinket1)) config.trinket1 = m.Trinket.values[data.config.trinket1];
+      if (m.Trinket.values.hasOwnProperty(data.config.trinket2)) config.trinket2 = m.Trinket.values[data.config.trinket2];
+      if (m.MetaGem.values.hasOwnProperty(data.config.meta_gem)) config.meta_gem = m.MetaGem.values[data.config.meta_gem];
+      if (m.Potion.values.hasOwnProperty(data.config.potion)) config.potion = m.Potion.values[data.config.potion];
+      if (m.Potion.values.hasOwnProperty(data.config.pre_potion)) config.pre_potion = m.Potion.values[data.config.pre_potion];
+      if (m.Conjured.values.hasOwnProperty(data.config.conjured)) config.conjured = m.Conjured.values[data.config.conjured];
+      if (data.config.rot_black_magic && data.config.rot_black_magic_ench && m.Enchant.values.hasOwnProperty(data.config.rot_black_magic_ench)) config.rot_black_magic_ench = m.Enchant.values[data.config.rot_black_magic_ench];
+      if (m.Neck.values.hasOwnProperty(data.config.neck)) config.neck = m.Neck.values[data.config.neck];
+      for (var i = 0; i < data.config.timings.length; i++) {
+        m.addTiming(config, data.config.timings[i].name, data.config.timings[i].t ? data.config.timings[i].t : 0, data.config.timings[i].wait_for_buff, data.config.timings[i].wait_t ? data.config.timings[i].wait_t : 0);
+      }
+      for (var i = 0; i < data.config.interruptions.length; i++) {
+        m.addInterruption(config, data.config.interruptions[i].silence, data.config.interruptions[i].affects_all, data.config.interruptions[i].t, data.config.interruptions[i].duration);
+      }
+      var stats = JSON.parse(JSON.stringify(m.emptyStats()));
+      for (var key in data.config.stats) {
+        if (stats.hasOwnProperty(key)) stats[key] = data.config.stats[key];
+      }
+      var talents = JSON.parse(JSON.stringify(m.emptyTalents()));
+      for (var key in data.config.talents) {
+        if (talents.hasOwnProperty(key)) talents[key] = data.config.talents[key];
+      }
+      var glyphs = JSON.parse(JSON.stringify(m.emptyGlyphs()));
+      for (var key in data.config.glyphs) {
+        if (glyphs.hasOwnProperty(key)) glyphs[key] = data.config.glyphs[key];
+      }
+      var player = m.allocPlayer(config, stats, talents, glyphs);
+      if (m.Race.values.hasOwnProperty(data.config.race)) player.race = m.Race.values[data.config.race];
+      if (data.iterations && data.iterations > 1) var result = m.runSimulations(config, player, data.iterations);else var result = m.runSimulation(config, player);
+      if (result.log) result.log = JSON.parse(result.log);
+      if (result.spells) result.spells = JSON.parse(result.spells);
+      if (result.histogram) result.histogram = JSON.parse(result.histogram);
+      postMessage({
+        type: "success",
+        result: result
+      });
+    })["catch"](function (e) {
+      return console.error(e);
+    });
+  }
+};
+/******/ })()
+;

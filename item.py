@@ -5,9 +5,15 @@ import pprint
 import re
 import json
 
+stamina_type = 7
+int_type = 5
+haste_type = 36
+hit_type = 31
+sp_type = 45
+
 
 # TODO: Поменять вовхед на базу данных сируса
-def getItem(item_id, phase = 1, faction = None):
+def getItem(item_id, phase=1, faction=None):
     if item_id[:4] == "http":
         url = item_id + "&xml"
     else:
@@ -15,7 +21,7 @@ def getItem(item_id, phase = 1, faction = None):
 
     response = requests.get(url)
     if response.status_code != 200:
-        print("Error for "+item_id+" - http code: " + response.status_code)
+        print("Error for " + item_id + " - http code: " + response.status_code)
         return None
 
     xml = response.content.decode()
@@ -23,7 +29,7 @@ def getItem(item_id, phase = 1, faction = None):
     p = re.compile("\<error\>(.*?)\<\/error\>")
     m = p.search(xml)
     if m:
-        print("Error for "+item_id+" : "+m.group(1))
+        print("Error for " + item_id + " : " + m.group(1))
         return None
 
     stats = {}
@@ -32,7 +38,7 @@ def getItem(item_id, phase = 1, faction = None):
     p = re.compile("\<item id=\"([0-9]+)\"")
     m = p.search(xml)
     if not m:
-        print("No id for "+item_id)
+        print("No id for " + item_id)
         return None
     stats["id"] = int(m.group(1))
 
@@ -40,7 +46,7 @@ def getItem(item_id, phase = 1, faction = None):
     p = re.compile("\<name\>\<\!\[CDATA\[([^\]]+)\]\]")
     m = p.search(xml)
     if not m:
-        print("No name for "+item_id)
+        print("No name for " + item_id)
         return None
     stats["title"] = m.group(1)
 
@@ -54,7 +60,7 @@ def getItem(item_id, phase = 1, faction = None):
     p = re.compile("\<jsonEquip\>\<\!\[CDATA\[(.*?)\]\]\>")
     m = p.search(xml)
     if m:
-        equip = json.loads("{"+m.group(1)+"}")
+        equip = json.loads("{" + m.group(1) + "}")
         if "int" in equip:
             stats["int"] = equip["int"]
         if "spi" in equip:
@@ -138,10 +144,11 @@ def getItem(item_id, phase = 1, faction = None):
     output = json.dumps(stats)
     p = re.compile("\"([a-z0-9]+)\":")
     output = p.sub(r"\1:", output)
-    output = output[:1]+" "+output[1:]
-    output = output[:-1]+" "+output[-1:]
+    output = output[:1] + " " + output[1:]
+    output = output[:-1] + " " + output[-1:]
 
     return output
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("item_id", help="Item ID(s)")
@@ -154,4 +161,4 @@ ids = args.item_id.split(",")
 for index, item_id in enumerate(ids):
     item = getItem(item_id, args.p, args.f)
     if item != None:
-        print(item+",")
+        print(item + ",")

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="magesim"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="clang"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="magesim">
+				<Option output="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/magesim" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/home/tamirlan/magesim/magesim-for-sirus/src"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/SDL"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/compat"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/c++/v1"/>
+					<Add directory="/usr/lib/llvm-13/lib/clang/13.0.1/include"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/11/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 magesim"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="magesim/fast">
+				<Option output="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/magesim" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="clang"/>
+				<Compiler>
+					<Add directory="/home/tamirlan/magesim/magesim-for-sirus/src"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/SDL"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/compat"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include/c++/v1"/>
+					<Add directory="/usr/lib/llvm-13/lib/clang/13.0.1/include"/>
+					<Add directory="/usr/share/emscripten/cache/sysroot/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/11/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 magesim/fast"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j8 -f &quot;/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/buff.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/buff.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/common.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/common.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/main.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/mirror_image.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/mirror_image.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/player.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/player.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/simulation.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/simulation.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/state.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/state.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/unit.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/unit.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/water_elemental.cpp">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/src/water_elemental.h">
+			<Option target="magesim"/>
+		</Unit>
+		<Unit filename="/home/tamirlan/magesim/magesim-for-sirus/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -45,13 +45,20 @@ enum ID : int {
   NIBELUNG_NM = 71843,
 
   // Sirus races, TODO: исправить айди
+  // TODO: Исправить баг с бесконечным аптаймом активки эльфа
   LIGHTFORGED = 319321,
   ZANDALARI_HASTE = 55555252,
   BLOOD_ELF_RACE = 443123123,
 
   // Sirus procs
-  QUELDANAS_NECK_ALDORS = 111111111,
-  QUELDANAS_NECK_SCRYERS = 222222222,
+  NECK_ALDORS_213 = 111111111,
+  NECK_SCRYERS_213 = 222222222,
+  NECK_ALDORS_232 = 333333333,
+  NECK_SCRYERS_232 = 444444444,
+  NECK_ALDORS_251 = 555555555,
+  NECK_SCRYERS_251 = 666666666,
+  NECK_ALDORS_264 = 777777777,
+  NECK_SCRYERS_264 = 888888888,
 
   // Trinkets
   FORGE_EMBER = 60479,
@@ -631,18 +638,66 @@ public:
   }
 };
 
-class QueldanasNeckAldors : public Cooldown {
+class NeckAldors213 : public Cooldown {
 public:
-  QueldanasNeckAldors() {
-    id = QUELDANAS_NECK_ALDORS;
+  NeckAldors213() {
+    id = NECK_ALDORS_213;
     duration = 45;
   }
 };
 
-class QueldanasNeckScryers : public Cooldown {
+class NeckScryers213 : public Cooldown {
 public:
-  QueldanasNeckScryers() {
-    id = QUELDANAS_NECK_SCRYERS;
+  NeckScryers213() {
+    id = NECK_SCRYERS_213;
+    duration = 45;
+  }
+};
+
+class NeckAldors232 : public Cooldown {
+public:
+  NeckAldors232() {
+    id = NECK_ALDORS_232;
+    duration = 45;
+  }
+};
+
+class NeckScryers232 : public Cooldown {
+public:
+  NeckScryers232() {
+    id = NECK_SCRYERS_232;
+    duration = 45;
+  }
+};
+
+class NeckAldors251 : public Cooldown {
+public:
+  NeckAldors251() {
+    id = NECK_ALDORS_251;
+    duration = 45;
+  }
+};
+
+class NeckScryers251 : public Cooldown {
+public:
+  NeckScryers251() {
+    id = NECK_SCRYERS_251;
+    duration = 45;
+  }
+};
+
+class NeckAldors264 : public Cooldown {
+public:
+  NeckAldors264() {
+    id = NECK_ALDORS_264;
+    duration = 45;
+  }
+};
+
+class NeckScryers264 : public Cooldown {
+public:
+  NeckScryers264() {
+    id = NECK_SCRYERS_264;
     duration = 45;
   }
 };

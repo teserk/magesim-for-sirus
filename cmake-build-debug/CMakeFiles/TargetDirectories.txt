@@ -1,3 +1,3 @@
-C:/Users/souch/CLionProjects/magesim-wotlk/cmake-build-debug/CMakeFiles/magesim.dir
-C:/Users/souch/CLionProjects/magesim-wotlk/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/souch/CLionProjects/magesim-wotlk/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/CMakeFiles/magesim.dir
+/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/tamirlan/magesim/magesim-for-sirus/cmake-build-debug/CMakeFiles/rebuild_cache.dir

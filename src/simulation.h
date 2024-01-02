@@ -1,12 +1,13 @@
 #pragma once
 
-#include "state.h"
-#include "log.h"
-
-#include <string>
-#include <memory>
-#include <vector>
 #include <list>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "log.h"
+#include "player.h"
+#include "state.h"
 
 namespace spell
 {

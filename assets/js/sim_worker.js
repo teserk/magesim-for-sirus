@@ -32,6 +32,8 @@ onmessage = (event) => {
                 config.conjured = m.Conjured.values[data.config.conjured];
             if (data.config.rot_black_magic && data.config.rot_black_magic_ench && m.Enchant.values.hasOwnProperty(data.config.rot_black_magic_ench))
                 config.rot_black_magic_ench = m.Enchant.values[data.config.rot_black_magic_ench];
+            if (m.Neck.values.hasOwnProperty(data.config.neck))
+                config.neck = m.Neck.values[data.config.neck]
 
             for (var i=0; i<data.config.timings.length; i++) {
                 m.addTiming(

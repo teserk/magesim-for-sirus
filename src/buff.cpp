@@ -651,20 +651,59 @@ ZandalariHaste::ZandalariHaste() {
   duration = 10;
 }
 
-/* TODO: Разбить прок шеи на три отдельных разных тиров
- * Пока что сделал только для 213 шеи
- */
-QuelDanasNeckAldors::QuelDanasNeckAldors() {
-  id = QUELDANAS_NECK_ALDOR;
-  name = "QuelDanas Neck Aldor";
+NeckAldors213::NeckAldors213() {
+  id = NECK_ALDORS_213;
   stats.spell_power = 174;
+  name = "Neck Aldors 213";
   duration = 10;
 }
 
-QuelDanasNeckScryers::QuelDanasNeckScryers() {
-  id = QUELDANAS_NECK_SCRYERS;
-  name = "QuelDanas Neck Scryers";
-  stats.spell_power = 348;
+NeckScryers213::NeckScryers213() {
+  id = NECK_SCRYERS_213;
+  stats.spell_power = 348;  // Double of Aldors 213
+  name = "Neck Scryers 213";
+  duration = 5;
+}
+
+NeckAldors232::NeckAldors232() {
+  id = NECK_ALDORS_232;
+  stats.spell_power = 174;
+  name = "Neck Aldors 232";
+  duration = 10;
+}
+
+NeckScryers232::NeckScryers232() {
+  id = NECK_SCRYERS_232;
+  stats.spell_power = 348;  // Double of Aldors 232
+  name = "Neck Scryers 232";
+  duration = 5;
+}
+
+NeckAldors251::NeckAldors251() {
+  id = NECK_ALDORS_251;
+  stats.spell_power = 261;
+  name = "Neck Aldors 251";
+  duration = 10;
+}
+
+NeckScryers251::NeckScryers251() {
+  id = NECK_SCRYERS_251;
+  stats.spell_power = 522;  // Double of Aldors 251
+  name = "Neck Scryers 251";
+  duration = 5;
+}
+
+NeckAldors264::NeckAldors264() {
+  id = NECK_ALDORS_264;
+  stats.spell_power = 297;
+  name = "Neck Aldors 264";
+  duration = 10;
+}
+
+NeckScryers264::NeckScryers264() {
+  id = NECK_SCRYERS_264;
+  stats.spell_power = 594;  // Double of Aldors 264
+  name = "Neck Scryers 264";
   duration = 5;
 }
 }// namespace buff
