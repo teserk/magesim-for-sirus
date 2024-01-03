@@ -17786,7 +17786,7 @@ var ids = {
   TRINKET_SHRUNKEN_HEAD: 33829,
   TRINKET_NAARU_SLIVER: 34429,
   TRINKET_ASHTONGUE_TALISMAN: 32488,
-  // Sirus necks
+  // Sirus necks TODO: убрать этот срам, заменить нормальными айди и добавить отдельно массив реп
   NECK_ALDORS_213: 111111111,
   NECK_SCRYERS_213: 222222222,
   NECK_ALDORS_232: 333333333,
@@ -17796,6 +17796,8 @@ var ids = {
   NECK_ALDORS_264: 777777777,
   NECK_SCRYERS_264: 888888888
 };
+
+// TODO: Переделать эту базу данных
 var equip = {
   weapon: [
   // icc
@@ -30995,8 +30997,10 @@ var enchants = {
     id: 57691,
     enchantmentId: 3758,
     title: "Fur Lining - Spell Power",
-    sp: 76
-  }, {
+    sp: 114
+  },
+  // changed for sirus
+  {
     id: 60767,
     enchantmentId: 2332,
     title: "Superior Spellpower",
@@ -31243,6 +31247,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
+
+// TODO: Убрать Wcl, возможно заменить его парсингом с sirus.api
 var Wcl = /*#__PURE__*/function () {
   function Wcl(client_id) {
     _classCallCheck(this, Wcl);

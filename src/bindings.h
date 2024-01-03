@@ -237,6 +237,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
     .property("darkglow_embroidery", &Config::darkglow_embroidery)
     .property("hyperspeed_accelerators", &Config::hyperspeed_accelerators)
     .property("t3_2set", &Config::t3_2set)
+    .property("t4_2set", &Config::t4_2set)
+    .property("t4_4set", &Config::t4_4set)
     .property("t5_2set", &Config::t5_2set)
     .property("t5_4set", &Config::t5_4set)
     .property("t6_2set", &Config::t6_2set)

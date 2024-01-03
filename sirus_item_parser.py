@@ -29,6 +29,8 @@ def getItem(item_id):
     stats["name"] = data["name"]
     stats["ilvl"] = data["item_level"]
 
+    stats["inventory_type"] = data["inventory_type"]
+
     stats[type_to_name[data["stat_type1"]]] = data["stat_value1"]
     stats[type_to_name[data["stat_type2"]]] = data["stat_value2"]
     stats[type_to_name[data["stat_type3"]]] = data["stat_value3"]
@@ -58,8 +60,4 @@ def getItem(item_id):
             stats["bonus"] = {"sp", int(value)}  # TODO: добавить мп5 слишком ща впадлу
 
     stats["unique"] = data["is_unique"]
-    return stats
-
-
-itemid = input()
-print(getItem(itemid))
+    return json.dumps(stats, indent=2)

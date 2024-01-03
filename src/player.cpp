@@ -184,7 +184,7 @@ double Player::hitChance(std::shared_ptr<spell::Spell> spell, double dlevel) con
     hit += 1;
   }
 
-  // Precision double dip for ffb
+  // Precision double dip for ffb, unconfirmed for sirus
   if (spell->id == spell::FROSTFIRE_BOLT && talents.precision)
     hit += talents.precision;
 
@@ -1855,7 +1855,7 @@ action::Action Player::useCooldown(const State &state) {
     auto action = buffAction<buff::ArcanePower>(true, glyphs.arcane_power);
     action.cooldown = std::make_shared<cooldown::ArcanePower>();
     return action;
-    // Возгорание не актуально на данный момент
+    // Возгорание не актуально на данный момент, никогда его не прожимаем
     //    } else if (talents.combustion && !hasCooldown(cooldown::COMBUSTION) && !hasBuff(buff::COMBUSTION) &&
     //               useTimingIfPossible("combustion", state)) {
     //      combustion = 0;

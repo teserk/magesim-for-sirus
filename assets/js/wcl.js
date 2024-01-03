@@ -1,5 +1,7 @@
 import axios from "axios";
 
+
+// TODO: Убрать Wcl, возможно заменить его парсингом с sirus.api
 class Wcl {
 
     constructor(client_id) {
@@ -77,7 +79,7 @@ class Wcl {
             throw new Error("Could not find any ranked characters");
         if (fight.friendlyPlayers)
             chars = chars.filter(c => fight.friendlyPlayers.indexOf(c.id) != -1);
-        if (deaths) 
+        if (deaths)
             chars = chars.filter(c => !_.find(deaths, {targetID: c.id}));
         var char = _.find(chars, {type: "Warrior"});
         if (!char)
@@ -121,9 +123,9 @@ class Wcl {
 
             if (data.dp.length > 1 && data.duration) {
                 var total = 0;
-                for (var i=0; i<data.dp.length; i++)
-                    total+= data.dp[i].sp * ((i == data.dp.length-1 ? data.duration : data.dp[i+1].t) - data.dp[i].t);
-                data.dp_avg = _.round(total/data.duration);
+                for (var i = 0; i < data.dp.length; i++)
+                    total += data.dp[i].sp * ((i == data.dp.length - 1 ? data.duration : data.dp[i + 1].t) - data.dp[i].t);
+                data.dp_avg = _.round(total / data.duration);
             }
         }
 
@@ -135,7 +137,7 @@ class Wcl {
     async oauthInit(redir) {
         this.unsetAccessToken();
 
-        var code_verifier = crypto.randomUUID()+crypto.randomUUID();
+        var code_verifier = crypto.randomUUID() + crypto.randomUUID();
         localStorage.setItem("wcl_code_verifier", code_verifier);
 
         var challenge = await this.createChallenge(code_verifier);
@@ -152,23 +154,22 @@ class Wcl {
             response_type: "code",
         });
 
-        var url = "https://classic.warcraftlogs.com/oauth/authorize?"+params.toString();
+        var url = "https://classic.warcraftlogs.com/oauth/authorize?" + params.toString();
         if (redir) {
             window.location.href = url;
-        }
-        else {
-            var width = Math.min(window.innerWidth-20, 720);
-            var height = Math.min(window.innerHeight-20, 480);
+        } else {
+            var width = Math.min(window.innerWidth - 20, 720);
+            var height = Math.min(window.innerHeight - 20, 480);
 
             var options = [
                 "popup=1",
-                "width="+width,
-                "height="+height,
-                "left="+(window.innerWidth-width)/2,
-                "top="+(window.innerHeight-height)/2,
+                "width=" + width,
+                "height=" + height,
+                "left=" + (window.innerWidth - width) / 2,
+                "top=" + (window.innerHeight - height) / 2,
             ];
 
-            window.open(url,"WCL Login", options.join(","));
+            window.open(url, "WCL Login", options.join(","));
         }
     }
 
@@ -189,12 +190,12 @@ class Wcl {
 
         return new Promise((res, rej) => {
             axios.post(url, data)
-            .then(r => {
-                if (_.get(r.data, "access_token"))
-                    res(r.data);
-                else
-                    rej("No access token in response");
-            });
+                .then(r => {
+                    if (_.get(r.data, "access_token"))
+                        res(r.data);
+                    else
+                        rej("No access token in response");
+                });
         });
     }
 
@@ -225,9 +226,9 @@ class Wcl {
 
         var d = new Date;
         if (data.expires_in)
-            d.setTime(d.getTime() + (data.expires_in - 7200)*1000); // Remove 2 days from expiration to be safe
+            d.setTime(d.getTime() + (data.expires_in - 7200) * 1000); // Remove 2 days from expiration to be safe
         else
-            d.setDate(d.getDate()+1); // 1 day expiration default
+            d.setDate(d.getDate() + 1); // 1 day expiration default
         localStorage.setItem("wcl_access_token_expires", d.getTime());
     }
 
@@ -261,18 +262,18 @@ class Wcl {
         return new Promise((res, rej) => {
             axios({
                 method: method,
-                url: this.base_url+uri,
+                url: this.base_url + uri,
                 data: data,
                 params: params,
-                headers: {Authorization: "Bearer "+this.access_token}
+                headers: {Authorization: "Bearer " + this.access_token}
             })
-            .then(r => res(r))
-            .catch(e => {
-                if (e.status == 401 || e.status == 403)
-                    this.oauthInit();
-                else
-                    rej(e);
-            })
+                .then(r => res(r))
+                .catch(e => {
+                    if (e.status == 401 || e.status == 403)
+                        this.oauthInit();
+                    else
+                        rej(e);
+                })
         });
     }
 
@@ -292,4 +293,4 @@ class Wcl {
 
 }
 
-export { Wcl }
+export {Wcl}

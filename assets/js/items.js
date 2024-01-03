@@ -88,7 +88,7 @@ const ids = {
     TRINKET_SHRUNKEN_HEAD: 33829,
     TRINKET_NAARU_SLIVER: 34429,
     TRINKET_ASHTONGUE_TALISMAN: 32488,
-    // Sirus necks
+    // Sirus necks TODO: убрать этот срам, заменить нормальными айди и добавить отдельно массив реп
     NECK_ALDORS_213: 111111111,
     NECK_SCRYERS_213: 222222222,
     NECK_ALDORS_232: 333333333,
@@ -99,6 +99,8 @@ const ids = {
     NECK_SCRYERS_264: 888888888,
 };
 
+
+// TODO: Переделать эту базу данных
 var equip = {
     weapon: [
         // icc
@@ -1531,7 +1533,7 @@ var enchants = {
         { id: 33990, enchantmentId: 1144, title: "Major Spirit", spi: 15 },
     ],
     wrist: [
-        { id: 57691, enchantmentId: 3758, title: "Fur Lining - Spell Power", sp: 76 },
+        { id: 57691, enchantmentId: 3758, title: "Fur Lining - Spell Power", sp: 114 }, // changed for sirus
         { id: 60767, enchantmentId: 2332, title: "Superior Spellpower", sp: 30 },
         { id: 44593, enchantmentId: 1147, title: "Major spirit", spi: 18 },
         { id: 44555, enchantmentId: 1119, title: "Exceptional Intellect", int: 16 },
