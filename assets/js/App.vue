@@ -2014,7 +2014,6 @@ export default {
     this.loadDefaultProfiles();
     this.loadProfiles();
     this.calcStats();
-    this.checkDonation();
   },
 
   data() {
