@@ -1,8 +1,10 @@
 # MageSim Wotlk
 
-Mage DPS simulator for WoW Wotlk Classic.
+Mage DPS simulator for WoW Sirus.
 
 [Live sim website](https://teserk.github.io/magesim-for-sirus/)
+
+Adapted Mage DPS simulator from Magesim (big thanks to Cheesehyvel).
 
 Backend is written in C++ and compiled with Emscripten into WebAssembly.\
 Frontend is written in Vue.js and SCSS and compiled with Laravel mix.
