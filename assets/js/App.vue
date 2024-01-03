@@ -1,591 +1,596 @@
 <template>
-  <div id="app">
-    <div class="notice notice-alt" v-if="donation_open" @click="donation_open = false">
+
+  <div class="notices">
+    <div class="error-notice notice" v-if="error_notice.open" @click="error_notice.open = false">
       <div class="inner">
-        <div class="title">Thank you!</div>
-        <div class="text mt-2">
-          For your donation.
+        <div class="title mb-2" v-if="error_notice.title">{{ error_notice.title }}</div>
+        <div class="text" v-if="error_notice.text">
+          <div v-for="text in error_notice.text">{{ text }}</div>
         </div>
       </div>
     </div>
-
-    <div class="notices">
-      <div class="error-notice notice" v-if="error_notice.open" @click="error_notice.open = false">
-        <div class="inner">
-          <div class="title mb-2" v-if="error_notice.title">{{ error_notice.title }}</div>
-          <div class="text" v-if="error_notice.text">
-            <div v-for="text in error_notice.text">{{ text }}</div>
-          </div>
-        </div>
-      </div>
-      <div class="profile-status notice" v-if="profile_status.open" @click="profile_status.open = false">
-        <div class="inner">
-          <div class="title">Profile loaded</div>
-          <div class="checklist">
-            <check-item :value="profile_status.items">Items</check-item>
-            <check-item :value="false" v-for="slot in profile_status.missing_items" :key="slot">{{ formatKey(slot) }}
-            </check-item>
-            <check-item :value="profile_status.config">Config</check-item>
-          </div>
+    <div class="profile-status notice" v-if="profile_status.open" @click="profile_status.open = false">
+      <div class="inner">
+        <div class="title">Profile loaded</div>
+        <div class="checklist">
+          <check-item :value="profile_status.items">Items</check-item>
+          <check-item :value="false" v-for="slot in profile_status.missing_items" :key="slot">{{ formatKey(slot) }}
+          </check-item>
+          <check-item :value="profile_status.config">Config</check-item>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="wrapper">
-      <div class="sidebar">
-        <div class="actions">
-          <div class="btn large block mt-n" @click="runMultiple" :class="[is_running ? 'disabled' : '']">
-            <div>Run</div>
-            <div>{{ config.iterations }} iterations</div>
-          </div>
-          <div class="btn block mt-n" @click="runSingle" :class="[is_running ? 'disabled' : '']">
-            <div>Single iteration</div>
-          </div>
-          <div class="btn block mt-n" @click="runEP" :class="[is_running && !is_running_ep ? 'disabled' : '']">
-            <div v-if="!is_running_ep">Stat weights</div>
-            <div v-else>Stop</div>
-          </div>
+  <div class="wrapper">
+    <div class="sidebar">
+      <div class="actions">
+        <div class="btn large block mt-n" @click="runMultiple" :class="[is_running ? 'disabled' : '']">
+          <div>Run</div>
+          <div>{{ config.iterations }} iterations</div>
         </div>
-        <div class="display-stats" v-if="display_stats">
-          <table class="simple">
-            <tbody>
-            <tr>
-              <td>Mana</td>
-              <td>{{ display_stats.mana }}</td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.intellect ? 'active' : '']">
-                Intellect
-                <span v-if="config.custom_stats.intellect">
+        <div class="btn block mt-n" @click="runSingle" :class="[is_running ? 'disabled' : '']">
+          <div>Single iteration</div>
+        </div>
+        <div class="btn block mt-n" @click="runEP" :class="[is_running && !is_running_ep ? 'disabled' : '']">
+          <div v-if="!is_running_ep">Stat weights</div>
+          <div v-else>Stop</div>
+        </div>
+      </div>
+      <div class="display-stats" v-if="display_stats">
+        <table class="simple">
+          <tbody>
+          <tr>
+            <td>Mana</td>
+            <td>{{ display_stats.mana }}</td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.intellect ? 'active' : '']">
+              Intellect
+              <span v-if="config.custom_stats.intellect">
                                         ({{ $plusMinus(config.custom_stats.intellect) }})
                                         <tooltip
                                             position="t">{{ config.custom_stats.intellect }} bonus intellect</tooltip>
                                     </span>
-              </td>
-              <td>{{ display_stats.intellect }}</td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.spirit ? 'active' : '']">
-                Spirit
-                <span v-if="config.custom_stats.spirit">
+            </td>
+            <td>{{ display_stats.intellect }}</td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.spirit ? 'active' : '']">
+              Spirit
+              <span v-if="config.custom_stats.spirit">
                                         ({{ $plusMinus(config.custom_stats.spirit) }})
                                         <tooltip position="t">{{ config.custom_stats.spirit }} bonus spirit</tooltip>
                                     </span>
-              </td>
-              <td>{{ display_stats.spirit }}</td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.mp5 ? 'active' : '']">
-                Mp5
-                <span v-if="config.custom_stats.mp5">
+            </td>
+            <td>{{ display_stats.spirit }}</td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.mp5 ? 'active' : '']">
+              Mp5
+              <span v-if="config.custom_stats.mp5">
                                         ({{ $plusMinus(config.custom_stats.mp5) }})
                                         <tooltip position="t">{{ config.custom_stats.mp5 }} bonus mp5</tooltip>
                                     </span>
-              </td>
-              <td>{{ display_stats.mp5 }}</td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.spell_power ? 'active' : '']">
-                Spell power
-                <span v-if="config.custom_stats.spell_power">
+            </td>
+            <td>{{ display_stats.mp5 }}</td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.spell_power ? 'active' : '']">
+              Spell power
+              <span v-if="config.custom_stats.spell_power">
                                         ({{ $plusMinus(config.custom_stats.spell_power) }})
                                         <tooltip
-                                            position="t">{{ config.custom_stats.spell_power }} bonus spell power</tooltip>
+                                            position="t">{{
+                                            config.custom_stats.spell_power
+                                          }} bonus spell power</tooltip>
                                     </span>
-              </td>
-              <td>{{ display_stats.spell_power }}</td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.crit_rating ? 'active' : '']">
-                Crit
-                <span v-if="config.custom_stats.crit_rating">
+            </td>
+            <td>{{ display_stats.spell_power }}</td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.crit_rating ? 'active' : '']">
+              Crit
+              <span v-if="config.custom_stats.crit_rating">
                                         ({{ $plusMinus(config.custom_stats.crit_rating) }})
                                         <tooltip
-                                            position="t">{{ config.custom_stats.crit_rating }} bonus crit rating</tooltip>
+                                            position="t">{{
+                                            config.custom_stats.crit_rating
+                                          }} bonus crit rating</tooltip>
                                     </span>
-              </td>
-              <td>
-                <span>{{ $round(display_stats.crit, 2) }}%</span>
-                <tooltip position="r">{{ display_stats.crit_rating }} crit rating</tooltip>
-              </td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.hit_rating ? 'active' : '']">
-                Hit
-                <span v-if="config.custom_stats.hit_rating">
+            </td>
+            <td>
+              <span>{{ $round(display_stats.crit, 2) }}%</span>
+              <tooltip position="r">{{ display_stats.crit_rating }} crit rating</tooltip>
+            </td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.hit_rating ? 'active' : '']">
+              Hit
+              <span v-if="config.custom_stats.hit_rating">
                                         ({{ $plusMinus(config.custom_stats.hit_rating) }})
                                         <tooltip
                                             position="t">{{ config.custom_stats.hit_rating }} bonus hit rating</tooltip>
                                     </span>
-              </td>
-              <td>
-                <span>{{ $round(display_stats.hit, 2) }}%</span>
-                <tooltip position="r">
-                  <div class="tal">
-                    <div>{{ $round(hitRatingToChance(display_stats.hit_rating),2) }}% from {{ display_stats.hit_rating
-                      }} hit rating
-                    </div>
-                    <div v-if="config.talents.precision">{{ config.talents.precision }}% from Precision</div>
-                    <div v-if="config.talents.precision && config.rotation == rotations.ROTATION_ST_FROSTFIRE">{{
-                      config.talents.precision }}% extra from Precision (ffb only)
-                    </div>
-                    <div v-if="config.debuff_spell_hit">3% from spell hit debuff</div>
-                    <div v-if="config.heroic_presence && faction == 'alliance'">1% from Heroic Presence</div>
-                    <div v-if="config.talents.arcane_focus">3% from Arcane Focus (arcane only)</div>
+            </td>
+            <td>
+              <span>{{ $round(display_stats.hit, 2) }}%</span>
+              <tooltip position="r">
+                <div class="tal">
+                  <div>{{ $round(hitRatingToChance(display_stats.hit_rating), 2) }}% from {{
+                      display_stats.hit_rating
+                    }} hit rating
                   </div>
-                </tooltip>
-              </td>
-            </tr>
-            <tr>
-              <td :class="[config.custom_stats.haste_rating ? 'active' : '']">
-                Haste
-                <span v-if="config.custom_stats.haste_rating">
+                  <div v-if="config.talents.precision">{{ config.talents.precision }}% from Precision</div>
+                  <div v-if="config.talents.precision && config.rotation == rotations.ROTATION_ST_FROSTFIRE">{{
+                      config.talents.precision
+                    }}% extra from Precision (ffb only)
+                  </div>
+                  <div v-if="config.debuff_spell_hit">3% from spell hit debuff</div>
+                  <div v-if="config.heroic_presence && faction == 'alliance'">1% from Heroic Presence</div>
+                  <div v-if="config.talents.arcane_focus">3% from Arcane Focus (arcane only)</div>
+                </div>
+              </tooltip>
+            </td>
+          </tr>
+          <tr>
+            <td :class="[config.custom_stats.haste_rating ? 'active' : '']">
+              Haste
+              <span v-if="config.custom_stats.haste_rating">
                                         ({{ $plusMinus(config.custom_stats.haste_rating) }})
                                         <tooltip
-                                            position="t">{{ config.custom_stats.haste_rating }} bonus haste rating</tooltip>
+                                            position="t">{{
+                                            config.custom_stats.haste_rating
+                                          }} bonus haste rating</tooltip>
                                     </span>
-              </td>
-              <td>
-                <span>{{ $round(display_stats.haste, 2) }}%</span>
-                <tooltip position="r">{{ display_stats.haste_rating }} haste rating</tooltip>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <div class="mt-1 tac">
-            <div class="btn small" @click="openCustomStats">
-              Add bonus stats
-            </div>
+            </td>
+            <td>
+              <span>{{ $round(display_stats.haste, 2) }}%</span>
+              <tooltip position="r">{{ display_stats.haste_rating }} haste rating</tooltip>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="mt-1 tac">
+          <div class="btn small" @click="openCustomStats">
+            Add bonus stats
           </div>
         </div>
-        <div class="ep-stats" v-if="epCalc">
-          <div class="title">
-            <span>Stat weights</span>
-            <help>
-              Stat weights are calculated by running {{ config.iterations }} iterations with +{{
-              config.stat_weight_increment }} of each stat with the same RNG seed and comparing the dps gain.<br>
-              Calculated stat weights are based on your config. Any changes to it or your items can change the
-              weights.<br>
-              The best way to find out if an item/gem/enchant is better is to equip it and run simulations.
-            </help>
-          </div>
-          <select v-model="ep_weight">
-            <option value="dps">DPS</option>
-            <option value="intellect">Intellect (EP)</option>
-            <option value="spirit">Spirit (EP)</option>
-            <option value="mp5">Mp5 (EP)</option>
-            <option value="spell_power">Spell power (EP)</option>
-            <option value="crit_rating">Crit rating (EP)</option>
-            <option value="hit_rating">Hit rating (EP)</option>
-            <option value="haste_rating">Haste rating (EP)</option>
-          </select>
-          <table class="simple mt-1">
-            <tbody>
-            <tr @click="ep_weight = 'intellect'">
-              <td>Intellect</td>
-              <td>{{ $nullRound(epCalc.intellect, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'spirit'">
-              <td>Spirit</td>
-              <td>{{ $nullRound(epCalc.spirit, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'mp5'">
-              <td>Mp5</td>
-              <td>{{ $nullRound(epCalc.mp5, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'spell_power'">
-              <td>Spell power</td>
-              <td>{{ $nullRound(epCalc.spell_power, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'crit_rating'">
-              <td>Crit rating</td>
-              <td>{{ $nullRound(epCalc.crit_rating, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'hit_rating'">
-              <td>Hit rating</td>
-              <td>{{ $nullRound(epCalc.hit_rating, 2) }}</td>
-            </tr>
-            <tr @click="ep_weight = 'haste_rating'">
-              <td>Haste rating</td>
-              <td>{{ $nullRound(epCalc.haste_rating, 2) }}</td>
-            </tr>
-            </tbody>
-          </table>
-          <loader class="small mt-2" v-if="is_running"/>
+      </div>
+      <div class="ep-stats" v-if="epCalc">
+        <div class="title">
+          <span>Stat weights</span>
+          <help>
+            Stat weights are calculated by running {{ config.iterations }} iterations with +{{
+              config.stat_weight_increment
+            }} of each stat with the same RNG seed and comparing the dps gain.<br>
+            Calculated stat weights are based on your config. Any changes to it or your items can change the
+            weights.<br>
+            The best way to find out if an item/gem/enchant is better is to equip it and run simulations.
+          </help>
         </div>
-        <div class="no-result mt-4" v-else-if="is_running">
-          <loader v-if="is_running"/>
-        </div>
-        <div class="result" v-else-if="result">
-          <template v-if="result.iterations">
-            <div class="dps-result">
-              <div>DPS</div>
-              <div class="faded">{{ $round(result.min_dps, 2) }} - {{ $round(result.max_dps, 2) }}</div>
-              <div class="dps">{{ $round(result.avg_dps, 2) }}</div>
-              <div class="mb-1" v-if="result.t_gcd_capped >= 0.01 || result.n_oom">
-                <div class="faded" v-if="result.t_gcd_capped >= 0.01">
-                  <span>Wasted haste: {{ $round(result.t_gcd_capped, 2) }}s</span>
-                  <help>Time spent gcd capped</help>
-                </div>
-                <div class="faded warning" v-if="result.n_oom">
-                  <span>OOM: {{ $round(result.n_oom / result.iterations * 100) }}%</span>
-                  <help>
-                    Out of mana in {{ $round(result.n_oom) }} iterations<br>
-                    Common issues might be due to the number of Evocation ticks or timing of mana cooldowns.
-                  </help>
-                </div>
+        <select v-model="ep_weight">
+          <option value="dps">DPS</option>
+          <option value="intellect">Intellect (EP)</option>
+          <option value="spirit">Spirit (EP)</option>
+          <option value="mp5">Mp5 (EP)</option>
+          <option value="spell_power">Spell power (EP)</option>
+          <option value="crit_rating">Crit rating (EP)</option>
+          <option value="hit_rating">Hit rating (EP)</option>
+          <option value="haste_rating">Haste rating (EP)</option>
+        </select>
+        <table class="simple mt-1">
+          <tbody>
+          <tr @click="ep_weight = 'intellect'">
+            <td>Intellect</td>
+            <td>{{ $nullRound(epCalc.intellect, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'spirit'">
+            <td>Spirit</td>
+            <td>{{ $nullRound(epCalc.spirit, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'mp5'">
+            <td>Mp5</td>
+            <td>{{ $nullRound(epCalc.mp5, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'spell_power'">
+            <td>Spell power</td>
+            <td>{{ $nullRound(epCalc.spell_power, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'crit_rating'">
+            <td>Crit rating</td>
+            <td>{{ $nullRound(epCalc.crit_rating, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'hit_rating'">
+            <td>Hit rating</td>
+            <td>{{ $nullRound(epCalc.hit_rating, 2) }}</td>
+          </tr>
+          <tr @click="ep_weight = 'haste_rating'">
+            <td>Haste rating</td>
+            <td>{{ $nullRound(epCalc.haste_rating, 2) }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <loader class="small mt-2" v-if="is_running"/>
+      </div>
+      <div class="no-result mt-4" v-else-if="is_running">
+        <loader v-if="is_running"/>
+      </div>
+      <div class="result" v-else-if="result">
+        <template v-if="result.iterations">
+          <div class="dps-result">
+            <div>DPS</div>
+            <div class="faded">{{ $round(result.min_dps, 2) }} - {{ $round(result.max_dps, 2) }}</div>
+            <div class="dps">{{ $round(result.avg_dps, 2) }}</div>
+            <div class="mb-1" v-if="result.t_gcd_capped >= 0.01 || result.n_oom">
+              <div class="faded" v-if="result.t_gcd_capped >= 0.01">
+                <span>Wasted haste: {{ $round(result.t_gcd_capped, 2) }}s</span>
+                <help>Time spent gcd capped</help>
+              </div>
+              <div class="faded warning" v-if="result.n_oom">
+                <span>OOM: {{ $round(result.n_oom / result.iterations * 100) }}%</span>
+                <help>
+                  Out of mana in {{ $round(result.n_oom) }} iterations<br>
+                  Common issues might be due to the number of Evocation ticks or timing of mana cooldowns.
+                </help>
               </div>
             </div>
-            <div class="pinned" v-if="pin_dps">
+          </div>
+          <div class="pinned" v-if="pin_dps">
                             <span class="update" @click="updatePin">
                                 <span class="material-icons">&#xe5d5;</span>
                                 <tooltip position="r">Update reference</tooltip>
                             </span>
-              <span class="diff" :class="[pin_dps > result.avg_dps ? 'lt' : 'gt']">
-                                <template v-if="pin_dps <= result.avg_dps">+</template>{{ $roundFixed(result.avg_dps - pin_dps, 2) }}
+            <span class="diff" :class="[pin_dps > result.avg_dps ? 'lt' : 'gt']">
+                                <template v-if="pin_dps <= result.avg_dps">+</template>{{
+                $roundFixed(result.avg_dps - pin_dps, 2)
+              }}
                             </span>
-              <span class="remove" @click="removePin">
+            <span class="remove" @click="removePin">
                                 <span class="material-icons">&#xe5cd;</span>
                                 <tooltip position="r">Remove reference</tooltip>
                             </span>
-            </div>
-            <div class="pin" v-else>
+          </div>
+          <div class="pin" v-else>
                             <span>
                                 <span class="material-icons" @click="updatePin">&#xf10d;</span>
                                 <tooltip position="r">Set reference</tooltip>
                             </span>
+          </div>
+          <div class="btn mt-2" v-if="!config.rng_seed" :class="[is_running ? 'disabled' : '']"
+               @click="findAvg(result.avg_dps)">Find average fight
+          </div>
+          <div class="btn mt-1" v-if="result.all_results" @click="allResults()">Simulation data</div>
+        </template>
+        <template v-else>
+          <div class="dps-result">
+            <div>DPS</div>
+            <div class="faded">Damage: {{ result.dmg }}</div>
+            <div class="dps">{{ $round(result.dps, 2) }}</div>
+            <div class="faded" v-if="result.t_gcd_capped">
+              <span>Wasted haste: {{ $round(result.t_gcd_capped, 2) }}s</span>
+              <help>Time spent gcd capped</help>
             </div>
-            <div class="btn mt-2" v-if="!config.rng_seed" :class="[is_running ? 'disabled' : '']"
-                 @click="findAvg(result.avg_dps)">Find average fight
-            </div>
-            <div class="btn mt-1" v-if="result.all_results" @click="allResults()">Simulation data</div>
-          </template>
-          <template v-else>
-            <div class="dps-result">
-              <div>DPS</div>
-              <div class="faded">Damage: {{ result.dmg }}</div>
-              <div class="dps">{{ $round(result.dps, 2) }}</div>
-              <div class="faded" v-if="result.t_gcd_capped">
-                <span>Wasted haste: {{ $round(result.t_gcd_capped, 2) }}s</span>
-                <help>Time spent gcd capped</help>
-              </div>
-              <div class="faded warning" v-if="result.t_oom">
-                <span>OOM at {{ $round(result.t_oom, 2) }}s</span>
-                <help>
-                  Ran out of mana at {{ $round(result.t_oom, 2) }}<br>
-                  Common issues might be the number of Evocation ticks or the timing of mana cooldowns.
-                </help>
-              </div>
-            </div>
-          </template>
-
-          <div class="warnings mt-2">
-            <div class="warning" v-if="!isMetaGemActive()">
-              <span class="material-icons">&#xe002;</span>
-              <tooltip position="right">Meta gem requirements have not been met.</tooltip>
-            </div>
-            <div class="warning" v-if="numProfs() > 2">
-              <span class="material-icons">&#xe002;</span>
-              <tooltip position="right">You have selected bonuses from {{ numProfs() }} professions</tooltip>
-            </div>
-            <div class="warning" v-if="numDragonsEye() > 3">
-              <span class="material-icons">&#xe002;</span>
-              <tooltip position="right">You have selected more than 3 Dragon's Eye gems</tooltip>
+            <div class="faded warning" v-if="result.t_oom">
+              <span>OOM at {{ $round(result.t_oom, 2) }}s</span>
+              <help>
+                Ran out of mana at {{ $round(result.t_oom, 2) }}<br>
+                Common issues might be the number of Evocation ticks or the timing of mana cooldowns.
+              </help>
             </div>
           </div>
-        </div>
-        <a class="github" href="https://github.com/Cheesehyvel/magesim-wotlk" target="_blank"></a>
-        <div class="donate">
-          <a href="https://www.paypal.com/donate/?hosted_button_id=CU9RF4LCMW8W6" target="_blank">
-            Donate
-          </a>
+        </template>
+
+        <div class="warnings mt-2">
+          <div class="warning" v-if="!isMetaGemActive()">
+            <span class="material-icons">&#xe002;</span>
+            <tooltip position="right">Meta gem requirements have not been met.</tooltip>
+          </div>
+          <div class="warning" v-if="numProfs() > 2">
+            <span class="material-icons">&#xe002;</span>
+            <tooltip position="right">You have selected bonuses from {{ numProfs() }} professions</tooltip>
+          </div>
+          <div class="warning" v-if="numDragonsEye() > 3">
+            <span class="material-icons">&#xe002;</span>
+            <tooltip position="right">You have selected more than 3 Dragon's Eye gems</tooltip>
+          </div>
         </div>
       </div>
-      <div class="main">
-        <div class="tabs">
-          <div class="tab" :class="{active: active_tab == 'gear'}" @click="setTab('gear')">Gear</div>
-          <div class="tab" :class="{active: active_tab == 'config'}" @click="setTab('config')">Config</div>
-          <div class="tab" @click="openImport()">Import</div>
-          <div class="tab" @click="openExport()">Export</div>
-          <template v-if="history.length">
-            <div class="tab" :class="{active: active_tab == 'history'}" @click="setTab('history')">History</div>
-          </template>
-          <template v-if="result && !result.iterations">
-            <div class="tab" :class="{active: active_tab == 'log'}" @click="setTab('log')">Combat log</div>
-            <div class="tab" :class="{active: active_tab == 'timeline'}" @click="setTab('timeline')">Timeline</div>
-          </template>
-          <template v-if="result && result.iterations">
-            <div class="tab" :class="{active: active_tab == 'histogram'}" @click="setTab('histogram')">Histogram</div>
-          </template>
-          <template v-if="result && result.hasOwnProperty('spells')">
-            <div class="tab" :class="{active: active_tab == 'spells'}" @click="setTab('spells')">Spells</div>
-          </template>
-        </div>
-        <div class="body">
-          <div class="gear" :class="{splitview}" v-if="active_tab == 'gear'">
-            <div class="slots">
-              <div
-                  class="slot"
-                  :class="[active_slot == slot ? 'active' : '']"
-                  v-for="slot in slots"
-                  @click="setActiveSlot(slot);"
-              >{{ formatKey(slot) }}
-              </div>
-              <div class="btn btn-splitview" @click="toggleSplitview">
-                <template v-if="splitview">
-                  <span>Paperdoll</span>
-                  <span class="material-icons">&#xe5e1;</span>
-                </template>
-                <template v-else>
-                  <span class="material-icons">&#xe5e0;</span>
-                  <span>Paperdoll</span>
-                </template>
-              </div>
+      <a class="github" href="https://github.com/teserk/magesim-for-sirus" target="_blank"></a>
+    </div>
+    <div class="main">
+      <div class="tabs">
+        <div class="tab" :class="{active: active_tab == 'gear'}" @click="setTab('gear')">Gear</div>
+        <div class="tab" :class="{active: active_tab == 'config'}" @click="setTab('config')">Config</div>
+        <div class="tab" @click="openImport()">Import</div>
+        <div class="tab" @click="openExport()">Export</div>
+        <template v-if="history.length">
+          <div class="tab" :class="{active: active_tab == 'history'}" @click="setTab('history')">History</div>
+        </template>
+        <template v-if="result && !result.iterations">
+          <div class="tab" :class="{active: active_tab == 'log'}" @click="setTab('log')">Combat log</div>
+          <div class="tab" :class="{active: active_tab == 'timeline'}" @click="setTab('timeline')">Timeline</div>
+        </template>
+        <template v-if="result && result.iterations">
+          <div class="tab" :class="{active: active_tab == 'histogram'}" @click="setTab('histogram')">Histogram</div>
+        </template>
+        <template v-if="result && result.hasOwnProperty('spells')">
+          <div class="tab" :class="{active: active_tab == 'spells'}" @click="setTab('spells')">Spells</div>
+        </template>
+      </div>
+      <div class="body">
+        <div class="gear" :class="{splitview}" v-if="active_tab == 'gear'">
+          <div class="slots">
+            <div
+                class="slot"
+                :class="[active_slot == slot ? 'active' : '']"
+                v-for="slot in slots"
+                @click="setActiveSlot(slot);"
+            >{{ formatKey(slot) }}
             </div>
-            <div class="gear-wrapper">
-              <div class="items" ref="items">
-                <div class="items-wrapper">
-                  <div class="top clearfix">
-                    <div class="fl clearfix">
-                      <div class="form-item text-search">
-                        <input type="text" ref="search" v-model="search_item" placeholder="Search..." @input="onSearch">
-                        <tooltip position="bl">
-                          <b>Text search with filters</b><br><br>
-                          Yes/no filters: pvp, 2h, set<br>
-                          Example: 'pvp:no' will exclude all pvp items.<br><br>
-                          Number filters: phase, ilvl, sp, crit, hit, haste, int, spi, mp5<br>
-                          Example: 'ilvl:252+' will find items with ilvl 252 or higher.<br>
-                          Example: 'ilvl:252-' will find items with ilvl 252 or lower.<br>
-                          Example: 'ilvl:239-252' will find items with ilvl between 239 and 252.
-                        </tooltip>
-                      </div>
-                    </div>
-                    <div class="fr">
-                      <div class="btn" :class="[!hasComparisons || is_running ? 'disabled' : '']"
-                           @click="runComparison">
-                        Run item comparison
-                      </div>
-                      <div class="btn ml-n" @click="openEquiplist">
-                        Equipped items overview
-                      </div>
-                      <div class="btn ml-n" @click="openCustomItem">
-                        Add custom item
-                      </div>
+            <div class="btn btn-splitview" @click="toggleSplitview">
+              <template v-if="splitview">
+                <span>Paperdoll</span>
+                <span class="material-icons">&#xe5e1;</span>
+              </template>
+              <template v-else>
+                <span class="material-icons">&#xe5e0;</span>
+                <span>Paperdoll</span>
+              </template>
+            </div>
+          </div>
+          <div class="gear-wrapper">
+            <div class="items" ref="items">
+              <div class="items-wrapper">
+                <div class="top clearfix">
+                  <div class="fl clearfix">
+                    <div class="form-item text-search">
+                      <input type="text" ref="search" v-model="search_item" placeholder="Search..." @input="onSearch">
+                      <tooltip position="bl">
+                        <b>Text search with filters</b><br><br>
+                        Yes/no filters: pvp, 2h, set<br>
+                        Example: 'pvp:no' will exclude all pvp items.<br><br>
+                        Number filters: phase, ilvl, sp, crit, hit, haste, int, spi, mp5<br>
+                        Example: 'ilvl:252+' will find items with ilvl 252 or higher.<br>
+                        Example: 'ilvl:252-' will find items with ilvl 252 or lower.<br>
+                        Example: 'ilvl:239-252' will find items with ilvl between 239 and 252.
+                      </tooltip>
                     </div>
                   </div>
+                  <div class="fr">
+                    <div class="btn" :class="[!hasComparisons || is_running ? 'disabled' : '']"
+                         @click="runComparison">
+                      Run item comparison
+                    </div>
+                    <div class="btn ml-n" @click="openEquiplist">
+                      Equipped items overview
+                    </div>
+                    <div class="btn ml-n" @click="openCustomItem">
+                      Add custom item
+                    </div>
+                  </div>
+                </div>
 
-                  <table class="items-table large mt-2">
-                    <thead>
-                    <tr>
-                      <th class="min">
+                <table class="items-table large mt-2">
+                  <thead>
+                  <tr>
+                    <th class="min">
                                                     <span class="compare" @click.stop="compareAll()" v-if="activeItems">
                                                         <help icon="e915">Compare all items</help>
                                                     </span>
-                      </th>
-                      <th class="min"></th>
-                      <th class="title">
-                        <sort-link v-model="item_sort" name="title">Name</sort-link>
-                      </th>
-                      <th v-if="hasComparisons">
-                        <sort-link v-model="item_sort" name="dps" order="desc">DPS</sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="ilvl" order="desc">ilvl</sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="phase">{{ splitviewShort("Phase", "P") }}</sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="sockets" order="desc">Sockets</sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="sp" order="desc">{{ splitviewShort("Spell power", "SP")
-                          }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="crit" order="desc">{{ splitviewShort("Crit rating", "Crit")
-                          }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="hit" order="desc">{{ splitviewShort("Hit rating", "Hit")
-                          }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="haste" order="desc">{{ splitviewShort("Haste rating",
-                          "Haste") }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="int" order="desc">{{ splitviewShort("Intellect", "Int")
-                          }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="spi" order="desc">{{ splitviewShort("Spirit", "Spi") }}
-                        </sort-link>
-                      </th>
-                      <th>
-                        <sort-link v-model="item_sort" name="mp5" order="desc">Mp5</sort-link>
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr
-                        class="item"
-                        :class="[isEquipped(active_slot, item.id) ? 'active' : '']"
-                        v-for="item in activeItems"
-                        @click="equipToggle(active_slot, item)"
-                        :key="item.id"
-                    >
-                      <td class="min">
+                    </th>
+                    <th class="min"></th>
+                    <th class="title">
+                      <sort-link v-model="item_sort" name="title">Name</sort-link>
+                    </th>
+                    <th v-if="hasComparisons">
+                      <sort-link v-model="item_sort" name="dps" order="desc">DPS</sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="ilvl" order="desc">ilvl</sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="phase">{{ splitviewShort("Phase", "P") }}</sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="sockets" order="desc">Sockets</sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="sp" order="desc">{{
+                          splitviewShort("Spell power", "SP")
+                        }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="crit" order="desc">{{
+                          splitviewShort("Crit rating", "Crit")
+                        }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="hit" order="desc">{{
+                          splitviewShort("Hit rating", "Hit")
+                        }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="haste" order="desc">{{
+                          splitviewShort("Haste rating",
+                              "Haste")
+                        }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="int" order="desc">{{
+                          splitviewShort("Intellect", "Int")
+                        }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="spi" order="desc">{{ splitviewShort("Spirit", "Spi") }}
+                      </sort-link>
+                    </th>
+                    <th>
+                      <sort-link v-model="item_sort" name="mp5" order="desc">Mp5</sort-link>
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                      class="item"
+                      :class="[isEquipped(active_slot, item.id) ? 'active' : '']"
+                      v-for="item in activeItems"
+                      @click="equipToggle(active_slot, item)"
+                      :key="item.id"
+                  >
+                    <td class="min">
                                                     <span class="compare" :class="[isComparing(item) ? 'active' : '']"
                                                           @click.stop="compareItem(item)">
                                                         <help icon="e915">Add to comparison</help>
                                                     </span>
-                      </td>
-                      <td class="min">
+                    </td>
+                    <td class="min">
                                                     <span class="favorite" :class="[isFavorite(item) ? 'active' : '']"
                                                           @click.stop="toggleFavorite(item)">
                                                         <help icon="e87d" v-if="isFavorite(item)">Favorite</help>
                                                         <help icon="e87d" :outlined="true" v-else>Favorite</help>
                                                     </span>
-                      </td>
-                      <td class="title">
-                        <a :href="itemUrl(item)" :class="['quality-'+$get(item, 'q', 'epic')]" target="_blank"
-                           @click.prevent>
-                          {{ item.title }}
-                        </a>
-                        <span class="link" @click.stop="openItem(item)">
+                    </td>
+                    <td class="title">
+                      <a :href="itemUrl(item)" :class="['quality-'+$get(item, 'q', 'epic')]" target="_blank"
+                         @click.prevent>
+                        {{ item.title }}
+                      </a>
+                      <span class="link" @click.stop="openItem(item)">
                                                         <span class="material-icons">
                                                             &#xe895;
                                                         </span>
                                                     </span>
-                        <span class="delete" @click.stop="deleteCustomItem(item)" v-if="$get(item, 'custom')">
+                      <span class="delete" @click.stop="deleteCustomItem(item)" v-if="$get(item, 'custom')">
                                                         <help icon="e872">Delete custom item</help>
                                                     </span>
-                      </td>
-                      <td v-if="hasComparisons">
-                        <template v-if="comparisonDps(item)">
-                          {{ comparisonDps(item) }}
-                          <span v-if="pin_dps" class="diff" :class="[pin_dps > comparisonDps(item) ? 'lt' : 'gt']">
+                    </td>
+                    <td v-if="hasComparisons">
+                      <template v-if="comparisonDps(item)">
+                        {{ comparisonDps(item) }}
+                        <span v-if="pin_dps" class="diff" :class="[pin_dps > comparisonDps(item) ? 'lt' : 'gt']">
                                                             (<template
-                              v-if="pin_dps <= comparisonDps(item)">+</template>{{ $roundFixed(comparisonDps(item) - pin_dps, 2) }})
+                            v-if="pin_dps <= comparisonDps(item)">+</template>{{
+                            $roundFixed(comparisonDps(item) - pin_dps, 2)
+                          }})
                                                         </span>
-                          <span v-if="comparisonMetaGemInactive(item)" class="warning">
+                        <span v-if="comparisonMetaGemInactive(item)" class="warning">
                                                             <span class="material-icons">&#xe002;</span>
                                                             <tooltip position="right">Meta gem requirements have not been met.</tooltip>
                                                         </span>
-                        </template>
-                      </td>
-                      <td>{{ $get(item, "ilvl", "") }}</td>
-                      <td>{{ $get(item, "phase", 1) }}</td>
-                      <td @click.prevent.stop="scrollToGems">
-                        <template v-if="item.sockets">
-                          <div class="socket-color" :class="['color-'+socket]" v-for="socket in item.sockets"></div>
-                        </template>
-                        <span class="ml-n" v-if="item.bonus"
-                              :class="[hasSocketBonus(active_slot) ? 'socket-bonus' : '']">
+                      </template>
+                    </td>
+                    <td>{{ $get(item, "ilvl", "") }}</td>
+                    <td>{{ $get(item, "phase", 1) }}</td>
+                    <td @click.prevent.stop="scrollToGems">
+                      <template v-if="item.sockets">
+                        <div class="socket-color" :class="['color-'+socket]" v-for="socket in item.sockets"></div>
+                      </template>
+                      <span class="ml-n" v-if="item.bonus"
+                            :class="[hasSocketBonus(active_slot) ? 'socket-bonus' : '']">
                                                         +{{ formatStats(item.bonus) }}
                                                     </span>
-                      </td>
-                      <td>{{ $get(item, "sp", "") }}</td>
-                      <td>{{ $get(item, "crit", "") }}</td>
-                      <td>{{ $get(item, "hit", "") }}</td>
-                      <td>{{ $get(item, "haste", "") }}</td>
-                      <td>{{ $get(item, "int", "") }}</td>
-                      <td>{{ $get(item, "spi", "") }}</td>
-                      <td>{{ $get(item, "mp5", "") }}</td>
-                    </tr>
-                    </tbody>
-                  </table>
+                    </td>
+                    <td>{{ $get(item, "sp", "") }}</td>
+                    <td>{{ $get(item, "crit", "") }}</td>
+                    <td>{{ $get(item, "hit", "") }}</td>
+                    <td>{{ $get(item, "haste", "") }}</td>
+                    <td>{{ $get(item, "int", "") }}</td>
+                    <td>{{ $get(item, "spi", "") }}</td>
+                    <td>{{ $get(item, "mp5", "") }}</td>
+                  </tr>
+                  </tbody>
+                </table>
 
-                  <div class="mt-4" ref="enchantAnchor"></div>
+                <div class="mt-4" ref="enchantAnchor"></div>
 
-                  <table class="enchants-table large" v-if="activeEnchants.length">
-                    <thead>
-                    <tr>
-                      <th>Enchant</th>
-                      <th>Spell power</th>
-                      <th>Crit rating</th>
-                      <th>Hit rating</th>
-                      <th>Haste rating</th>
-                      <th>Intellect</th>
-                      <th>Spirit</th>
-                      <th>Mp5</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr
-                        class="item"
-                        :class="[isEnchanted(active_slot, item.id) ? 'active' : '']"
-                        v-for="item in activeEnchants"
-                        :key="item.id"
-                        @click="enchant(active_slot, item)"
-                    >
-                      <td>
-                        <a :href="spellUrl(item)" :class="['quality-'+$get(item, 'q', 'uncommon')]" target="_blank"
-                           @click.prevent>
-                          {{ item.title }}
-                        </a>
-                      </td>
-                      <td>{{ $get(item, "sp", "") }}</td>
-                      <td>{{ $get(item, "crit", "") }}</td>
-                      <td>{{ $get(item, "hit", "") }}</td>
-                      <td>{{ $get(item, "haste", "") }}</td>
-                      <td>{{ $get(item, "int", "") }}</td>
-                      <td>{{ $get(item, "spi", "") }}</td>
-                      <td>{{ $get(item, "mp5", "") }}</td>
-                    </tr>
-                    </tbody>
-                  </table>
+                <table class="enchants-table large" v-if="activeEnchants.length">
+                  <thead>
+                  <tr>
+                    <th>Enchant</th>
+                    <th>Spell power</th>
+                    <th>Crit rating</th>
+                    <th>Hit rating</th>
+                    <th>Haste rating</th>
+                    <th>Intellect</th>
+                    <th>Spirit</th>
+                    <th>Mp5</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                      class="item"
+                      :class="[isEnchanted(active_slot, item.id) ? 'active' : '']"
+                      v-for="item in activeEnchants"
+                      :key="item.id"
+                      @click="enchant(active_slot, item)"
+                  >
+                    <td>
+                      <a :href="spellUrl(item)" :class="['quality-'+$get(item, 'q', 'uncommon')]" target="_blank"
+                         @click.prevent>
+                        {{ item.title }}
+                      </a>
+                    </td>
+                    <td>{{ $get(item, "sp", "") }}</td>
+                    <td>{{ $get(item, "crit", "") }}</td>
+                    <td>{{ $get(item, "hit", "") }}</td>
+                    <td>{{ $get(item, "haste", "") }}</td>
+                    <td>{{ $get(item, "int", "") }}</td>
+                    <td>{{ $get(item, "spi", "") }}</td>
+                    <td>{{ $get(item, "mp5", "") }}</td>
+                  </tr>
+                  </tbody>
+                </table>
 
-                  <div class="mt-4" ref="gemsAnchor"></div>
+                <div class="mt-4" ref="gemsAnchor"></div>
 
-                  <div class="extra-socket mb-2" v-if="['hands', 'wrist'].indexOf(active_slot) != -1">
-                    <label>
-                      <input type="checkbox" v-model="config.hands_socket" v-if="active_slot == 'hands'">
-                      <input type="checkbox" v-model="config.wrist_socket" v-if="active_slot == 'wrist'">
-                      <span>Extra socket from blacksmithing</span>
-                    </label>
-                  </div>
-                  <div class="extra-socket mb-2" v-if="active_slot == 'waist'">
-                    <label>
-                      <input type="checkbox" v-model="config.waist_socket">
-                      <span>Extra socket from <a :href="itemUrl(41611)" target="_blank">Eternal Belt Buckle</a></span>
-                    </label>
-                  </div>
+                <div class="extra-socket mb-2" v-if="['hands', 'wrist'].indexOf(active_slot) != -1">
+                  <label>
+                    <input type="checkbox" v-model="config.hands_socket" v-if="active_slot == 'hands'">
+                    <input type="checkbox" v-model="config.wrist_socket" v-if="active_slot == 'wrist'">
+                    <span>Extra socket from blacksmithing</span>
+                  </label>
+                </div>
+                <div class="extra-socket mb-2" v-if="active_slot == 'waist'">
+                  <label>
+                    <input type="checkbox" v-model="config.waist_socket">
+                    <span>Extra socket from <a :href="itemUrl(41611)" target="_blank">Eternal Belt Buckle</a></span>
+                  </label>
+                </div>
 
-                  <div class="search-gem mb-2" v-if="activeSockets.length">
-                    <input type="text" v-model="search_gem" placeholder="Search...">
-                  </div>
+                <div class="search-gem mb-2" v-if="activeSockets.length">
+                  <input type="text" v-model="search_gem" placeholder="Search...">
+                </div>
 
-                  <div class="sockets" v-if="activeSockets.length">
-                    <div class="socket" v-for="(socket, index) in activeSockets">
-                      <table class="large">
-                        <thead>
-                        <tr>
-                          <th class="min">
-                            <span class="socket-color" :class="['color-'+socket]"></span>
-                          </th>
-                          <th class="min narrow"></th>
-                          <th>Gem</th>
-                          <th>Stats</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr
-                            :class="[isSocketed(active_slot, gem.id, index) ? 'active' : '']"
-                            v-for="gem in activeGems(index)"
-                            @click="setSocket(active_slot, gem, index)"
-                            :key="gem.id"
-                        >
-                          <td class="min">
-                            <span class="socket-color" :class="['color-'+gem.color]"></span>
-                          </td>
-                          <td class="min narrow">
+                <div class="sockets" v-if="activeSockets.length">
+                  <div class="socket" v-for="(socket, index) in activeSockets">
+                    <table class="large">
+                      <thead>
+                      <tr>
+                        <th class="min">
+                          <span class="socket-color" :class="['color-'+socket]"></span>
+                        </th>
+                        <th class="min narrow"></th>
+                        <th>Gem</th>
+                        <th>Stats</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr
+                          :class="[isSocketed(active_slot, gem.id, index) ? 'active' : '']"
+                          v-for="gem in activeGems(index)"
+                          @click="setSocket(active_slot, gem, index)"
+                          :key="gem.id"
+                      >
+                        <td class="min">
+                          <span class="socket-color" :class="['color-'+gem.color]"></span>
+                        </td>
+                        <td class="min narrow">
                                                             <span class="favorite"
                                                                   :class="[isFavorite(gem) ? 'active' : '']"
                                                                   @click.stop="toggleFavorite(gem)">
@@ -593,64 +598,63 @@
                                                                 <help icon="e87d" :outlined="true"
                                                                       v-else>Favorite</help>
                                                             </span>
-                          </td>
-                          <td>
-                            <a :href="itemUrl(gem)" class="gem-color" :class="['color-'+gem.color]" target="_blank"
-                               @click.prevent>
-                              {{ gem.title }}
-                            </a>
-                          </td>
-                          <td>{{ formatStats(gem) }}</td>
-                        </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                        </td>
+                        <td>
+                          <a :href="itemUrl(gem)" class="gem-color" :class="['color-'+gem.color]" target="_blank"
+                             @click.prevent>
+                            {{ gem.title }}
+                          </a>
+                        </td>
+                        <td>{{ formatStats(gem) }}</td>
+                      </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
-              <div class="character" v-if="splitview">
-                <div class="paperdoll">
-                  <div :class="pos" v-for="pos in ['left', 'right']">
-                    <div class="paperslot" :class="[slot, active_slot == slot ? 'active' : '']"
-                         v-for="slot in dollSlots(pos)">
-                      <div class="paperv paperitem" @click="paperClick(slot)">
+            </div>
+            <div class="character" v-if="splitview">
+              <div class="paperdoll">
+                <div :class="pos" v-for="pos in ['left', 'right']">
+                  <div class="paperslot" :class="[slot, active_slot == slot ? 'active' : '']"
+                       v-for="slot in dollSlots(pos)">
+                    <div class="paperv paperitem" @click="paperClick(slot)">
+                      <a
+                          v-if="equipped[slot]"
+                          :href="equippedUrl(slot)"
+                          data-wh-icon-size="large"
+                          @click="$event.preventDefault()"
+                      ></a>
+                    </div>
+                    <div class="papers">
+                      <div class="paperv paperenchant"
+                           v-if="items.enchants.hasOwnProperty(equipSlotToItemSlot(slot)) && pos == 'left'"
+                           @click="paperClick(slot, 'enchant')">
                         <a
-                            v-if="equipped[slot]"
-                            :href="equippedUrl(slot)"
+                            v-if="enchants[slot]"
+                            :href="spellUrl(enchants[slot])"
                             data-wh-icon-size="large"
                             @click="$event.preventDefault()"
                         ></a>
                       </div>
-                      <div class="papers">
-                        <div class="paperv paperenchant"
-                             v-if="items.enchants.hasOwnProperty(equipSlotToItemSlot(slot)) && pos == 'left'"
-                             @click="paperClick(slot, 'enchant')">
-                          <a
-                              v-if="enchants[slot]"
-                              :href="spellUrl(enchants[slot])"
-                              data-wh-icon-size="large"
-                              @click="$event.preventDefault()"
-                          ></a>
-                        </div>
-                        <div class="paperv papersocket" :class="['papersocket-color-'+socket]"
-                             v-for="(socket, index) in slotSockets(slot)" @click="paperClick(slot, 'gems')">
-                          <a
-                              v-if="gems[slot][index]"
-                              :href="itemUrl(gems[slot][index])"
-                              data-wh-icon-size="large"
-                              @click="$event.preventDefault()"
-                          ></a>
-                        </div>
-                        <div class="paperv paperenchant"
-                             v-if="items.enchants.hasOwnProperty(equipSlotToItemSlot(slot)) && pos == 'right'"
-                             @click="paperClick(slot, 'enchant')">
-                          <a
-                              v-if="enchants[slot]"
-                              :href="spellUrl(enchants[slot])"
-                              data-wh-icon-size="large"
-                              @click="$event.preventDefault()"
-                          ></a>
-                        </div>
+                      <div class="paperv papersocket" :class="['papersocket-color-'+socket]"
+                           v-for="(socket, index) in slotSockets(slot)" @click="paperClick(slot, 'gems')">
+                        <a
+                            v-if="gems[slot][index]"
+                            :href="itemUrl(gems[slot][index])"
+                            data-wh-icon-size="large"
+                            @click="$event.preventDefault()"
+                        ></a>
+                      </div>
+                      <div class="paperv paperenchant"
+                           v-if="items.enchants.hasOwnProperty(equipSlotToItemSlot(slot)) && pos == 'right'"
+                           @click="paperClick(slot, 'enchant')">
+                        <a
+                            v-if="enchants[slot]"
+                            :href="spellUrl(enchants[slot])"
+                            data-wh-icon-size="large"
+                            @click="$event.preventDefault()"
+                        ></a>
                       </div>
                     </div>
                   </div>
@@ -658,1285 +662,1292 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="log" v-if="active_tab == 'log'">
-            <div class="log-wrapper">
-              <div class="filter">
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[1]"> <span>Show cast start</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[2]"> <span>Show cast success</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[3]"> <span>Show spell impact</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[4]"> <span>Show mana gain</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[5]"> <span>Show buffs</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter[8]"> <span>Show wait</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="log_filter_player"> <span>Show player only</span></label>
-                </div>
+        <div class="log" v-if="active_tab == 'log'">
+          <div class="log-wrapper">
+            <div class="filter">
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[1]"> <span>Show cast start</span></label>
               </div>
-              <div class="form-item mb-2">
-                <input type="text" v-model="search_log" placeholder="Search...">
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[2]"> <span>Show cast success</span></label>
               </div>
-              <table>
-                <thead>
-                <th>Time</th>
-                <th>Mana</th>
-                <th>DPS</th>
-                <th>Event</th>
-                </thead>
-                <tbody>
-                <tr v-for="log in activeLog" :class="['type-'+log.type]">
-                  <td>{{ formatTime(log.t) }}</td>
-                  <td>{{ round(log.mana) }} ({{ round(log.mana_percent) }}%)</td>
-                  <td>{{ (log.t ? round(log.dmg/log.t) : "0") }}</td>
-                  <td>{{ log.text }}</td>
-                </tr>
-                </tbody>
-              </table>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[3]"> <span>Show spell impact</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[4]"> <span>Show mana gain</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[5]"> <span>Show buffs</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter[8]"> <span>Show wait</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="log_filter_player"> <span>Show player only</span></label>
+              </div>
             </div>
-          </div>
-
-          <div class="timel" v-if="active_tab == 'timeline'">
-            <timeline ref="timeline" :result="result"></timeline>
-          </div>
-
-          <div class="spells" v-if="active_tab == 'spells'">
-            <div class="spells-wrapper">
-              <table class="large">
-                <thead>
-                <th>Caster</th>
-                <th>Spell</th>
-                <th>Casts</th>
-                <th>Misses</th>
-                <th>Hits</th>
-                <th>Crits</th>
-                <th>Damage</th>
-                <th>Min dmg</th>
-                <th>Avg dmg</th>
-                <th>Max dmg</th>
-                </thead>
-                <tbody>
-                <tr v-for="spell in spellStats">
-                  <td>{{ spell.source }}</td>
-                  <td>{{ spell.name }}</td>
-                  <td>{{ $round(spell.casts, 1) }} ({{ $round(spell.casts / numCasts * 100, 1) }}%)</td>
-                  <td>{{ $round(spell.misses, 1) }} ({{ $round(spell.misses/(spell.hits + spell.crits +
-                    spell.misses)*100, 2) }}%)
-                  </td>
-                  <td>{{ $round(spell.hits, 1) }}</td>
-                  <td>{{ $round(spell.crits, 1) }} ({{ $round(spell.crits/(spell.hits + spell.crits + spell.misses)*100,
-                    2) }}%)
-                  </td>
-                  <td>
-                    {{ $round(spell.dmg, 0) }}
-                    <template v-if="result.hasOwnProperty('dmg')">({{ $round(spell.dmg / result.dmg * 100, 2) }}%)
-                    </template>
-                    <template v-else>({{ $round(spell.dmg / spellDmg * 100, 2) }}%)</template>
-                  </td>
-                  <td>{{ $round(spell.min_dmg, 0) }}</td>
-                  <td>{{ $round(spell.dmg / (spell.hits + spell.crits), 0) }}</td>
-                  <td>{{ $round(spell.max_dmg, 0) }}</td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="form-item mb-2">
+              <input type="text" v-model="search_log" placeholder="Search...">
             </div>
+            <table>
+              <thead>
+              <th>Time</th>
+              <th>Mana</th>
+              <th>DPS</th>
+              <th>Event</th>
+              </thead>
+              <tbody>
+              <tr v-for="log in activeLog" :class="['type-'+log.type]">
+                <td>{{ formatTime(log.t) }}</td>
+                <td>{{ round(log.mana) }} ({{ round(log.mana_percent) }}%)</td>
+                <td>{{ (log.t ? round(log.dmg / log.t) : "0") }}</td>
+                <td>{{ log.text }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <div class="histog" v-if="active_tab == 'histogram'">
-            <histogram ref="histogram" :data="result.histogram" :avg="result.avg_dps"></histogram>
+        <div class="timel" v-if="active_tab == 'timeline'">
+          <timeline ref="timeline" :result="result"></timeline>
+        </div>
+
+        <div class="spells" v-if="active_tab == 'spells'">
+          <div class="spells-wrapper">
+            <table class="large">
+              <thead>
+              <th>Caster</th>
+              <th>Spell</th>
+              <th>Casts</th>
+              <th>Misses</th>
+              <th>Hits</th>
+              <th>Crits</th>
+              <th>Damage</th>
+              <th>Min dmg</th>
+              <th>Avg dmg</th>
+              <th>Max dmg</th>
+              </thead>
+              <tbody>
+              <tr v-for="spell in spellStats">
+                <td>{{ spell.source }}</td>
+                <td>{{ spell.name }}</td>
+                <td>{{ $round(spell.casts, 1) }} ({{ $round(spell.casts / numCasts * 100, 1) }}%)</td>
+                <td>{{ $round(spell.misses, 1) }} ({{
+                    $round(spell.misses / (spell.hits + spell.crits +
+                        spell.misses) * 100, 2)
+                  }}%)
+                </td>
+                <td>{{ $round(spell.hits, 1) }}</td>
+                <td>{{ $round(spell.crits, 1) }} ({{
+                    $round(spell.crits / (spell.hits + spell.crits + spell.misses) * 100,
+                        2)
+                  }}%)
+                </td>
+                <td>
+                  {{ $round(spell.dmg, 0) }}
+                  <template v-if="result.hasOwnProperty('dmg')">({{ $round(spell.dmg / result.dmg * 100, 2) }}%)
+                  </template>
+                  <template v-else>({{ $round(spell.dmg / spellDmg * 100, 2) }}%)</template>
+                </td>
+                <td>{{ $round(spell.min_dmg, 0) }}</td>
+                <td>{{ $round(spell.dmg / (spell.hits + spell.crits), 0) }}</td>
+                <td>{{ $round(spell.max_dmg, 0) }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <div class="history" v-if="active_tab == 'history'">
-            <div class="history-wrapper">
-              <table class="history-table large">
-                <thead>
-                <th></th>
-                <th>DPS</th>
-                <th>Min/Max</th>
-                <th>Rotation</th>
-                <th>Duration</th>
-                <th>Iterations</th>
-                <th>Execution time</th>
-                <th>Time</th>
-                <th></th>
-                </thead>
-                <tbody>
-                <tr v-for="profile in history">
-                  <td>
-                    <div class="btn small my-n" @click="loadHistory(profile)">Load profile</div>
-                  </td>
-                  <td>
-                    <template v-if="profile.result">
-                      <b>{{ $round(profile.result.avg_dps, 2) }}</b>
-                    </template>
-                    <template v-else>-</template>
-                  </td>
-                  <td>
-                    <template v-if="profile.result">
-                      {{ $round(profile.result.min_dps) }} - {{ $round(profile.result.max_dps) }}
-                    </template>
-                    <template v-else>-</template>
-                  </td>
-                  <td>
-                    {{ getRotationString(profile.config.rotation) }}
-                  </td>
-                  <td>
-                    {{ profile.config.duration }}
-                    <span class="faded" v-if="profile.config.duration_variance"> &#177;{{ profile.config.duration_variance }}</span>
-                  </td>
-                  <td>{{ profile.config.iterations }}</td>
-                  <td>
-                    <template v-if="profile.end">{{ formatTimeDiff(profile.date, profile.end) }}</template>
-                    <template v-else>-</template>
-                  </td>
-                  <td>
-                    {{ formatDateTime(profile.date) }}
-                  </td>
-                  <td>
+        <div class="histog" v-if="active_tab == 'histogram'">
+          <histogram ref="histogram" :data="result.histogram" :avg="result.avg_dps"></histogram>
+        </div>
+
+        <div class="history" v-if="active_tab == 'history'">
+          <div class="history-wrapper">
+            <table class="history-table large">
+              <thead>
+              <th></th>
+              <th>DPS</th>
+              <th>Min/Max</th>
+              <th>Rotation</th>
+              <th>Duration</th>
+              <th>Iterations</th>
+              <th>Execution time</th>
+              <th>Time</th>
+              <th></th>
+              </thead>
+              <tbody>
+              <tr v-for="profile in history">
+                <td>
+                  <div class="btn small my-n" @click="loadHistory(profile)">Load profile</div>
+                </td>
+                <td>
+                  <template v-if="profile.result">
+                    <b>{{ $round(profile.result.avg_dps, 2) }}</b>
+                  </template>
+                  <template v-else>-</template>
+                </td>
+                <td>
+                  <template v-if="profile.result">
+                    {{ $round(profile.result.min_dps) }} - {{ $round(profile.result.max_dps) }}
+                  </template>
+                  <template v-else>-</template>
+                </td>
+                <td>
+                  {{ getRotationString(profile.config.rotation) }}
+                </td>
+                <td>
+                  {{ profile.config.duration }}
+                  <span class="faded" v-if="profile.config.duration_variance"> &#177;{{
+                      profile.config.duration_variance
+                    }}</span>
+                </td>
+                <td>{{ profile.config.iterations }}</td>
+                <td>
+                  <template v-if="profile.end">{{ formatTimeDiff(profile.date, profile.end) }}</template>
+                  <template v-else>-</template>
+                </td>
+                <td>
+                  {{ formatDateTime(profile.date) }}
+                </td>
+                <td>
                                             <span v-if="profile.result && profile.result.all_results"
                                                   class="btn small my-n" @click="allResults(profile.result)">
                                                 Simulation data
                                             </span>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <div class="config" v-if="active_tab == 'config'">
-            <div class="fieldsets">
-              <fieldset class="config-general">
-                <legend>General</legend>
+        <div class="config" v-if="active_tab == 'config'">
+          <div class="fieldsets">
+            <fieldset class="config-general">
+              <legend>General</legend>
+              <div class="form-item">
+                <label>Quick spec</label>
+                <span class="btn secondary" @click="setSpec('arcane')">Arcane</span>
+                <span class="btn secondary" @click="setSpec('fire')">Fire</span>
+                <span class="btn secondary" @click="setSpec('frost')">Frost</span>
+                <span class="btn secondary" @click="setSpec('ffb')">FFB</span>
+              </div>
+              <div class="form-item">
+                <label>Race</label>
+                <select v-model="config.race">
+                  <option :value="races.RACE_BLOOD_ELF">Blood elf</option>
+                  <option :value="races.RACE_DRAENEI">Draenei</option>
+                  <option :value="races.RACE_GNOME">Gnome</option>
+                  <option :value="races.RACE_HUMAN">Human</option>
+                  <option :value="races.RACE_TROLL">Troll</option>
+                  <option :value="races.RACE_UNDEAD">Undead</option>
+                  <option :value="races.RACE_ZANDALARI">Zandalari</option>
+                  <option :value="races.RACE_LIGHTFORGED">Lightforged</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label>Talents (<a :href="config.build" target="_blank">link</a>)</label>
+                <input type="text" v-model="config.build" @input="onBuildInput">
+              </div>
+              <div class="form-item">
+                <label>Number of sims</label>
+                <input type="text" v-model.number="config.iterations">
+              </div>
+              <div class="form-item form-row">
                 <div class="form-item">
-                  <label>Quick spec</label>
-                  <span class="btn secondary" @click="setSpec('arcane')">Arcane</span>
-                  <span class="btn secondary" @click="setSpec('fire')">Fire</span>
-                  <span class="btn secondary" @click="setSpec('frost')">Frost</span>
-                  <span class="btn secondary" @click="setSpec('ffb')">FFB</span>
+                  <label>Fight duration (sec)</label>
+                  <input type="text" v-model.number="config.duration">
                 </div>
                 <div class="form-item">
-                  <label>Race</label>
-                  <select v-model="config.race">
-                    <option :value="races.RACE_BLOOD_ELF">Blood elf</option>
-                    <option :value="races.RACE_DRAENEI">Draenei</option>
-                    <option :value="races.RACE_GNOME">Gnome</option>
-                    <option :value="races.RACE_HUMAN">Human</option>
-                    <option :value="races.RACE_TROLL">Troll</option>
-                    <option :value="races.RACE_UNDEAD">Undead</option>
-                    <option :value="races.RACE_ZANDALARI">Zandalari</option>
-                    <option :value="races.RACE_LIGHTFORGED">Lightforged</option>
+                  <label>Variance +/-</label>
+                  <input type="text" v-model.number="config.duration_variance">
+                </div>
+              </div>
+              <div class="form-item form-row">
+                <div class="form-item">
+                  <label>Target level</label>
+                  <select v-model="config.target_level">
+                    <option :value="83">83</option>
+                    <option :value="82">82</option>
+                    <option :value="81">81</option>
+                    <option :value="80">80</option>
                   </select>
-                </div>
-                <div class="form-item">
-                  <label>Talents (<a :href="config.build" target="_blank">link</a>)</label>
-                  <input type="text" v-model="config.build" @input="onBuildInput">
-                </div>
-                <div class="form-item">
-                  <label>Number of sims</label>
-                  <input type="text" v-model.number="config.iterations">
-                </div>
-                <div class="form-item form-row">
-                  <div class="form-item">
-                    <label>Fight duration (sec)</label>
-                    <input type="text" v-model.number="config.duration">
-                  </div>
-                  <div class="form-item">
-                    <label>Variance +/-</label>
-                    <input type="text" v-model.number="config.duration_variance">
-                  </div>
-                </div>
-                <div class="form-item form-row">
-                  <div class="form-item">
-                    <label>Target level</label>
-                    <select v-model="config.target_level">
-                      <option :value="83">83</option>
-                      <option :value="82">82</option>
-                      <option :value="81">81</option>
-                      <option :value="80">80</option>
-                    </select>
-                  </div>
-                  <div class="form-item">
-                    <label>
-                      <span>Target hp%</span>
-                      <help>Starting health for all targets. The health will go down over time.</help>
-                    </label>
-                    <input type="text" v-model.number="config.target_hp">
-                  </div>
-                </div>
-                <div class="form-item form-row">
-                  <div class="form-item">
-                    <label>No. of targets</label>
-                    <input type="text" v-model.number="config.targets">
-                  </div>
-                  <div class="form-item">
-                    <label>
-                      <span>No. of dot targets</span>
-                      <help>
-                        Number of targets to multidot.<br>
-                        Leave this empty or set to 0 to use the same as No. of targets.
-                      </help>
-                    </label>
-                    <input type="text" v-model.number="config.dot_targets">
-                  </div>
                 </div>
                 <div class="form-item">
                   <label>
-                    <span>Distance from target</span>
-                    <help>This only affects travel time.<br>No range checks are made.</help>
+                    <span>Target hp%</span>
+                    <help>Starting health for all targets. The health will go down over time.</help>
                   </label>
-                  <input type="text" v-model.number="config.distance">
+                  <input type="text" v-model.number="config.target_hp">
+                </div>
+              </div>
+              <div class="form-item form-row">
+                <div class="form-item">
+                  <label>No. of targets</label>
+                  <input type="text" v-model.number="config.targets">
                 </div>
                 <div class="form-item">
                   <label>
-                    <span>Reaction time (ms)</span>
+                    <span>No. of dot targets</span>
                     <help>
-                      This only affects certain mechanics where an instant reaction can have an important impact on the
-                      rotation, like:<br>
-                      Cooldowns with "wait for"<br>
-                      Missile Barrage<br>
-                      Hot Streak<br>
-                      Brain Freeze
+                      Number of targets to multidot.<br>
+                      Leave this empty or set to 0 to use the same as No. of targets.
                     </help>
                   </label>
-                  <input type="text" v-model.number="config.reaction_time">
+                  <input type="text" v-model.number="config.dot_targets">
                 </div>
-                <div class="form-item" v-if="false">
-                  <label>
-                    <span>Reaction time (ms)</span>
-                    <help>Affects cooldown usage when waiting for procs</help>
-                  </label>
-                  <input type="text" v-model.number="config.reaction_time">
+              </div>
+              <div class="form-item">
+                <label>
+                  <span>Distance from target</span>
+                  <help>This only affects travel time.<br>No range checks are made.</help>
+                </label>
+                <input type="text" v-model.number="config.distance">
+              </div>
+              <div class="form-item">
+                <label>
+                  <span>Reaction time (ms)</span>
+                  <help>
+                    This only affects certain mechanics where an instant reaction can have an important impact on the
+                    rotation, like:<br>
+                    Cooldowns with "wait for"<br>
+                    Missile Barrage<br>
+                    Hot Streak<br>
+                    Brain Freeze
+                  </help>
+                </label>
+                <input type="text" v-model.number="config.reaction_time">
+              </div>
+              <div class="form-item" v-if="false">
+                <label>
+                  <span>Reaction time (ms)</span>
+                  <help>Affects cooldown usage when waiting for procs</help>
+                </label>
+                <input type="text" v-model.number="config.reaction_time">
+              </div>
+              <div class="form-item">
+                <label>
+                  <span>RNG seed</span>
+                  <help>
+                    A number above 0 will give all runs the same random seed.<br>
+                    All iterations in the same run will still have different seeds.<br>
+                    This might be useful for certain analysis.
+                  </help>
+                </label>
+                <input type="text" v-model.number="config.rng_seed">
+              </div>
+              <div class="form-item">
+                <label>
+                  <span>Stat weight increment</span>
+                  <help>
+                    Each stat will be increased by this value when calculating stat weights.
+                  </help>
+                </label>
+                <input type="text" v-model.number="config.stat_weight_increment">
+              </div>
+              <div class="form-item">
+                <label>Design</label>
+                <select @input="onDesignInput($event)">
+                  <option :value="0">- Choose -</option>
+                  <option :value="1">Wotlk</option>
+                  <option :value="2">Alternative</option>
+                </select>
+              </div>
+              <div class="form-item" v-if="config.targets > 1">
+                <label><input type="checkbox" v-model="config.only_main_dmg">
+                  <span>Focus dps on main target</span>
+                  <help>
+                    This will ignore damage done to secondary targets in the result.<br>
+                    When in doubt it will focus damage on the main target rather than maximizing overall damage.<br>
+                    This is only applicable if the numbers of targets is more than 1.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.avg_spell_dmg">
+                  <span>Use average spell damage</span>
+                  <help>
+                    This will eliminate the random damage from spells.<br>
+                    This can be useful to verify calculations.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.additional_data">
+                  <span>Additional data</span>
+                  <help>
+                    This will save data about dps and duration for each simulation.<br>
+                    This will use more memory and can cause performance issues with a high number of sims.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.encounters">
+                  <span>Enable encounters</span>
+                  <help>
+                    This will enable certain buffs/debuffs from encounters.<br>
+                    They can be found under cooldowns.
+                  </help>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="config-rotation">
+              <legend>Rotation</legend>
+              <div class="form-item">
+                <label>Main rotation</label>
+                <select v-model="config.rotation">
+                  <option :value="rotations.ROTATION_ST_FROSTFIRE">Frostfire Bolt</option>
+                  <option :value="rotations.ROTATION_ST_AB_AM">Arcane</option>
+                  <option :value="rotations.ROTATION_ST_AB_AM_BARRAGE" v-if="config.talents.arcane_barrage">Arcane +
+                    Barrage
+                  </option>
+                  <option :value="rotations.ROTATION_ST_FIRE">Fire</option>
+                  <option :value="rotations.ROTATION_ST_FIRE_SC">Fire (Scorch)</option>
+                  <option :value="rotations.ROTATION_ST_FROST">Frost</option>
+                  <option :value="rotations.ROTATION_AOE_AE">Arcane Explosion</option>
+                  <option :value="rotations.ROTATION_AOE_AE_FS">Flamestrike > Arcane Explosion</option>
+                  <option :value="rotations.ROTATION_AOE_BLIZZ">Blizzard</option>
+                  <option :value="rotations.ROTATION_AOE_BLIZZ_FS">Flamestrike > Blizzard</option>
+                  <option :value="rotations.ROTATION_AOE_FIRE">Fire AoE</option>
+                  <option :value="rotations.ROTATION_AOE_FS">Flamestrike</option>
+                </select>
+              </div>
+              <div class="form-item" v-if="config.talents.imp_scorch">
+                <label><input type="checkbox" v-model="config.maintain_imp_scorch">
+                  <span>Keep up imp. scorch</span>
+                  <help>Imp. Scorch from you</help>
+                </label>
+              </div>
+              <template
+                  v-if="[rotations.ROTATION_ST_AB_AM, rotations.ROTATION_ST_AB_AM_BARRAGE].indexOf(config.rotation) != -1">
+                <div class="form-item">
+                  <label>Stack Arcane Blast to 3 below mana %</label>
+                  <input type="text" v-model.number="config.rot_ab3_mana">
                 </div>
                 <div class="form-item">
-                  <label>
-                    <span>RNG seed</span>
-                    <help>
-                      A number above 0 will give all runs the same random seed.<br>
-                      All iterations in the same run will still have different seeds.<br>
-                      This might be useful for certain analysis.
-                    </help>
-                  </label>
-                  <input type="text" v-model.number="config.rng_seed">
+                  <label>AB without Missile Barrage above mana %</label>
+                  <input type="text" v-model.number="config.rot_ab_no_mb_mana">
                 </div>
                 <div class="form-item">
-                  <label>
-                    <span>Stat weight increment</span>
-                    <help>
-                      Each stat will be increased by this value when calculating stat weights.
-                    </help>
-                  </label>
-                  <input type="text" v-model.number="config.stat_weight_increment">
-                </div>
-                <div class="form-item">
-                  <label>Design</label>
-                  <select @input="onDesignInput($event)">
-                    <option :value="0">- Choose -</option>
-                    <option :value="1">Wotlk</option>
-                    <option :value="2">Alternative</option>
-                  </select>
-                </div>
-                <div class="form-item" v-if="config.targets > 1">
-                  <label><input type="checkbox" v-model="config.only_main_dmg">
-                    <span>Focus dps on main target</span>
-                    <help>
-                      This will ignore damage done to secondary targets in the result.<br>
-                      When in doubt it will focus damage on the main target rather than maximizing overall damage.<br>
-                      This is only applicable if the numbers of targets is more than 1.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.avg_spell_dmg">
-                    <span>Use average spell damage</span>
-                    <help>
-                      This will eliminate the random damage from spells.<br>
-                      This can be useful to verify calculations.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.additional_data">
-                    <span>Additional data</span>
-                    <help>
-                      This will save data about dps and duration for each simulation.<br>
-                      This will use more memory and can cause performance issues with a high number of sims.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.encounters">
-                    <span>Enable encounters</span>
-                    <help>
-                      This will enable certain buffs/debuffs from encounters.<br>
-                      They can be found under cooldowns.
-                    </help>
-                  </label>
-                </div>
-              </fieldset>
-              <fieldset class="config-rotation">
-                <legend>Rotation</legend>
-                <div class="form-item">
-                  <label>Main rotation</label>
-                  <select v-model="config.rotation">
-                    <option :value="rotations.ROTATION_ST_FROSTFIRE">Frostfire Bolt</option>
-                    <option :value="rotations.ROTATION_ST_AB_AM">Arcane</option>
-                    <option :value="rotations.ROTATION_ST_AB_AM_BARRAGE" v-if="config.talents.arcane_barrage">Arcane +
-                      Barrage
-                    </option>
-                    <option :value="rotations.ROTATION_ST_FIRE">Fire</option>
-                    <option :value="rotations.ROTATION_ST_FIRE_SC">Fire (Scorch)</option>
-                    <option :value="rotations.ROTATION_ST_FROST">Frost</option>
-                    <option :value="rotations.ROTATION_AOE_AE">Arcane Explosion</option>
-                    <option :value="rotations.ROTATION_AOE_AE_FS">Flamestrike > Arcane Explosion</option>
-                    <option :value="rotations.ROTATION_AOE_BLIZZ">Blizzard</option>
-                    <option :value="rotations.ROTATION_AOE_BLIZZ_FS">Flamestrike > Blizzard</option>
-                    <option :value="rotations.ROTATION_AOE_FIRE">Fire AoE</option>
-                    <option :value="rotations.ROTATION_AOE_FS">Flamestrike</option>
-                  </select>
-                </div>
-                <div class="form-item" v-if="config.talents.imp_scorch">
-                  <label><input type="checkbox" v-model="config.maintain_imp_scorch">
-                    <span>Keep up imp. scorch</span>
-                    <help>Imp. Scorch from you</help>
-                  </label>
-                </div>
-                <template
-                    v-if="[rotations.ROTATION_ST_AB_AM, rotations.ROTATION_ST_AB_AM_BARRAGE].indexOf(config.rotation) != -1">
-                  <div class="form-item">
-                    <label>Stack Arcane Blast to 3 below mana %</label>
-                    <input type="text" v-model.number="config.rot_ab3_mana">
-                  </div>
-                  <div class="form-item">
-                    <label>AB without Missile Barrage above mana %</label>
-                    <input type="text" v-model.number="config.rot_ab_no_mb_mana">
-                  </div>
-                  <div class="form-item">
-                    <label>Extra ABs during first AP</label>
-                    <input type="text" v-model.number="config.rot_abs_ap">
-                  </div>
-                  <div class="form-item">
-                    <label>
-                      <span>Use Missile Barrage below n AB stacks</span>
-                      <help>Settings this to 1 or 2 can potentially be a dps increase with Arcane Barrage rotation or T8
-                        4p.
-                      </help>
-                    </label>
-                    <input type="text" v-model.number="config.rot_mb_below_ab">
-                  </div>
-                  <div class="form-item">
-                    <label>
-                      <span>Use Missile Barrage ASAP below mana %</span>
-                      <help>This can be useful to conserve mana</help>
-                    </label>
-                    <input type="text" v-model.number="config.rot_mb_mana">
-                  </div>
-                </template>
-                <template v-if="config.rotation == rotations.ROTATION_ST_FROST">
-                  <div class="form-item">
-                    <label><input type="checkbox" v-model="config.rot_ice_lance">
-                      <span>Ice Lance at end of Fingers of Frost</span>
-                    </label>
-                  </div>
-                  <div class="form-item">
-                    <label><input type="checkbox" v-model="config.rot_brain_freeze_fireball">
-                      <span>Fireball with Brain Freeze</span>
-                      <help>Instead of Frostfire Bolt, which is the default</help>
-                    </label>
-                  </div>
-                  <div class="form-item" v-if="config.talents.brain_freeze">
-                    <label>
-                      <span>Brain Freeze duration cutoff</span>
-                      <help>
-                        Brain Freeze will always be used when the buff duration is below the given number of
-                        seconds.<br>
-                        Otherwise it will only be used as the bonus spell at the end of Fingers of Frost.<br>
-                        Setting this to a low number can be a dps increase when you are close to haste cap.
-                      </help>
-                    </label>
-                    <input type="text" v-model.number="config.rot_brain_freeze_hold">
-                  </div>
-                </template>
-                <div class="form-item">
-                  <label>
-                    <span>Number of Evocation ticks</span>
-                    <help>
-                      This will allow you to cancel evocation early.<br>
-                      Setting this to 0 will cast a full evocation.
-                    </help>
-                  </label>
-                  <input type="text" v-model.number="config.evo_ticks">
-                </div>
-                <div class="form-item" v-if="canBlackMagicWeave">
-                  <label><input type="checkbox" v-model="config.rot_black_magic">
-                    <span>Black Magic weaving</span>
-                    <help>
-                      This will swap your weapon with an identical weapon with Black Magic enchant, and then swap back
-                      after it procs.<br>
-                      The swaps will only happen after an instant cast spell to avoid a gcd.
-                    </help>
-                  </label>
-                </div>
-              </fieldset>
-              <fieldset class="config-debuffs">
-                <legend>Debuffs</legend>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.debuff_crit" :disabled="config.totem_of_wrath">
-                    <span>3% crit</span>
-                    <help>
-                      Heart of the Crusader<br>Master Poisoner<br>Totem of Wrath
-                      <br><br>If you have Totem of Wrath you should select it under buffs instead.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.debuff_spell_crit">
-                    <span>5% spell crit</span>
-                    <help>
-                      Imp. Shadow Bolt<br>Winter's Chill<br>Imp. Scorch
-                      <br><br>Do no check this if you are the person keeping up Winter's Chill or Imp. Scorch.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.debuff_spell_hit">
-                    <span>3% spell hit</span>
-                    <help>Misery<br>Imp. Faerie Fire</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.debuff_spell_dmg">
-                    <span>13% spell dmg</span>
-                    <help>Curse of Elements<br>Earth and Moon<br>Ebon Spellbringer</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.judgement_of_wisdom">
-                    <span>Judgement of Wisdom</span>
-                    <help>Chance to restore 2% base mana on spell hit</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.gift_of_arthas">
-                    <span>Gift of Arthas</span>
-                    <help>Acts as +8 spell power debuff on target</help>
-                  </label>
-                </div>
-              </fieldset>
-              <fieldset class="config-buffs">
-                <legend>Buffs</legend>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.mage_armor" @input="dontStack($event, 'molten_armor')">
-                    <span>Mage Armor</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.molten_armor" @input="dontStack($event, 'mage_armor')">
-                    <span>Molten Armor</span></label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" :checked="true" :disabled="true">
-                    <span>Arcane Intellect</span>
-                    <help>60 intellect</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.divine_spirit"
-                                @input="dontStack($event, 'fel_intelligence')">
-                    <span>Divine Spirit</span>
-                    <help>80 spirit</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.fel_intelligence"
-                                @input="dontStack($event, 'divine_spirit')">
-                    <span>Fel intelligence</span>
-                    <help>64 spirit<br>The intellect part does not stack with Arcane Intellect</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.mark_of_the_wild">
-                    <span>Mark of the Wild</span>
-                    <help>37 stats</help>
-                  </label>
-                </div>
-                <div class="form-item sub" v-if="config.mark_of_the_wild">
-                  <label><input type="checkbox" v-model="config.imp_mark_of_the_wild">
-                    <span class="material-icons">&#xe5da;</span>
-                    <span>Imp. Mark of the Wild</span>
-                    <help>52 stats instead of 37</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.totem_of_wrath"
-                                @input="config.debuff_crit = $event.target.checked; dontStack($event, 'flametongue')">
-                    <span>Totem of Wrath</span>
-                    <help>3% crit + 280 spell power</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.flametongue"
-                                @input="dontStack($event, 'totem_of_wrath')">
-                    <span>Flametongue Totem</span>
-                    <help>144 spell power</help>
-                  </label>
+                  <label>Extra ABs during first AP</label>
+                  <input type="text" v-model.number="config.rot_abs_ap">
                 </div>
                 <div class="form-item">
                   <label>
-                    <input type="checkbox" v-model="config.demonic_pact">
-                    <span>Demonic Pact</span>
-                    <help>Does not stack with Totem of Wrath or Flametongue totem.</help>
-                  </label>
-                </div>
-                <div class="form-item" v-if="config.demonic_pact">
-                  <label>
-                    <span>Demonic Pact Bonus</span>
-                    <help>10% of the Warlocks spell power.</help>
-                  </label>
-                  <input type="text" v-model.number="config.demonic_pact_bonus">
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.buff_spell_haste">
-                    <span>Wrath of Air Totem</span>
-                    <help>5% spell haste</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.mana_spring"
-                                @input="dontStack($event, 'blessing_of_wisdom')">
-                    <span>Mana Spring Totem</span>
-                    <help>91 mp5</help>
-                  </label>
-                </div>
-                <div class="form-item sub" v-if="config.mana_spring">
-                  <label><input type="checkbox" v-model="config.restorative_totems">
-                    <span class="material-icons">&#xe5da;</span>
-                    <span>Restorative Totems</span>
-                    <help>109 mp5 instead of 91</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.blessing_of_wisdom"
-                                @input="dontStack($event, 'mana_spring')">
-                    <span>Blessing of Wisdom</span>
-                    <help>92 mp5</help>
-                  </label>
-                </div>
-                <div class="form-item sub" v-if="config.blessing_of_wisdom">
-                  <label><input type="checkbox" v-model="config.imp_blessing_of_wisdom">
-                    <span class="material-icons">&#xe5da;</span>
-                    <span>Imp. Blessing of Wisdom</span>
-                    <help>110 mp5 instead of 91</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.blessing_of_kings"
-                                @input="dontStack($event, 'drums_of_forgotten_kings')">
-                    <span>Blessing of Kings</span>
-                    <help>10% stats</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.drums_of_forgotten_kings"
-                                @input="dontStack($event, 'blessing_of_kings')">
-                    <span>Drums of Forgotten Kings</span>
-                    <help>8% stats</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.buff_dmg">
-                    <span>3% damage</span>
-                    <help>Sanctified Retribution<br>Ferocious Inspiration<br>Arcane Empowerment</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.buff_spell_crit">
-                    <span>5% spell crit</span>
-                    <help>Moonkin Aura<br>Elemental Oath</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.buff_haste">
-                    <span>3% haste</span>
-                    <help>Improved moonkin form<br>Swift Retribution</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.mana_replenishment">
-                    <span>Replenish 1% mana every 5 sec</span>
-                    <help>Vampiric Touch<br>Judgement of the Wise<br>Hunting Party<br>Improved Soul Leech<br>Enduring
-                      Winter
+                    <span>Use Missile Barrage below n AB stacks</span>
+                    <help>Settings this to 1 or 2 can potentially be a dps increase with Arcane Barrage rotation or T8
+                      4p.
                     </help>
                   </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.focus_magic">
-                    <span>Focus Magic</span>
-                    <help>
-                      3% spell crit, put on you by another mage.<br>
-                      If you have Focus Magic talented it will be factored in with permanent uptime after 5 seconds into
-                      the fight.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item" v-if="faction == 'alliance'">
-                  <label><input type="checkbox" v-model="config.heroic_presence">
-                    <span>Heroic Presence</span>
-                    <help>1% hit from Draenei Racial.<br>This is automatically applied if your race is Draenei</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.prof_skinning">
-                    <span>Master of Anatomy (Skinning)</span>
-                    <help>40 crit rating</help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.prof_alchemy">
-                    <span>Mixology (Alchemy)</span>
-                    <help>
-                      Bonuses to flask and elixirs.<br>
-                      Flask of the Frostwyrm: +47sp<br>
-                      Spellpower Elixir: +23sp<br>
-                      Guru's Elixir: +8 stats<br>
-                      Elixir of Accuracy: +20 hit rating<br>
-                      Elixir of Deadly Strikes: +20 crit rating<br>
-                      Elixir of Lightning Speed: +20 haste rating<br>
-                      Elixir of Spirit: +20 spirit<br>
-                      Elixir of Mighty Mageblood: +10 mp5<br>
-                      Elixir of Mighty Thoughts: +20 int
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.prof_engineer">
-                    <span>Mana Injectors (Engineering)</span>
-                    <help>25% extra from mana potions</help>
-                  </label>
-                </div>
-                <div class="form-item" v-if="canSulfuronSlammer">
-                  <label><input type="checkbox" v-model="config.sulfuron_slammer">
-                    <span>Sulfuron Slammer</span>
-                    <help>
-                      Using Sulfuron Slammer can proc certain trinkets such as
-                      Phylactery of the Nameless Lich
-                    </help>
-                  </label>
+                  <input type="text" v-model.number="config.rot_mb_below_ab">
                 </div>
                 <div class="form-item">
                   <label>
-                    <span>ICC buff</span>
+                    <span>Use Missile Barrage ASAP below mana %</span>
+                    <help>This can be useful to conserve mana</help>
+                  </label>
+                  <input type="text" v-model.number="config.rot_mb_mana">
+                </div>
+              </template>
+              <template v-if="config.rotation == rotations.ROTATION_ST_FROST">
+                <div class="form-item">
+                  <label><input type="checkbox" v-model="config.rot_ice_lance">
+                    <span>Ice Lance at end of Fingers of Frost</span>
+                  </label>
+                </div>
+                <div class="form-item">
+                  <label><input type="checkbox" v-model="config.rot_brain_freeze_fireball">
+                    <span>Fireball with Brain Freeze</span>
+                    <help>Instead of Frostfire Bolt, which is the default</help>
+                  </label>
+                </div>
+                <div class="form-item" v-if="config.talents.brain_freeze">
+                  <label>
+                    <span>Brain Freeze duration cutoff</span>
                     <help>
-                      Hellscream's Warsong or Strength of Wrynn<br>
-                      Giving 5-30% damage, healing, health, absorption.
+                      Brain Freeze will always be used when the buff duration is below the given number of
+                      seconds.<br>
+                      Otherwise it will only be used as the bonus spell at the end of Fingers of Frost.<br>
+                      Setting this to a low number can be a dps increase when you are close to haste cap.
                     </help>
                   </label>
-                  <select v-model.number="config.icc_buff">
-                    <option :value="0">0%</option>
-                    <option :value="5">5%</option>
-                    <option :value="10">10%</option>
-                    <option :value="15">15%</option>
-                    <option :value="20">20%</option>
-                    <option :value="25">25%</option>
-                    <option :value="30">30%</option>
-                  </select>
+                  <input type="text" v-model.number="config.rot_brain_freeze_hold">
                 </div>
-              </fieldset>
-              <fieldset class="config-consumes">
-                <legend>Consumes</legend>
-                <div class="form-item" v-if="!config.battle_elixir && !config.guardian_elixir">
-                  <label>Flask</label>
-                  <select v-model="config.flask">
-                    <option :value="flasks.FLASK_NONE">None</option>
-                    <option :value="flasks.FLASK_FROSTWYRM">Flask of the Frostwyrm (125 sp)</option>
-                    <option :value="flasks.FLASK_PURE_MOJO">Flask of Pure Mojo (45 mp5)</option>
-                  </select>
-                </div>
-                <div class="form-item" v-if="!config.flask">
-                  <label>Battle Elixir</label>
-                  <select v-model="config.battle_elixir">
-                    <option :value="elixirs.ELIXIR_NONE">None</option>
-                    <option :value="elixirs.ELIXIR_SPELLPOWER">Spellpower Elixir (58 sp)</option>
-                    <option :value="elixirs.ELIXIR_GURU">Guru's Elixir (20 stats)</option>
-                    <option :value="elixirs.ELIXIR_ACCURACY">Elixir of Accuracy (45 hit)</option>
-                    <option :value="elixirs.ELIXIR_DEADLY_STRIKES">Elixir of Deadly Strikes (45 crit)</option>
-                    <option :value="elixirs.ELIXIR_LIGHTNING_SPEED">Elixir of Lightning Speed (45 haste)</option>
-                  </select>
-                </div>
-                <div class="form-item" v-if="!config.flask">
-                  <label>Guardian Elixir</label>
-                  <select v-model="config.guardian_elixir">
-                    <option :value="elixirs.ELIXIR_NONE">None</option>
-                    <option :value="elixirs.ELIXIR_SPIRIT">Elixir of Spirit (50 spirit)</option>
-                    <option :value="elixirs.ELIXIR_MIGHTY_MAGEBLOOD">Elixir of Mighty Mageblood (30 mp5)</option>
-                    <option :value="elixirs.ELIXIR_MIGHTY_THOUGHTS">Elixir of Mighty Thoughts (45 int)</option>
-                    <option :value="elixirs.ELIXIR_DRAENIC_WISDOM">Elixir of Draenic Wisdom (30 int, 30 spirit)</option>
-                  </select>
-                </div>
-                <div class="form-item">
-                  <label>Food</label>
-                  <select v-model="config.food">
-                    <option :value="foods.FOOD_NONE">None</option>
-                    <option :value="foods.FOOD_SPELL_POWER">Firecracker Salmon (46 sp)</option>
-                    <option :value="foods.FOOD_CRIT">Spiced Worm Burger (40 crit)</option>
-                    <option :value="foods.FOOD_HIT">Snapper Extreme (40 hit)</option>
-                    <option :value="foods.FOOD_HASTE">Imperial Manta Steak (40 haste)</option>
-                  </select>
-                </div>
-                <div class="form-item">
-                  <label>Potion</label>
-                  <select v-model="config.potion">
-                    <option :value="potions.POTION_NONE">None</option>
-                    <option :value="potions.POTION_MANA">Mana potion</option>
-                    <option :value="potions.POTION_SPEED">Potion of Speed</option>
-                    <option :value="potions.POTION_WILD_MAGIC">Potion of Wild Magic</option>
-                    <option :value="potions.POTION_FLAME_CAP">Flame Cap</option>
-                  </select>
-                </div>
-                <div class="form-item">
-                  <label>Conjured</label>
-                  <select v-model="config.conjured">
-                    <option :value="conjureds.CONJURED_NONE">None</option>
-                    <option :value="conjureds.CONJURED_DARK_RUNE">Dark Rune</option>
-                  </select>
-                </div>
-              </fieldset>
-              <fieldset class="config-precombat">
-                <legend>Pre-combat</legend>
-                <div class="form-item">
-                  <label>Potion</label>
-                  <select v-model="config.pre_potion">
-                    <option :value="potions.POTION_NONE">None</option>
-                    <option :value="potions.POTION_MANA">Mana potion</option>
-                    <option :value="potions.POTION_SPEED">Potion of Speed</option>
-                    <option :value="potions.POTION_WILD_MAGIC">Potion of Wild Magic</option>
-                    <option :value="potions.POTION_FLAME_CAP">Flame Cap</option>
-                  </select>
-                </div>
-                <div class="form-item">
-                  <label><input type="checkbox" v-model="config.pre_mirror_image">
-                    <span>Mirror Image</span>
-                  </label>
-                </div>
-                <div class="form-item" v-if="config.talents.water_elemental">
-                  <label><input type="checkbox" v-model="config.pre_water_elemental">
-                    <span>Water Elemental</span>
-                  </label>
-                </div>
-                <div class="form-item" v-if="config.talents.incanters_absorption">
-                  <label><input type="checkbox" v-model="config.pre_incanters_absorption">
-                    <span>Fire Ward + Sapper</span>
-                    <help>Sapper will be popped with Arcane Power if no timing is specified.</help>
-                  </label>
-                </div>
-                <div class="form-item" v-if="config.talents.incanters_absorption && config.pre_incanters_absorption">
-                  <label><input type="checkbox" v-model="config.pre_mana_incanters_absorption">
-                    <span>Mana Shield</span>
-                    <help>
-                      Mana Shield can absorb damage from Sapper Charge and/or Dark Rune.<br>
-                      If you want to use a Dark Rune, make sure you select it as the Conjured consumable.<br>
-                      Dark Rune will be popped with Arcane Power if no timing is specified.
-                    </help>
-                  </label>
-                </div>
-                <div class="form-item" v-if="!aoeRotation">
-                  <label><input type="checkbox" v-model="config.pre_cast">
-                    <span>Pre-cast main spell</span>
-                  </label>
-                </div>
-              </fieldset>
-              <fieldset class="config-cooldowns">
-                <legend>Cooldowns</legend>
-                <div class="timings">
-                  <table class="items">
-                    <thead>
-                    <tr>
-                      <th class="icon">CD</th>
-                      <th class="t">Pop at</th>
-                      <th class="wait-for-buff">Wait for</th>
-                      <th class="wait-t">Wait max</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="timing in config.timings" :key="timing.id">
-                      <template v-if="timingEnabled(timing.name)">
-                        <td class="icon">
+              </template>
+              <div class="form-item">
+                <label>
+                  <span>Number of Evocation ticks</span>
+                  <help>
+                    This will allow you to cancel evocation early.<br>
+                    Setting this to 0 will cast a full evocation.
+                  </help>
+                </label>
+                <input type="text" v-model.number="config.evo_ticks">
+              </div>
+              <div class="form-item" v-if="canBlackMagicWeave">
+                <label><input type="checkbox" v-model="config.rot_black_magic">
+                  <span>Black Magic weaving</span>
+                  <help>
+                    This will swap your weapon with an identical weapon with Black Magic enchant, and then swap back
+                    after it procs.<br>
+                    The swaps will only happen after an instant cast spell to avoid a gcd.
+                  </help>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="config-debuffs">
+              <legend>Debuffs</legend>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.debuff_crit" :disabled="config.totem_of_wrath">
+                  <span>3% crit</span>
+                  <help>
+                    Heart of the Crusader<br>Master Poisoner<br>Totem of Wrath
+                    <br><br>If you have Totem of Wrath you should select it under buffs instead.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.debuff_spell_crit">
+                  <span>5% spell crit</span>
+                  <help>
+                    Imp. Shadow Bolt<br>Winter's Chill<br>Imp. Scorch
+                    <br><br>Do no check this if you are the person keeping up Winter's Chill or Imp. Scorch.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.debuff_spell_hit">
+                  <span>3% spell hit</span>
+                  <help>Misery<br>Imp. Faerie Fire</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.debuff_spell_dmg">
+                  <span>13% spell dmg</span>
+                  <help>Curse of Elements<br>Earth and Moon<br>Ebon Spellbringer</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.judgement_of_wisdom">
+                  <span>Judgement of Wisdom</span>
+                  <help>Chance to restore 2% base mana on spell hit</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.gift_of_arthas">
+                  <span>Gift of Arthas</span>
+                  <help>Acts as +8 spell power debuff on target</help>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="config-buffs">
+              <legend>Buffs</legend>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.mage_armor" @input="dontStack($event, 'molten_armor')">
+                  <span>Mage Armor</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.molten_armor" @input="dontStack($event, 'mage_armor')">
+                  <span>Molten Armor</span></label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" :checked="true" :disabled="true">
+                  <span>Arcane Intellect</span>
+                  <help>60 intellect</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.divine_spirit"
+                              @input="dontStack($event, 'fel_intelligence')">
+                  <span>Divine Spirit</span>
+                  <help>80 spirit</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.fel_intelligence"
+                              @input="dontStack($event, 'divine_spirit')">
+                  <span>Fel intelligence</span>
+                  <help>64 spirit<br>The intellect part does not stack with Arcane Intellect</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.mark_of_the_wild">
+                  <span>Mark of the Wild</span>
+                  <help>37 stats</help>
+                </label>
+              </div>
+              <div class="form-item sub" v-if="config.mark_of_the_wild">
+                <label><input type="checkbox" v-model="config.imp_mark_of_the_wild">
+                  <span class="material-icons">&#xe5da;</span>
+                  <span>Imp. Mark of the Wild</span>
+                  <help>52 stats instead of 37</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.totem_of_wrath"
+                              @input="config.debuff_crit = $event.target.checked; dontStack($event, 'flametongue')">
+                  <span>Totem of Wrath</span>
+                  <help>3% crit + 280 spell power</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.flametongue"
+                              @input="dontStack($event, 'totem_of_wrath')">
+                  <span>Flametongue Totem</span>
+                  <help>144 spell power</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label>
+                  <input type="checkbox" v-model="config.demonic_pact">
+                  <span>Demonic Pact</span>
+                  <help>Does not stack with Totem of Wrath or Flametongue totem.</help>
+                </label>
+              </div>
+              <div class="form-item" v-if="config.demonic_pact">
+                <label>
+                  <span>Demonic Pact Bonus</span>
+                  <help>10% of the Warlocks spell power.</help>
+                </label>
+                <input type="text" v-model.number="config.demonic_pact_bonus">
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.buff_spell_haste">
+                  <span>Wrath of Air Totem</span>
+                  <help>5% spell haste</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.mana_spring"
+                              @input="dontStack($event, 'blessing_of_wisdom')">
+                  <span>Mana Spring Totem</span>
+                  <help>91 mp5</help>
+                </label>
+              </div>
+              <div class="form-item sub" v-if="config.mana_spring">
+                <label><input type="checkbox" v-model="config.restorative_totems">
+                  <span class="material-icons">&#xe5da;</span>
+                  <span>Restorative Totems</span>
+                  <help>109 mp5 instead of 91</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.blessing_of_wisdom"
+                              @input="dontStack($event, 'mana_spring')">
+                  <span>Blessing of Wisdom</span>
+                  <help>92 mp5</help>
+                </label>
+              </div>
+              <div class="form-item sub" v-if="config.blessing_of_wisdom">
+                <label><input type="checkbox" v-model="config.imp_blessing_of_wisdom">
+                  <span class="material-icons">&#xe5da;</span>
+                  <span>Imp. Blessing of Wisdom</span>
+                  <help>110 mp5 instead of 91</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.blessing_of_kings"
+                              @input="dontStack($event, 'drums_of_forgotten_kings')">
+                  <span>Blessing of Kings</span>
+                  <help>10% stats</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.drums_of_forgotten_kings"
+                              @input="dontStack($event, 'blessing_of_kings')">
+                  <span>Drums of Forgotten Kings</span>
+                  <help>8% stats</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.buff_dmg">
+                  <span>3% damage</span>
+                  <help>Sanctified Retribution<br>Ferocious Inspiration<br>Arcane Empowerment</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.buff_spell_crit">
+                  <span>5% spell crit</span>
+                  <help>Moonkin Aura<br>Elemental Oath</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.buff_haste">
+                  <span>3% haste</span>
+                  <help>Improved moonkin form<br>Swift Retribution</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.mana_replenishment">
+                  <span>Replenish 1% mana every 5 sec</span>
+                  <help>Vampiric Touch<br>Judgement of the Wise<br>Hunting Party<br>Improved Soul Leech<br>Enduring
+                    Winter
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.focus_magic">
+                  <span>Focus Magic</span>
+                  <help>
+                    3% spell crit, put on you by another mage.<br>
+                    If you have Focus Magic talented it will be factored in with permanent uptime after 5 seconds into
+                    the fight.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item" v-if="faction == 'alliance'">
+                <label><input type="checkbox" v-model="config.heroic_presence">
+                  <span>Heroic Presence</span>
+                  <help>1% hit from Draenei Racial.<br>This is automatically applied if your race is Draenei</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.prof_skinning">
+                  <span>Master of Anatomy (Skinning)</span>
+                  <help>40 crit rating</help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.prof_alchemy">
+                  <span>Mixology (Alchemy)</span>
+                  <help>
+                    Bonuses to flask and elixirs.<br>
+                    Flask of the Frostwyrm: +47sp<br>
+                    Spellpower Elixir: +23sp<br>
+                    Guru's Elixir: +8 stats<br>
+                    Elixir of Accuracy: +20 hit rating<br>
+                    Elixir of Deadly Strikes: +20 crit rating<br>
+                    Elixir of Lightning Speed: +20 haste rating<br>
+                    Elixir of Spirit: +20 spirit<br>
+                    Elixir of Mighty Mageblood: +10 mp5<br>
+                    Elixir of Mighty Thoughts: +20 int
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.prof_engineer">
+                  <span>Mana Injectors (Engineering)</span>
+                  <help>25% extra from mana potions</help>
+                </label>
+              </div>
+              <div class="form-item" v-if="canSulfuronSlammer">
+                <label><input type="checkbox" v-model="config.sulfuron_slammer">
+                  <span>Sulfuron Slammer</span>
+                  <help>
+                    Using Sulfuron Slammer can proc certain trinkets such as
+                    Phylactery of the Nameless Lich
+                  </help>
+                </label>
+              </div>
+              <div class="form-item">
+                <label>
+                  <span>ICC buff</span>
+                  <help>
+                    Hellscream's Warsong or Strength of Wrynn<br>
+                    Giving 5-30% damage, healing, health, absorption.
+                  </help>
+                </label>
+                <select v-model.number="config.icc_buff">
+                  <option :value="0">0%</option>
+                  <option :value="5">5%</option>
+                  <option :value="10">10%</option>
+                  <option :value="15">15%</option>
+                  <option :value="20">20%</option>
+                  <option :value="25">25%</option>
+                  <option :value="30">30%</option>
+                </select>
+              </div>
+            </fieldset>
+            <fieldset class="config-consumes">
+              <legend>Consumes</legend>
+              <div class="form-item" v-if="!config.battle_elixir && !config.guardian_elixir">
+                <label>Flask</label>
+                <select v-model="config.flask">
+                  <option :value="flasks.FLASK_NONE">None</option>
+                  <option :value="flasks.FLASK_FROSTWYRM">Flask of the Frostwyrm (125 sp)</option>
+                  <option :value="flasks.FLASK_PURE_MOJO">Flask of Pure Mojo (45 mp5)</option>
+                </select>
+              </div>
+              <div class="form-item" v-if="!config.flask">
+                <label>Battle Elixir</label>
+                <select v-model="config.battle_elixir">
+                  <option :value="elixirs.ELIXIR_NONE">None</option>
+                  <option :value="elixirs.ELIXIR_SPELLPOWER">Spellpower Elixir (58 sp)</option>
+                  <option :value="elixirs.ELIXIR_GURU">Guru's Elixir (20 stats)</option>
+                  <option :value="elixirs.ELIXIR_ACCURACY">Elixir of Accuracy (45 hit)</option>
+                  <option :value="elixirs.ELIXIR_DEADLY_STRIKES">Elixir of Deadly Strikes (45 crit)</option>
+                  <option :value="elixirs.ELIXIR_LIGHTNING_SPEED">Elixir of Lightning Speed (45 haste)</option>
+                </select>
+              </div>
+              <div class="form-item" v-if="!config.flask">
+                <label>Guardian Elixir</label>
+                <select v-model="config.guardian_elixir">
+                  <option :value="elixirs.ELIXIR_NONE">None</option>
+                  <option :value="elixirs.ELIXIR_SPIRIT">Elixir of Spirit (50 spirit)</option>
+                  <option :value="elixirs.ELIXIR_MIGHTY_MAGEBLOOD">Elixir of Mighty Mageblood (30 mp5)</option>
+                  <option :value="elixirs.ELIXIR_MIGHTY_THOUGHTS">Elixir of Mighty Thoughts (45 int)</option>
+                  <option :value="elixirs.ELIXIR_DRAENIC_WISDOM">Elixir of Draenic Wisdom (30 int, 30 spirit)</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label>Food</label>
+                <select v-model="config.food">
+                  <option :value="foods.FOOD_NONE">None</option>
+                  <option :value="foods.FOOD_SPELL_POWER">Firecracker Salmon (46 sp)</option>
+                  <option :value="foods.FOOD_CRIT">Spiced Worm Burger (40 crit)</option>
+                  <option :value="foods.FOOD_HIT">Snapper Extreme (40 hit)</option>
+                  <option :value="foods.FOOD_HASTE">Imperial Manta Steak (40 haste)</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label>Potion</label>
+                <select v-model="config.potion">
+                  <option :value="potions.POTION_NONE">None</option>
+                  <option :value="potions.POTION_MANA">Mana potion</option>
+                  <option :value="potions.POTION_SPEED">Potion of Speed</option>
+                  <option :value="potions.POTION_WILD_MAGIC">Potion of Wild Magic</option>
+                  <option :value="potions.POTION_FLAME_CAP">Flame Cap</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label>Conjured</label>
+                <select v-model="config.conjured">
+                  <option :value="conjureds.CONJURED_NONE">None</option>
+                  <option :value="conjureds.CONJURED_DARK_RUNE">Dark Rune</option>
+                </select>
+              </div>
+            </fieldset>
+            <fieldset class="config-precombat">
+              <legend>Pre-combat</legend>
+              <div class="form-item">
+                <label>Potion</label>
+                <select v-model="config.pre_potion">
+                  <option :value="potions.POTION_NONE">None</option>
+                  <option :value="potions.POTION_MANA">Mana potion</option>
+                  <option :value="potions.POTION_SPEED">Potion of Speed</option>
+                  <option :value="potions.POTION_WILD_MAGIC">Potion of Wild Magic</option>
+                  <option :value="potions.POTION_FLAME_CAP">Flame Cap</option>
+                </select>
+              </div>
+              <div class="form-item">
+                <label><input type="checkbox" v-model="config.pre_mirror_image">
+                  <span>Mirror Image</span>
+                </label>
+              </div>
+              <div class="form-item" v-if="config.talents.water_elemental">
+                <label><input type="checkbox" v-model="config.pre_water_elemental">
+                  <span>Water Elemental</span>
+                </label>
+              </div>
+              <div class="form-item" v-if="config.talents.incanters_absorption">
+                <label><input type="checkbox" v-model="config.pre_incanters_absorption">
+                  <span>Fire Ward + Sapper</span>
+                  <help>Sapper will be popped with Arcane Power if no timing is specified.</help>
+                </label>
+              </div>
+              <div class="form-item" v-if="config.talents.incanters_absorption && config.pre_incanters_absorption">
+                <label><input type="checkbox" v-model="config.pre_mana_incanters_absorption">
+                  <span>Mana Shield</span>
+                  <help>
+                    Mana Shield can absorb damage from Sapper Charge and/or Dark Rune.<br>
+                    If you want to use a Dark Rune, make sure you select it as the Conjured consumable.<br>
+                    Dark Rune will be popped with Arcane Power if no timing is specified.
+                  </help>
+                </label>
+              </div>
+              <div class="form-item" v-if="!aoeRotation">
+                <label><input type="checkbox" v-model="config.pre_cast">
+                  <span>Pre-cast main spell</span>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="config-cooldowns">
+              <legend>Cooldowns</legend>
+              <div class="timings">
+                <table class="items">
+                  <thead>
+                  <tr>
+                    <th class="icon">CD</th>
+                    <th class="t">Pop at</th>
+                    <th class="wait-for-buff">Wait for</th>
+                    <th class="wait-t">Wait max</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="timing in config.timings" :key="timing.id">
+                    <template v-if="timingEnabled(timing.name)">
+                      <td class="icon">
                                                         <span>
                                                             <img :src="getTiming(timing.name, 'icon')">
                                                             <tooltip>{{ getTiming(timing.name, 'title') }}</tooltip>
                                                         </span>
-                          <div class="remove" @click="removeTiming(timing.id)">
-                            <span class="material-icons">&#xe5cd;</span>
-                          </div>
-                        </td>
-                        <td class="t">
-                          <input type="text" v-model.number="timing.t">
-                        </td>
-                        <td class="wait-for-buff">
-                          <select v-model="timing.wait_for_buff" v-if="timingCanWait(timing.name)">
-                            <option :value="0">Nothing</option>
-                            <option v-for="buff in waitBuffs" :value="buff.id" :key="buff.id">{{ buff.name }}</option>
-                          </select>
-                        </td>
-                        <td class="wait-t">
-                          <input type="text" v-model.number="timing.wait_t" v-if="timingCanWait(timing.name)">
-                        </td>
-                      </template>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <div class="add-timing">
-                    <div class="plus">
-                      <span class="material-icons">&#xe145;</span>
-                    </div>
-                    <div class="menu">
-                      <template v-for="timing in timings">
-                        <div v-if="timingEnabled(timing.name)" @click="addTiming(timing.name)">
-                          <img :src="timing.icon">
-                          <tooltip>{{ timing.title }}</tooltip>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
-              <fieldset class="config-interruptions">
-                <legend>Interruptions</legend>
-                <div class="interruptions">
-                  <table class="items">
-                    <thead>
-                    <tr>
-                      <th class="type">Type</th>
-                      <th class="affects">Affects</th>
-                      <th class="t">Time</th>
-                      <th class="duration">Duration</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="interruption in config.interruptions" :key="interruption.id">
-                      <td class="type">
-                        <select v-model="interruption.silence">
-                          <option :value="false">Movement</option>
-                          <option :value="true">Silence</option>
-                        </select>
-                        <div class="remove" @click="removeInterruption(interruption.id)">
+                        <div class="remove" @click="removeTiming(timing.id)">
                           <span class="material-icons">&#xe5cd;</span>
                         </div>
                       </td>
-                      <td class="affects">
-                        <select v-model="interruption.affects_all">
-                          <option :value="false">Player</option>
-                          <option :value="true">Player and pets</option>
+                      <td class="t">
+                        <input type="text" v-model.number="timing.t">
+                      </td>
+                      <td class="wait-for-buff">
+                        <select v-model="timing.wait_for_buff" v-if="timingCanWait(timing.name)">
+                          <option :value="0">Nothing</option>
+                          <option v-for="buff in waitBuffs" :value="buff.id" :key="buff.id">{{ buff.name }}</option>
                         </select>
                       </td>
-                      <td class="t">
-                        <input type="text" v-model.number="interruption.t">
+                      <td class="wait-t">
+                        <input type="text" v-model.number="timing.wait_t" v-if="timingCanWait(timing.name)">
                       </td>
-                      <td class="t">
-                        <input type="text" v-model.number="interruption.duration">
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                  <div class="add-timing">
-                    <div class="plus" @click="addInterruption">
-                      <span class="material-icons">&#xe145;</span>
+                    </template>
+                  </tr>
+                  </tbody>
+                </table>
+                <div class="add-timing">
+                  <div class="plus">
+                    <span class="material-icons">&#xe145;</span>
+                  </div>
+                  <div class="menu">
+                    <template v-for="timing in timings">
+                      <div v-if="timingEnabled(timing.name)" @click="addTiming(timing.name)">
+                        <img :src="timing.icon">
+                        <tooltip>{{ timing.title }}</tooltip>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="config-interruptions">
+              <legend>Interruptions</legend>
+              <div class="interruptions">
+                <table class="items">
+                  <thead>
+                  <tr>
+                    <th class="type">Type</th>
+                    <th class="affects">Affects</th>
+                    <th class="t">Time</th>
+                    <th class="duration">Duration</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="interruption in config.interruptions" :key="interruption.id">
+                    <td class="type">
+                      <select v-model="interruption.silence">
+                        <option :value="false">Movement</option>
+                        <option :value="true">Silence</option>
+                      </select>
+                      <div class="remove" @click="removeInterruption(interruption.id)">
+                        <span class="material-icons">&#xe5cd;</span>
+                      </div>
+                    </td>
+                    <td class="affects">
+                      <select v-model="interruption.affects_all">
+                        <option :value="false">Player</option>
+                        <option :value="true">Player and pets</option>
+                      </select>
+                    </td>
+                    <td class="t">
+                      <input type="text" v-model.number="interruption.t">
+                    </td>
+                    <td class="t">
+                      <input type="text" v-model.number="interruption.duration">
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <div class="add-timing">
+                  <div class="plus" @click="addInterruption">
+                    <span class="material-icons">&#xe145;</span>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="config-profiles">
+              <legend>Your profiles</legend>
+              <div class="profiles">
+                <div class="profile" v-for="(profile, index) in profiles" :key="profile.id">
+                  <div class="name" @click="loadProfile(profile)">{{ profile.name }}</div>
+                  <div class="actions">
+                    <div class="move move-up" @click="moveProfile(index, -1)">
+                      <span class="material-icons">&#xe316;</span>
+                      <tooltip position="t">Move up</tooltip>
+                    </div>
+                    <div class="move move-down" @click="moveProfile(index, 1)">
+                      <span class="material-icons">&#xe313;</span>
+                      <tooltip position="t">Move down</tooltip>
+                    </div>
+                    <div class="load-items" @click="loadProfile(profile, 'items')">
+                      <span class="material-icons">&#xe84e;</span>
+                      <tooltip position="t">Load items only</tooltip>
+                    </div>
+                    <div class="load-config" @click="loadProfile(profile, 'config')">
+                      <span class="material-icons">&#xe8b8;</span>
+                      <tooltip position="t">Load config only</tooltip>
+                    </div>
+                    <div class="save" @click="saveProfile(profile)">
+                      <span class="material-icons">&#xe161;</span>
+                      <tooltip position="t">Save profile</tooltip>
+                    </div>
+                    <div class="delete" @click="deleteProfile(profile)">
+                      <span class="material-icons">&#xe872;</span>
+                      <tooltip position="t">Delete profile</tooltip>
                     </div>
                   </div>
                 </div>
-              </fieldset>
-              <fieldset class="config-profiles">
-                <legend>Your profiles</legend>
-                <div class="profiles">
-                  <div class="profile" v-for="(profile, index) in profiles" :key="profile.id">
-                    <div class="name" @click="loadProfile(profile)">{{ profile.name }}</div>
-                    <div class="actions">
-                      <div class="move move-up" @click="moveProfile(index, -1)">
-                        <span class="material-icons">&#xe316;</span>
-                        <tooltip position="t">Move up</tooltip>
-                      </div>
-                      <div class="move move-down" @click="moveProfile(index, 1)">
-                        <span class="material-icons">&#xe313;</span>
-                        <tooltip position="t">Move down</tooltip>
-                      </div>
-                      <div class="load-items" @click="loadProfile(profile, 'items')">
-                        <span class="material-icons">&#xe84e;</span>
-                        <tooltip position="t">Load items only</tooltip>
-                      </div>
-                      <div class="load-config" @click="loadProfile(profile, 'config')">
-                        <span class="material-icons">&#xe8b8;</span>
-                        <tooltip position="t">Load config only</tooltip>
-                      </div>
-                      <div class="save" @click="saveProfile(profile)">
-                        <span class="material-icons">&#xe161;</span>
-                        <tooltip position="t">Save profile</tooltip>
-                      </div>
-                      <div class="delete" @click="deleteProfile(profile)">
-                        <span class="material-icons">&#xe872;</span>
-                        <tooltip position="t">Delete profile</tooltip>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="new-profile mt-1">
-                    <input type="text" v-model="new_profile" placeholder="Enter the name of your new profile"
-                           @keydown.enter="newProfile()">
-                    <div class="btn" :class="[new_profile ? '' : 'disabled']" @click="newProfile()">
+                <div class="new-profile mt-1">
+                  <input type="text" v-model="new_profile" placeholder="Enter the name of your new profile"
+                         @keydown.enter="newProfile()">
+                  <div class="btn" :class="[new_profile ? '' : 'disabled']" @click="newProfile()">
                                             <span>
                                                 New profile
                                                 <tooltip position="r">Save your items and config</tooltip>
                                             </span>
-                    </div>
-                  </div>
-                  <div class="export-import clearfix mt-2">
-                    <div class="btn fl" @click="openExport()">Export</div>
-                    <div class="btn fl ml-n" @click="openImport()">Import</div>
-                    <div class="btn danger fr" @click="nukeSettings()">Nuke settings</div>
                   </div>
                 </div>
-              </fieldset>
-              <fieldset class="config-quick-profiles">
-                <legend>Quick profiles</legend>
-                <div class="profiles">
-                  <div class="profile" v-for="(profile, index) in default_profiles" :key="profile.id">
-                    <div class="name" @click="loadProfile(profile)">{{ profile.name }}</div>
-                    <div class="actions">
-                      <div class="load-items" @click="loadProfile(profile, 'items')">
-                        <span class="material-icons">&#xe84e;</span>
-                        <tooltip position="t">Load items only</tooltip>
-                      </div>
-                      <div class="load-config" @click="loadProfile(profile, 'config')">
-                        <span class="material-icons">&#xe8b8;</span>
-                        <tooltip position="t">Load config only</tooltip>
-                      </div>
+                <div class="export-import clearfix mt-2">
+                  <div class="btn fl" @click="openExport()">Export</div>
+                  <div class="btn fl ml-n" @click="openImport()">Import</div>
+                  <div class="btn danger fr" @click="nukeSettings()">Nuke settings</div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="config-quick-profiles">
+              <legend>Quick profiles</legend>
+              <div class="profiles">
+                <div class="profile" v-for="(profile, index) in default_profiles" :key="profile.id">
+                  <div class="name" @click="loadProfile(profile)">{{ profile.name }}</div>
+                  <div class="actions">
+                    <div class="load-items" @click="loadProfile(profile, 'items')">
+                      <span class="material-icons">&#xe84e;</span>
+                      <tooltip position="t">Load items only</tooltip>
+                    </div>
+                    <div class="load-config" @click="loadProfile(profile, 'config')">
+                      <span class="material-icons">&#xe8b8;</span>
+                      <tooltip position="t">Load config only</tooltip>
                     </div>
                   </div>
                 </div>
-              </fieldset>
-            </div>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="lightbox" v-if="export_profile.open">
-        <div class="closer" @click="closeExport"></div>
-        <div class="inner">
-          <div class="title">Export</div>
-          <div class="form-item">
-            <textarea v-model="export_profile.string" ref="export_input"></textarea>
-          </div>
-          <div class="form-item">
-            <label><input type="checkbox" v-model="export_profile.items" @input="updateExport">
-              <span>Include items</span></label>
-            <label><input type="checkbox" v-model="export_profile.config" @input="updateExport">
-              <span>Include config</span></label>
-          </div>
-          <div class="btn mt-2 wide" @click="closeExport">Close</div>
+    <div class="lightbox" v-if="export_profile.open">
+      <div class="closer" @click="closeExport"></div>
+      <div class="inner">
+        <div class="title">Export</div>
+        <div class="form-item">
+          <textarea v-model="export_profile.string" ref="export_input"></textarea>
         </div>
+        <div class="form-item">
+          <label><input type="checkbox" v-model="export_profile.items" @input="updateExport">
+            <span>Include items</span></label>
+          <label><input type="checkbox" v-model="export_profile.config" @input="updateExport">
+            <span>Include config</span></label>
+        </div>
+        <div class="btn mt-2 wide" @click="closeExport">Close</div>
       </div>
+    </div>
 
-      <div class="lightbox" v-if="import_profile.open">
-        <div class="closer" @click="closeImport"></div>
-        <div class="inner">
-          <div class="title">Import</div>
+    <div class="lightbox" v-if="import_profile.open">
+      <div class="closer" @click="closeImport"></div>
+      <div class="inner">
+        <div class="title">Import</div>
+        <div class="description">
+          Paste the data from any of these supported sources:<br>
+          MageSim, EightyUpgrades, WowSims Exporter Addon, Warcraft Logs.
+        </div>
+        <div class="form-item">
+          <textarea v-model="import_profile.string" ref="import_input" @input="checkImportString"></textarea>
+        </div>
+        <div class="form-item">
+          <label><input type="checkbox" v-model="import_profile.items" :disabled="!import_status.items"> <span>Include items</span></label>
+          <label><input type="checkbox" v-model="import_profile.config" :disabled="!import_status.config"> <span>Include config</span></label>
+        </div>
+        <div class="btn mt-2 wide" :class="[import_profile.string ? '' : 'disabled']" @click="doImport">Import</div>
+      </div>
+    </div>
+
+    <div class="lightbox small" v-if="import_wcl.open">
+      <div class="closer" @click="closeImportWCL"></div>
+      <div class="inner">
+        <div class="title">Import raid from WCL</div>
+        <template v-if="!wcl.access_token">
+          <div class="description my-2">
+            In order to fetch data from the API, you need to authorize the application.<br><br>
+          </div>
+          <div class="btn btn-primary" @click="wcl.oauthInit()">Continue to WCL</div>
+        </template>
+        <template v-else-if="!import_wcl.fight">
           <div class="description">
-            Paste the data from any of these supported sources:<br>
-            MageSim, EightyUpgrades, WowSims Exporter Addon, Warcraft Logs.
+            <div>This import will attempt to find the following settings in the raid log:</div>
+            <div class="checklist mt-n">
+              <check-item :value="import_profile.items">Player gear</check-item>
+              <check-item :value="import_profile.config">Fight duration</check-item>
+              <check-item :value="import_profile.config">Bloodlust timing</check-item>
+              <check-item :value="import_profile.config">Demonic Pact values</check-item>
+            </div>
+            <div class="mt-2">It will <b>NOT</b> import the following:</div>
+            <div class="checklist mt-n mb-2">
+              <check-item :value="false">Player talents</check-item>
+              <check-item :value="false">Rotation</check-item>
+              <check-item :value="false">Buffs/Debuffs</check-item>
+              <check-item :value="false">Personal Cooldowns</check-item>
+              <check-item :value="false">Interruptions such as silence or movement</check-item>
+            </div>
           </div>
-          <div class="form-item">
-            <textarea v-model="import_profile.string" ref="import_input" @input="checkImportString"></textarea>
+          <template v-if="import_wcl.raid">
+            <div class="form-item">
+              <label>Choose player</label>
+              <select v-model="import_wcl.player_id">
+                <option :value="null">- Choose -</option>
+                <option :value="player.id" v-for="player in import_wcl.raid.players.filter(p => p.type == 'Mage')">{{
+                    player.name
+                  }}
+                </option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label>Choose fight</label>
+              <select v-model="import_wcl.fight_id">
+                <option :value="null">- Choose -</option>
+                <option :value="fight.id" v-for="fight in import_wcl.raid.fights">{{ fight.name }}</option>
+              </select>
+            </div>
+          </template>
+          <div v-else class="mt-2">Loading log data...</div>
+          <div class="btn btn-primary mt-2"
+               :class="{disabled: !import_wcl.fight_id || !import_wcl.player_id || import_wcl.loading}"
+               @click="importWCLFight()">Continue
           </div>
-          <div class="form-item">
-            <label><input type="checkbox" v-model="import_profile.items" :disabled="!import_status.items"> <span>Include items</span></label>
-            <label><input type="checkbox" v-model="import_profile.config" :disabled="!import_status.config"> <span>Include config</span></label>
+        </template>
+        <template v-else>
+          <div class="description">
+            Successfully retrieved the following data:
+            <div class="checklist mt-n">
+              <check-item :value="import_profile.items && import_wcl.fight.player.gear.length">
+                Player gear
+              </check-item>
+              <check-item :value="import_profile.config && import_wcl.fight.duration">
+                Fight duration
+                <template v-if="import_wcl.fight.duration">({{ $round(import_wcl.fight.duration / 1000) }}s)</template>
+              </check-item>
+              <check-item :value="import_profile.config && import_wcl.fight.timings.length">
+                Bloodlust timing
+                <template v-if="import_wcl.fight.timings.length">({{ $round(import_wcl.fight.timings[0].t / 1000) }}s)
+                </template>
+              </check-item>
+              <check-item :value="import_profile.config && import_wcl.fight.dp_avg">
+                Demonic Pact values
+                <template v-if="import_wcl.fight.dp_avg">({{ import_wcl.fight.dp_avg }})</template>
+              </check-item>
+            </div>
           </div>
-          <div class="btn mt-2 wide" :class="[import_profile.string ? '' : 'disabled']" @click="doImport">Import</div>
-        </div>
+          <div class="btn btn-primary mt-2" @click="importWCLConfirm()">Confirm and import</div>
+        </template>
       </div>
+    </div>
 
-      <div class="lightbox small" v-if="import_wcl.open">
-        <div class="closer" @click="closeImportWCL"></div>
-        <div class="inner">
-          <div class="title">Import raid from WCL</div>
-          <template v-if="!wcl.access_token">
-            <div class="description my-2">
-              In order to fetch data from the API, you need to authorize the application.<br><br>
-            </div>
-            <div class="btn btn-primary" @click="wcl.oauthInit()">Continue to WCL</div>
-          </template>
-          <template v-else-if="!import_wcl.fight">
-            <div class="description">
-              <div>This import will attempt to find the following settings in the raid log:</div>
-              <div class="checklist mt-n">
-                <check-item :value="import_profile.items">Player gear</check-item>
-                <check-item :value="import_profile.config">Fight duration</check-item>
-                <check-item :value="import_profile.config">Bloodlust timing</check-item>
-                <check-item :value="import_profile.config">Demonic Pact values</check-item>
-              </div>
-              <div class="mt-2">It will <b>NOT</b> import the following:</div>
-              <div class="checklist mt-n mb-2">
-                <check-item :value="false">Player talents</check-item>
-                <check-item :value="false">Rotation</check-item>
-                <check-item :value="false">Buffs/Debuffs</check-item>
-                <check-item :value="false">Personal Cooldowns</check-item>
-                <check-item :value="false">Interruptions such as silence or movement</check-item>
-              </div>
-            </div>
-            <template v-if="import_wcl.raid">
-              <div class="form-item">
-                <label>Choose player</label>
-                <select v-model="import_wcl.player_id">
-                  <option :value="null">- Choose -</option>
-                  <option :value="player.id" v-for="player in import_wcl.raid.players.filter(p => p.type == 'Mage')">{{
-                    player.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="form-item">
-                <label>Choose fight</label>
-                <select v-model="import_wcl.fight_id">
-                  <option :value="null">- Choose -</option>
-                  <option :value="fight.id" v-for="fight in import_wcl.raid.fights">{{ fight.name }}</option>
-                </select>
-              </div>
-            </template>
-            <div v-else class="mt-2">Loading log data...</div>
-            <div class="btn btn-primary mt-2"
-                 :class="{disabled: !import_wcl.fight_id || !import_wcl.player_id || import_wcl.loading}"
-                 @click="importWCLFight()">Continue
-            </div>
-          </template>
-          <template v-else>
-            <div class="description">
-              Successfully retrieved the following data:
-              <div class="checklist mt-n">
-                <check-item :value="import_profile.items && import_wcl.fight.player.gear.length">
-                  Player gear
-                </check-item>
-                <check-item :value="import_profile.config && import_wcl.fight.duration">
-                  Fight duration
-                  <template v-if="import_wcl.fight.duration">({{ $round(import_wcl.fight.duration/1000) }}s)</template>
-                </check-item>
-                <check-item :value="import_profile.config && import_wcl.fight.timings.length">
-                  Bloodlust timing
-                  <template v-if="import_wcl.fight.timings.length">({{ $round(import_wcl.fight.timings[0].t/1000) }}s)
-                  </template>
-                </check-item>
-                <check-item :value="import_profile.config && import_wcl.fight.dp_avg">
-                  Demonic Pact values
-                  <template v-if="import_wcl.fight.dp_avg">({{ import_wcl.fight.dp_avg }})</template>
-                </check-item>
-              </div>
-            </div>
-            <div class="btn btn-primary mt-2" @click="importWCLConfirm()">Confirm and import</div>
-          </template>
-        </div>
-      </div>
-
-      <div class="lightbox" v-if="equiplist_open">
-        <div class="closer" @click="closeEquiplist"></div>
-        <div class="inner">
-          <div class="title">Equipped items</div>
-          <table>
-            <thead>
-            <tr>
-              <th>Slot</th>
-              <th>Item</th>
-              <th>Enchant</th>
-              <th>Gems</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="equipped-item" v-for="(item_id, slot) in equipped">
-              <template v-if="item_id">
-                <td>{{ formatKey(slot) }}</td>
-                <td>
-                  <a :href="itemUrl(item_id)" target="_blank"
-                     :class="['quality-'+$get(getItem(slot, item_id), 'q', 'epic')]">
-                    {{ getItem(slot, item_id).title }}
+    <div class="lightbox" v-if="equiplist_open">
+      <div class="closer" @click="closeEquiplist"></div>
+      <div class="inner">
+        <div class="title">Equipped items</div>
+        <table>
+          <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Item</th>
+            <th>Enchant</th>
+            <th>Gems</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="equipped-item" v-for="(item_id, slot) in equipped">
+            <template v-if="item_id">
+              <td>{{ formatKey(slot) }}</td>
+              <td>
+                <a :href="itemUrl(item_id)" target="_blank"
+                   :class="['quality-'+$get(getItem(slot, item_id), 'q', 'epic')]">
+                  {{ getItem(slot, item_id).title }}
+                </a>
+              </td>
+              <td>
+                <template v-if="$get(enchants, slot)">
+                  <a :href="spellUrl(enchants[slot])" target="_blank"
+                     :class="['quality-'+$get(getEnchant(slot, enchants[slot]), 'q', 'uncommon')]">
+                    {{ getEnchant(slot, enchants[slot]).title }}
                   </a>
-                </td>
-                <td>
-                  <template v-if="$get(enchants, slot)">
-                    <a :href="spellUrl(enchants[slot])" target="_blank"
-                       :class="['quality-'+$get(getEnchant(slot, enchants[slot]), 'q', 'uncommon')]">
-                      {{ getEnchant(slot, enchants[slot]).title }}
+                </template>
+              </td>
+              <td>
+                <template v-for="(gem_id, index) in gems[slot]" v-if="gems.hasOwnProperty(slot)">
+                  <template v-if="gem_id">
+                    <span v-if="index > 0">, </span>
+                    <a :href="itemUrl(gem_id)" target="_blank" :class="['gem-color', 'color-'+getGem(gem_id).color]">
+                      {{ getGem(gem_id).title }}
                     </a>
                   </template>
-                </td>
-                <td>
-                  <template v-for="(gem_id, index) in gems[slot]" v-if="gems.hasOwnProperty(slot)">
-                    <template v-if="gem_id">
-                      <span v-if="index > 0">, </span>
-                      <a :href="itemUrl(gem_id)" target="_blank" :class="['gem-color', 'color-'+getGem(gem_id).color]">
-                        {{ getGem(gem_id).title }}
-                      </a>
-                    </template>
-                  </template>
-                </td>
-              </template>
-            </tr>
-            </tbody>
-          </table>
-          <div class="mt-2">
-            <div class="btn wide" @click="copyEquiplist">Copy</div>
-          </div>
+                </template>
+              </td>
+            </template>
+          </tr>
+          </tbody>
+        </table>
+        <div class="mt-2">
+          <div class="btn wide" @click="copyEquiplist">Copy</div>
         </div>
       </div>
+    </div>
 
-      <div class="lightbox small" v-if="custom_stats_open">
-        <div class="closer" @click="closeCustomStats"></div>
-        <div class="inner">
-          <div class="title">Bonus stats</div>
-          <div class="description">Add additional stats to your character.</div>
+    <div class="lightbox small" v-if="custom_stats_open">
+      <div class="closer" @click="closeCustomStats"></div>
+      <div class="inner">
+        <div class="title">Bonus stats</div>
+        <div class="description">Add additional stats to your character.</div>
+        <div class="form-item form-row">
+          <label>Intellect</label>
+          <input type="number" v-model.number="config.custom_stats.intellect">
+        </div>
+        <div class="form-item form-row">
+          <label>Spirit</label>
+          <input type="number" v-model.number="config.custom_stats.spirit">
+        </div>
+        <div class="form-item form-row">
+          <label>Spell Power</label>
+          <input type="number" v-model.number="config.custom_stats.spell_power">
+        </div>
+        <div class="form-item form-row">
+          <label>Crit rating</label>
+          <input type="number" v-model.number="config.custom_stats.crit_rating">
+        </div>
+        <div class="form-item form-row">
+          <label>Hit rating</label>
+          <input type="number" v-model.number="config.custom_stats.hit_rating">
+        </div>
+        <div class="form-item form-row">
+          <label>Haste rating</label>
+          <input type="number" v-model.number="config.custom_stats.haste_rating">
+        </div>
+        <div class="form-item form-row">
+          <label>Mp5</label>
+          <input type="number" v-model.number="config.custom_stats.mp5">
+        </div>
+      </div>
+    </div>
+
+    <div class="lightbox small" v-if="custom_item_open">
+      <div class="closer" @click="closeCustomItem"></div>
+      <div class="inner">
+        <div class="title">Add custom item</div>
+        <div class="description">Custom items will only be added for your browser.</div>
+        <div class="form">
+          <div class="form-item form-row">
+            <label>
+              ID
+              <help>Leave empty to generate a random ID</help>
+            </label>
+            <input type="number" v-model.number="custom_item.id">
+          </div>
+          <div class="form-item form-row">
+            <label>Name</label>
+            <input type="text" v-model="custom_item.title">
+          </div>
+          <div class="form-item form-row">
+            <label>Slot</label>
+            <select v-model="custom_item.slot">
+              <option :value="null">- Choose -</option>
+              <option :value="slot" v-for="slot in itemSlots">{{ formatKey(slot) }}</option>
+            </select>
+          </div>
+          <div class="form-item form-row" v-if="custom_item.slot == 'weapon'">
+            <label>Twohanded</label>
+            <div>
+              <input type="checkbox" v-model="custom_item.twohand">
+            </div>
+          </div>
+          <div class="form-item form-row">
+            <label>Quality</label>
+            <select v-model="custom_item.q">
+              <option value="epic">Epic</option>
+              <option value="rare">Rare</option>
+              <option value="uncommon">Uncommon</option>
+              <option value="common">Common</option>
+            </select>
+          </div>
           <div class="form-item form-row">
             <label>Intellect</label>
-            <input type="number" v-model.number="config.custom_stats.intellect">
+            <input type="number" v-model.number="custom_item.int">
           </div>
           <div class="form-item form-row">
             <label>Spirit</label>
-            <input type="number" v-model.number="config.custom_stats.spirit">
+            <input type="number" v-model.number="custom_item.spi">
           </div>
           <div class="form-item form-row">
             <label>Spell Power</label>
-            <input type="number" v-model.number="config.custom_stats.spell_power">
+            <input type="number" v-model.number="custom_item.sp">
           </div>
           <div class="form-item form-row">
             <label>Crit rating</label>
-            <input type="number" v-model.number="config.custom_stats.crit_rating">
+            <input type="number" v-model.number="custom_item.crit">
           </div>
           <div class="form-item form-row">
             <label>Hit rating</label>
-            <input type="number" v-model.number="config.custom_stats.hit_rating">
+            <input type="number" v-model.number="custom_item.hit">
           </div>
           <div class="form-item form-row">
             <label>Haste rating</label>
-            <input type="number" v-model.number="config.custom_stats.haste_rating">
+            <input type="number" v-model.number="custom_item.haste">
           </div>
           <div class="form-item form-row">
             <label>Mp5</label>
-            <input type="number" v-model.number="config.custom_stats.mp5">
+            <input type="number" v-model.number="custom_item.mp5">
+          </div>
+          <div class="form-item form-row">
+            <label>Number of prismatic sockets</label>
+            <input type="number" v-model.number="custom_item.sockets">
+          </div>
+          <div class="form-item form-row" v-if="custom_item.slot == 'head'">
+            <label>Meta socket</label>
+            <div>
+              <input type="checkbox" v-model="custom_item.meta_socket">
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="lightbox small" v-if="custom_item_open">
-        <div class="closer" @click="closeCustomItem"></div>
-        <div class="inner">
-          <div class="title">Add custom item</div>
-          <div class="description">Custom items will only be added for your browser.</div>
-          <div class="form">
-            <div class="form-item form-row">
-              <label>
-                ID
-                <help>Leave empty to generate a random ID</help>
-              </label>
-              <input type="number" v-model.number="custom_item.id">
-            </div>
-            <div class="form-item form-row">
-              <label>Name</label>
-              <input type="text" v-model="custom_item.title">
-            </div>
-            <div class="form-item form-row">
-              <label>Slot</label>
-              <select v-model="custom_item.slot">
-                <option :value="null">- Choose -</option>
-                <option :value="slot" v-for="slot in itemSlots">{{ formatKey(slot) }}</option>
-              </select>
-            </div>
-            <div class="form-item form-row" v-if="custom_item.slot == 'weapon'">
-              <label>Twohanded</label>
-              <div>
-                <input type="checkbox" v-model="custom_item.twohand">
-              </div>
-            </div>
-            <div class="form-item form-row">
-              <label>Quality</label>
-              <select v-model="custom_item.q">
-                <option value="epic">Epic</option>
-                <option value="rare">Rare</option>
-                <option value="uncommon">Uncommon</option>
-                <option value="common">Common</option>
-              </select>
-            </div>
-            <div class="form-item form-row">
-              <label>Intellect</label>
-              <input type="number" v-model.number="custom_item.int">
-            </div>
-            <div class="form-item form-row">
-              <label>Spirit</label>
-              <input type="number" v-model.number="custom_item.spi">
-            </div>
-            <div class="form-item form-row">
-              <label>Spell Power</label>
-              <input type="number" v-model.number="custom_item.sp">
-            </div>
-            <div class="form-item form-row">
-              <label>Crit rating</label>
-              <input type="number" v-model.number="custom_item.crit">
-            </div>
-            <div class="form-item form-row">
-              <label>Hit rating</label>
-              <input type="number" v-model.number="custom_item.hit">
-            </div>
-            <div class="form-item form-row">
-              <label>Haste rating</label>
-              <input type="number" v-model.number="custom_item.haste">
-            </div>
-            <div class="form-item form-row">
-              <label>Mp5</label>
-              <input type="number" v-model.number="custom_item.mp5">
-            </div>
-            <div class="form-item form-row">
-              <label>Number of prismatic sockets</label>
-              <input type="number" v-model.number="custom_item.sockets">
-            </div>
-            <div class="form-item form-row" v-if="custom_item.slot == 'head'">
-              <label>Meta socket</label>
-              <div>
-                <input type="checkbox" v-model="custom_item.meta_socket">
-              </div>
-            </div>
-          </div>
-          <div class="mt-2 text-error" v-if="custom_item_error">
-            {{ custom_item_error }}
-          </div>
-          <div class="mt-2">
-            <div class="btn block" @click="addCustomItem">Save</div>
-          </div>
+        <div class="mt-2 text-error" v-if="custom_item_error">
+          {{ custom_item_error }}
+        </div>
+        <div class="mt-2">
+          <div class="btn block" @click="addCustomItem">Save</div>
         </div>
       </div>
-
-      <div class="lightbox small warning" v-if="quick_start_open">
-        <div class="inner">
-          <div class="title">Quick start</div>
-          <div class="text">
-            Select a profile below to start your simming!<br>
-            <span class="faded">You can access all of these profiles later and even create your own under the</span> <b>Config</b>
-            <span class="faded">tab.</span>
-          </div>
-          <div class="profile-choices">
-            <div class="profile-choice btn" v-for="profile in default_profiles"
-                 @click="loadProfile(profile); quick_start_open = false">
-              <img :src="profile.icon" v-if="profile.icon">
-              {{ profile.name }}
-            </div>
-          </div>
-          <div class="btn mt-2" @click="quick_start_open = false">
-            No thanks, I'll start from scratch
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <div class="lightbox small warning" v-if="quick_start_open">
+      <div class="inner">
+        <div class="title">Quick start</div>
+        <div class="text">
+          Select a profile below to start your simming!<br>
+          <span class="faded">You can access all of these profiles later and even create your own under the</span> <b>Config</b>
+          <span class="faded">tab.</span>
+        </div>
+        <div class="profile-choices">
+          <div class="profile-choice btn" v-for="profile in default_profiles"
+               @click="loadProfile(profile); quick_start_open = false">
+            <img :src="profile.icon" v-if="profile.icon">
+            {{ profile.name }}
+          </div>
+        </div>
+        <div class="btn mt-2" @click="quick_start_open = false">
+          No thanks, I'll start from scratch
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -3312,13 +3323,6 @@ export default {
 
         return result;
       });
-    },
-
-    checkDonation() {
-      if (window.location.hash == "#donation") {
-        window.location.hash = "";
-        this.donation_open = true;
-      }
     },
 
     checkNewUser() {
