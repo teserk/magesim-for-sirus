@@ -1,8 +1,0 @@
-# ninja log v5
-13	1721	7256443350908827	CMakeFiles/magesim.dir/src/buff.cpp.obj	221ff0827c2437a6
-16	2590	7256443359553039	CMakeFiles/magesim.dir/src/water_elemental.cpp.obj	4327a95c084e98bf
-11	3017	7256443364034897	CMakeFiles/magesim.dir/src/state.cpp.obj	e04fb599b18d35e0
-8	3228	7256443366142206	CMakeFiles/magesim.dir/src/unit.cpp.obj	90c2edb006db2f2c
-2590	4283	7256443376738442	CMakeFiles/magesim.dir/src/mirror_image.cpp.obj	5069f6d24cf79b22
-1727	16705	7256443500663475	CMakeFiles/magesim.dir/src/player.cpp.obj	e42e7c96949c7f72
-18	766	7256458012016712	CMakeFiles/magesim.dir/src/common.cpp.obj	8cc48cf0022f74e2
