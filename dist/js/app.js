@@ -31707,7 +31707,6 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
     this.loadDefaultProfiles();
     this.loadProfiles();
     this.calcStats();
-    this.checkDonation();
   },
   data: function data() {
     var splitview = localStorage.getItem("splitview") == "true" ? true : false;
