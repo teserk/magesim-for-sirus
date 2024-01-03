@@ -2,4 +2,6 @@ node_modules
 magesim
 notes
 dist/main.js
+.idea
+__pycache__
 .env
