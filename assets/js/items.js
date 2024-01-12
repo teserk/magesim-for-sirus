@@ -13,6 +13,7 @@ const ids = {
     TRINKET_SUNDIAL_EXILED: 40682,
     TRINKET_EMBRACE_SPIDER: 39229,
     TRINKET_DYING_CURSE: 40255,
+    TRINKET_DYING_CURSE_HM: 330352, // sirus HM version
     TRINKET_EXTRACT_NECROMANTIC_POWER: 40373,
     TRINKET_SOUL_DEAD: 40382,
     TRINKET_ILLUSTRATION_DRAGON_SOUL: 40432,
@@ -103,6 +104,8 @@ const ids = {
 // TODO: Переделать эту базу данных
 var equip = {
     weapon: [
+        // sirus Quel'Danas
+        { id: 152252, title: "Коварство верховного мага", ilvl: 213, int: 41, sp: 461, crit: 29, haste: 41},
         // icc
         { id: 50732, title: "Bloodsurge, Kel'Thuzad's Blade of Agony", ilvl: 284, int: 81, sp: 893, crit: 55, haste: 71, sockets: ["r"], bonus: {sp: 5}, unique: true, phase: 4 },
         { id: 50427, title: "Bloodsurge, Kel'Thuzad's Blade of Agony", ilvl: 271, int: 71, sp: 792, crit: 63, haste: 63, unique: true, phase: 4 },
@@ -252,6 +255,8 @@ var equip = {
         { id: 34182, title: "Grand Magister's Staff of Torrents", ilvl: 154, int: 52, sp: 266, crit: 49, hit: 50, twohand: true, sockets: ["y", "y", "y"], bonus: { sp: 5 } },
     ],
     off_hand: [
+        // sirus Quel'Danas
+        {id: 152263, title: "Лампада танцующих теней", ilvl: 213, int: 40, sp: 66, crit: 38, haste: 38},
         // icc
         { id: 50719, title: "Shadow Silk Spindle", ilvl: 277, int: 78, sp: 119, crit: 68, haste: 68, phase: 4 },
         { id: 50173, title: "Shadow Silk Spindle", ilvl: 264, int: 69, sp: 106, crit: 60, haste: 60, phase: 4 },
@@ -1393,6 +1398,8 @@ var equip = {
         { id: ids.TRINKET_EXTRACT_NECROMANTIC_POWER, title: "Extract of Necromantic Power", ilvl: 213, crit: 95, unique: true },
         { id: ids.TRINKET_SOUL_DEAD, title: "Soul of the Dead", ilvl: 213, crit: 95, unique: true },
         { id: ids.TRINKET_EMBRACE_SPIDER, title: "Embrace of the Spider", ilvl: 200, sp: 98, unique: true },
+        // naxx HM sirus
+        {id: ids.TRINKET_DYING_CURSE_HM, title: "Исчезающее проклятие ХМ", ilvl: 219, hit: 75, unique: true},
         // pvp
         { id: 42132, title: "Battlemaster's Bravery", ilvl: 213, sp: 111 },
         { id: 42130, title: "Battlemaster's Avidity", ilvl: 213, haste: 95 },
@@ -1515,7 +1522,7 @@ var enchants = {
         { id: 59960, enchantmentId: 3819, title: "Arcanum of Blissful Mending", sp: 30, mp5: 10 },
     ],
     shoulder: [
-        { id: 61120, enchantmentId: 3838, title: "Master's Inscription of the Storm ", sp: 70, crit: 15 },
+        { id: 61120, enchantmentId: 3838, title: "Master's Inscription of the Storm ", sp: 105, crit: 24 }, // changed for sirus
         { id: 61118, enchantmentId: 3836, title: "Master's Inscription of the Crag", sp: 70, mp5: 8 },
         { id: 59937, enchantmentId: 3810, title: "Greater Inscription of the Storm ", sp: 24, crit: 15 },
         { id: 59936, enchantmentId: 3809, title: "Greater Inscription of the Crag", sp: 24, mp5: 8 },

@@ -66,6 +66,7 @@ enum ID : int {
   ELUSIVE_POWER = 67669,
   EMBRACE_SPIDER = 60492,
   DYING_CURSE = 60494,
+  DYING_CURSE_HM = 330352, // Sirus HM version
   EXTRACT_NECROMANTIC_POWER = 60488,
   SOUL_DEAD = 60538,
   ALACRITY_ELEMENTS = 65004,
@@ -462,6 +463,15 @@ class DyingCurse : public Cooldown {
 public:
   DyingCurse() {
     id = DYING_CURSE;
+    duration = 45;
+  }
+};
+
+class DyingCurseHM : public Cooldown {
+
+public:
+  DyingCurseHM() {
+    id = DYING_CURSE_HM;
     duration = 45;
   }
 };

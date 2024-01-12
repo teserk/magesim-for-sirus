@@ -1379,6 +1379,9 @@ Player::onCastOrTick(const State &state, std::shared_ptr<spell::Spell> spell, st
   // Confirmed - on cast/tick
   if (hasTrinket(TRINKET_DYING_CURSE) && !hasCooldown(cooldown::DYING_CURSE) && random<int>(0, 19) < 3) {
     actions.push_back(buffCooldownAction<buff::DyingCurse, cooldown::DyingCurse>());
+    if (hasTrinket(TRINKET_DYING_CURSE_HM) && !hasCooldown(cooldown::DYING_CURSE_HM)) {
+      actions.push_back(buffCooldownAction<buff::DyingCurseHM, cooldown::DyingCurseHM>());
+    }
   }
 
   // Unconfirmed - on cast/tick ?

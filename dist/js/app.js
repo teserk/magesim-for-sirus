@@ -32019,7 +32019,7 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
       is_running: false,
       is_running_ep: false,
       active_tab: "gear",
-      item_source: "wowhead",
+      item_source: "sirus",
       search_item: this.loadFilters("phase:4-") + " ",
       search_gem: "",
       search_log: "",
@@ -33682,13 +33682,13 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
       if (_typeof(id) == "object") id = id.id;
       if (id > 99900 && id != 211844) return null;
       if (this.item_source == "wotlkdb") return "https://www.wotlkdb.com/?item=" + id;
-      if (this.item_source == "evo") return "https://wotlk.evowow.com/?item=" + id;
-      return "https://www.wowhead.com/wotlk/item=" + id;
+      if (this.item_source == "sirus") return "https://sirus.su/base/item/" + id;
+      return "https://www.wowhead.com/wotlk/spell=" + id;
     },
     spellUrl: function spellUrl(id) {
       if (_typeof(id) == "object") id = id.id;
       if (this.item_source == "wotlkdb") return "https://www.wotlkdb.com/?spell=" + id;
-      if (this.item_source == "evo") return "https://wotlk.evowow.com/?spell=" + id;
+      if (this.item_source == "sirus") return "https://sirus.su/base/item/" + id;
       return "https://www.wowhead.com/wotlk/spell=" + id;
     },
     equippedUrl: function equippedUrl(slot) {
@@ -35526,6 +35526,17 @@ __webpack_require__.r(__webpack_exports__);
         title: "Combustion",
         color: "#f84"
       }, {
+        title: "Власть огня",
+        color: "#f84"
+      },
+      // sirus special
+      {
+        title: "Воплощение",
+        color: "#dd5"
+      }, {
+        title: "Боевая регенерация",
+        color: "#5a0"
+      }, {
         title: "Power Infusion",
         color: "#dd0"
       }, {
@@ -35661,6 +35672,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         title: "Power Circle",
         color: "#a2a"
+      }, {
+        title: "Подвеска Проницательности",
+        color: "#cc8"
       }],
       mana_gains: [{
         title: "Mana Gem",

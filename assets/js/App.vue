@@ -2349,7 +2349,7 @@ export default {
       is_running: false,
       is_running_ep: false,
       active_tab: "gear",
-      item_source: "wowhead",
+      item_source: "sirus",
       search_item: this.loadFilters("phase:4-") + " ",
       search_gem: "",
       search_log: "",
@@ -4191,9 +4191,9 @@ export default {
         return null;
       if (this.item_source == "wotlkdb")
         return "https://www.wotlkdb.com/?item=" + id;
-      if (this.item_source == "evo")
-        return "https://wotlk.evowow.com/?item=" + id;
-      return "https://www.wowhead.com/wotlk/item=" + id;
+      if (this.item_source == "sirus")
+        return "https://sirus.su/base/item/" + id;
+      return "https://www.wowhead.com/wotlk/spell=" + id;
     },
 
     spellUrl(id) {
@@ -4201,8 +4201,8 @@ export default {
         id = id.id;
       if (this.item_source == "wotlkdb")
         return "https://www.wotlkdb.com/?spell=" + id;
-      if (this.item_source == "evo")
-        return "https://wotlk.evowow.com/?spell=" + id;
+      if (this.item_source == "sirus")
+        return "https://sirus.su/base/item/" + id;
       return "https://www.wowhead.com/wotlk/spell=" + id;
     },
 

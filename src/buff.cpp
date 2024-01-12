@@ -331,6 +331,14 @@ DyingCurse::DyingCurse() {
   stats.spell_power = 765;
 }
 
+DyingCurseHM::DyingCurseHM() {
+  id = DYING_CURSE_HM;
+  name = "Dying Curse (HM)";
+  duration = 10;
+  stats.spell_power = 797;
+}
+
+
 IllustrationDragonSoul::IllustrationDragonSoul() {
   id = ILLUSTRATION_DRAGON_SOUL;
   name = "Illustration of the Dragon Soul";

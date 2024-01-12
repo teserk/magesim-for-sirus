@@ -56,6 +56,7 @@ enum ID : int {
   ELUSIVE_POWER = 67669,
   EMBRACE_SPIDER = 60492,
   DYING_CURSE = 60494,
+  DYING_CURSE_HM = 330352,
   ILLUSTRATION_DRAGON_SOUL = 60486,
   ALACRITY_ELEMENTS = 65004,
   EYE_BROODMOTHER = 65006,
@@ -407,6 +408,13 @@ class DyingCurse : public Buff {
 public:
   DyingCurse();
 };
+
+class DyingCurseHM : public Buff {
+
+public:
+  DyingCurseHM();
+};
+
 
 class IllustrationDragonSoul : public Buff {
 
