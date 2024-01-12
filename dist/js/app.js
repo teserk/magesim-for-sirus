@@ -17306,6 +17306,7 @@ __webpack_require__.r(__webpack_exports__);
     PANDORAS_PLEA: 64741,
     EMBRACE_SPIDER: 60492,
     DYING_CURSE: 60494,
+    DYING_CURSE_HM: 330352,
     ALACRITY_ELEMENTS: 65004,
     DISLODGED_OBJECT_HC: 71644,
     DISLODGED_OBJECT_NM: 71601,
@@ -17711,6 +17712,8 @@ var ids = {
   TRINKET_SUNDIAL_EXILED: 40682,
   TRINKET_EMBRACE_SPIDER: 39229,
   TRINKET_DYING_CURSE: 40255,
+  TRINKET_DYING_CURSE_HM: 330352,
+  // sirus HM version
   TRINKET_EXTRACT_NECROMANTIC_POWER: 40373,
   TRINKET_SOUL_DEAD: 40382,
   TRINKET_ILLUSTRATION_DRAGON_SOUL: 40432,
@@ -17800,6 +17803,16 @@ var ids = {
 // TODO: Переделать эту базу данных
 var equip = {
   weapon: [
+  // sirus Quel'Danas
+  {
+    id: 152252,
+    title: "Коварство верховного мага",
+    ilvl: 213,
+    "int": 41,
+    sp: 461,
+    crit: 29,
+    haste: 41
+  },
   // icc
   {
     id: 50732,
@@ -19444,6 +19457,16 @@ var equip = {
     }
   }],
   off_hand: [
+  // sirus Quel'Danas
+  {
+    id: 152263,
+    title: "Лампада танцующих теней",
+    ilvl: 213,
+    "int": 40,
+    sp: 66,
+    crit: 38,
+    haste: 38
+  },
   // icc
   {
     id: 50719,
@@ -30276,6 +30299,14 @@ var equip = {
     sp: 98,
     unique: true
   },
+  // naxx HM sirus
+  {
+    id: ids.TRINKET_DYING_CURSE_HM,
+    title: "Исчезающее проклятие ХМ",
+    ilvl: 219,
+    hit: 75,
+    unique: true
+  },
   // pvp
   {
     id: 42132,
@@ -30928,9 +30959,11 @@ var enchants = {
     id: 61120,
     enchantmentId: 3838,
     title: "Master's Inscription of the Storm ",
-    sp: 70,
-    crit: 15
-  }, {
+    sp: 105,
+    crit: 24
+  },
+  // changed for sirus
+  {
     id: 61118,
     enchantmentId: 3836,
     title: "Master's Inscription of the Crag",
@@ -32639,6 +32672,10 @@ var WCL_CLIENT_ID = "9970a7cf-9127-424a-a18d-a0503fb2dc1d";
       if (this.isEquipped("trinket", this.items.ids.TRINKET_DYING_CURSE)) buffs.push({
         id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.DYING_CURSE,
         name: "Dying Curse"
+      });
+      if (this.isEquipped("trinket", this.items.ids.TRINKET_DYING_CURSE_HM)) buffs.push({
+        id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.DYING_CURSE_HM,
+        name: "Исчезающее проклятие (HM)"
       });
       if (this.isEquipped("trinket", this.items.ids.TRINKET_ELEMENTAL_FOCUS_STONE)) buffs.push({
         id: _constants__WEBPACK_IMPORTED_MODULE_4__["default"].buffs.ALACRITY_ELEMENTS,
